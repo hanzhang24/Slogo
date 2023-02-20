@@ -47,10 +47,10 @@ and controller.
 * The Controller is responsible for parsing user input, throwing format errors, and creating
   instruction payloads for the Model
 
-![Design Overview](DesignOverview.jpg)
+![Design Overview](Design_Simplified.jpg)
 
 ## Design Details
-
+![Design Detailed](Design_Detailed.jpg)
 
 ## Design Considerations
 
