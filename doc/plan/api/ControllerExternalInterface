@@ -1,0 +1,5 @@
+Controller External Interface {
+  // builds the instruction payload from the user input and calls the Model to run the payload
+  public void buildInstructionPackage(String userInput);
+  //
+}

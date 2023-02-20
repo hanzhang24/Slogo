@@ -96,7 +96,6 @@
 ## Design
 * View
   * ViewTranslator
-    * ViewPayload
   * ViewInstructionQueue
   * Screen
   * SplashScreen
@@ -116,6 +115,7 @@
   * InstanceManager
   * CommandCreator
   * Command
+  * ViewPayload
 * Model
   * Pen
 
@@ -129,8 +129,8 @@ public class Instruction {
      // returns the Instruction name to the screen
      public String getInstructionName();
      
-     // returns a ReturnPayload object for the View to use to update itself
-     public ReturnPayload makeReturnPayload();
+     // returns a ViewPayload object for the View to use to update itself
+     public ViewPayload makeViewPayload();
        
      // returns if the set of parameters is valid
      public boolean hasValidParameters(List<T> parameters)
@@ -139,7 +139,7 @@ public class Instruction {
 
 This class is meant to represent a return payload of a command
 ```java
-public class ReturnPayload {
+public class ViewPayload {
   List<Command> updateList;
   // returns the list of updates to the View to process
   public List<Command> getUpdateList();
@@ -204,11 +204,13 @@ public class InstanceManager {
 
 ### Frontend Design CRCs
 
+This class's purpose is to 
+
 This abstract class's purpose to set up the fundamental screen:
 ```java
 public interface Screen {
   Pane pane;
-  Scene makeScene();
+  Scene scene;
  }
  ```
 
@@ -216,7 +218,7 @@ This class's purpose is to display the splash screen:
 ```java
 public class SplashSpreen implements Screen {
   Pane pane;
-  Scene makeScene();
+  Scene scene;
  }
  ```
 
@@ -225,16 +227,14 @@ This class's purpose is to display the GameScreen and pass information to the co
 public class GameScreen implements Screen {
   Pane pane;
   Queue inertionQueue;
-  Scene makeScene();
-  Node createAction();
-  String getCommand();
+  Scene scene;
  }
 ```
 This class's purpose is to provide a DropDown Selection
 
 ```java
 import javafx.scene.control.ComboBox;
-public class DropDown{
+public class DropDownView{
   public DropDown(List<String>);
   ComboBox<String>;
   ActionEvent event;
@@ -246,7 +246,7 @@ This class's purpose is to provide a Button
 
 ```java
 import javafx.event.ActionEvent;
-public class Button {
+public class ButtonView {
   Button button;
   String label;
   ActionEvent event;
@@ -257,7 +257,7 @@ This class's purpose is to provide a Slider for animation Speed
 ```java
 import javafx.event.ActionEvent;
 
-public class Slider{
+public class SliderView{
   Slider slider;
   String label;
   ActionEvent event;
@@ -269,7 +269,7 @@ This class's purpose is to contain the DrawBoard for the program to display in
 
 import javafx.scene.canvas.Canvas;
 
-public class DrawBoard {
+public class DrawBoardView {
   Canvas canvas;
   TurtleView turtle;
   ActionEvent event;
@@ -282,7 +282,7 @@ This class's purpose is to represent the Turtle
 
 import javafx.scene.image.ImageView;
 
-public class Turtle {
+public class TurtleView {
   ImageView image;
   void setImage();
 }
@@ -292,9 +292,11 @@ This class's purpose is to display errors
 
 ```java
 
-public class Popup {
+public class PopupView {
+
   Alert alert;
-  void appear();
+
+  void PopUpAppear();
 }
 ```
 
@@ -327,6 +329,7 @@ public class CommandBoxView{
   void clear();
 }
 ```
+
 
 ### Use Cases
 
@@ -364,21 +367,19 @@ public class CommandBoxView{
     runInstruction(instr); // this path is followed down accordingly
   }
 ```
- * User types in 'pu fd 100000000000000000000000000'
 
+ * User types in 'pu fd 100000000000000000000000000'
 ```java
   // CommandCreator is called as a handler
   // inside buildCommand(userInput)
   List<Token> = Tokenizer.tokenize(userInput)
 
-  // inside Tokenizer.tokenize()
-  
+  // inside Tokenizer.tokenize(), it will detect that it is a number and try to initialize
   try {
-    FloatToken = new FloatToken()
-    if 
+    floatToken = new FloatToken(token) // 
+  } catch (ValueError e){
+        throw new ValueError("Invalid float value "+token)
   }
-  
-
 ```
 
 
@@ -387,8 +388,7 @@ public class CommandBoxView{
   List <Strings> colors = new List
   DropDown colorSelection = new DropDown(options);
   ColorSelection sends a value on ActionEvent, MouseClick to the CommandCreator
-  
-  
+
 ```
 
 * The user inputs an invalid command 'jksldjsl'
@@ -420,10 +420,10 @@ public class CommandBoxView{
 ```java
   // instruction is parsed as specified above
   // in model.runInstruction())
-  ReturnPayload returnPayload = instruction.makeReturnPayload();
-  viewTranslator.add(returnPayload);
+  ViewPayload ViewPayload = instruction.makeViewPayload();
+  viewTranslator.add(ViewPayload);
   // in View
-  for(Command c : returnPayload){
+  for(Command c : ViewPayload){
     runCommand(c);
   }
 ```
@@ -457,4 +457,11 @@ public class CommandBoxView{
     userVariables.add(key + " = " + userDefinedVariables.get(key));
   }
   return userVariables;
+```
+
+* The user wishes to see history
+```java
+  // HistoryView is called as
+  
+ 
 ```
