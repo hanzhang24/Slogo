@@ -1,0 +1,4 @@
+Model External Interface {
+  // runs an instruction and adds a return payload to the ViewTranslator queue as needed
+  public void runInstructionPackage(List<Instruction> instructions);
+}
