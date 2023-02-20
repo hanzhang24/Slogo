@@ -1,0 +1,11 @@
+View Internal Interface {
+   //Allows for
+   String getSelection();
+   Void addSelection();
+   void Draw();
+   void setImage();
+   void setProperty();
+   void updateDisplay();
+   String getText();
+   void clear();
+}
