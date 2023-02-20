@@ -114,10 +114,12 @@
   * CommandLookup
   * Compiler
   * Command
-  * ViewPayload
   * ModelPayload
+  * ViewPayload
 * Model
   * Pen
+  * InstructionHistory
+  * Workspace
 
 ### Backend Design CRCs
 
