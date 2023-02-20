@@ -112,10 +112,10 @@
     * TurtleView
 * Controller
   * CommandLookup
-  * InstanceManager
-  * CommandCreator
+  * Compiler
   * Command
   * ViewPayload
+  * ModelPayload
 * Model
   * Pen
 
@@ -146,6 +146,15 @@ public class ViewPayload {
 }
 ```
 
+This class is meant to represent a input payload of a command
+```java
+public class InputPayload {
+  List<Instruction> instructionList;
+  // returns the list of updates to the View to process
+  public List<Command> getInstructionList();
+}
+```
+
 This class's purpose is to store the information for a command name and the required parameters
 ```java
 public class Command extends Instruction {
@@ -173,9 +182,9 @@ public class Conditional extends Instruction{
 
 This class's purpose is to compile commands for models to execute:
 ```java
-public class CommandCreator {
-     // builds the list of commands for one user input, then calls Model to run it
-     public List<Instruction> buildInstructionPackage throws Exception (String userInput)
+public class Compiler {
+     // builds the list of commands for one user input
+     public ModelPayload buildInstructionPackage throws CompilationException (String userInput)
     
  }
 ```
@@ -184,23 +193,34 @@ This class's purpose is to look up supported commands:
 ```java
 public class CommandLookup {
      // returns a Command object based on the lookup key, or throws an exception
-     public Command lookupCommand throws Exception (String userCommand)
+     public Command lookupCommand throws InvalidCommandException (String userCommand)
+     // adds a new user defined command to the lookup table
+     public void addNewCommand throws InvalidCommandException (Command command);
+    
+ }
+```
+This class's purpose is to track the history of successful commands:
+```java
+public class InstructionHistory {
+     // adds a successful payload to the InstructionHistory
+     public void addPayloadToHistory(ModelPayload modelPayload);
     
  }
 ```
 
-This class's purpose is to hold a variety of program-associated collections of information
+This class's purpose is to track the user's declared variables:
 ```java
-public class InstanceManager {
-    List<Command> commandHistory;
-    List<Command> userDefinedCommands;
-    Map<T,T> userDefinedVariables; 
-    // getters and setters for all methods
-    // returns a list of user defined variables
-    public List<String> getVariables();
-}
+public class Workspace {
+     // reads a value from the temporary map, or from the original map if not present
+     public double readValue(String variableName);
+     // writes a value to the temporary map
+     public void writeValue(String variableName, double value);
+     // flushes all updates to the original map
+     public void updateOriginalMap();
+     // returns all user defined variables
+     public List<String> getUserVariables();
+ }
 ```
-
 
 ### Frontend Design CRCs
 
@@ -335,42 +355,47 @@ public class CommandBoxView{
 
  * The user types 'fd 50' in the command window, sees the turtle move in the display window leaving a trail, and has the command added to the environment's history.
  ``` java
-  // CommandCreator is called as a handler
-  List<Instruction> instructionSet = buildCommand(userInput);
-  model.runCommand(instructionSet);
-  instanceManager.add(instructionSet);
+  // Compiler is called as a handler
+  ModelPayload modelPayload = buildCommand(userInput);
+  model.runPayload(modelPayload);
+  // in Model.runCommand
+  try {
+    for(Instruction instr : modelPayload){
+      model.runInstruction(instr);
+  } catch (Runtime Exception re) {
+      throw re;
+  }
+  history.add(modelPayload);
+  viewUpdateQueue.add(new ViewPayload(modelPayload));
+  
 ```
 
  * The user types '50 fd' in the command window and sees an error message that the command was not formatted correctly.
  ``` java
-  // CommandCreator is called as a handler
+  // Compiler is called as a handler
   try {
-    List<Instruction> instructionSet = buildCommand(userInput);
-    model.runCommand(instructionSet);
-    instanceManager.add(instructionSet);
+    ModelPayload modelPayload = buildCommand(userInput);
   } catch (InstructionFormatError ie) {
     throw ie;
   }
 ```
  * The user types 'pu fd 50 pd fd 50' in the command window and sees the turtle move twice (once without a trail and once with a trail).
  ``` java
-  // CommandCreator is called as a handler
+  // Compiler is called as a handler
   try {
-    List<Instruction> instructionSet = buildCommand(userInput);
-    model.runCommand(instructionSet);
-    instanceManager.add(instructionSet);
+    ModelPayload modelPayload = buildCommand(userInput);    model.runCommand(instructionSet);
   } catch (InstructionFormatError ie) {
     // handle error
   }
   ... in model
-  for(Instruction instr : instructionSet){
+  for(Instruction instr : modelPayload){
     runInstruction(instr); // this path is followed down accordingly
   }
 ```
 
  * User types in 'pu fd 100000000000000000000000000'
 ```java
-  // CommandCreator is called as a handler
+  // Compiler is called as a handler
   // inside buildCommand(userInput)
   List<Token> = Tokenizer.tokenize(userInput)
 
@@ -387,14 +412,14 @@ public class CommandBoxView{
 ```java
   List <Strings> colors = new List
   DropDown colorSelection = new DropDown(options);
-  ColorSelection sends a value on ActionEvent, MouseClick to the CommandCreator
+  ColorSelection sends a value on ActionEvent, MouseClick to the Compiler
 
 ```
 
 * The user inputs an invalid command 'jksldjsl'
 ```java
   String commands = GameScreen.getValue()
-  CommandCreator.buildInstructionPackage()
+  Compiler.buildInstructionPackage()
   \\Throws an exception, tells the view to display PopUp
   \\Inside exception handling      
   PopUp error = new Popup(Error)
@@ -412,7 +437,7 @@ public class CommandBoxView{
 ```java
   CommandViewBox box = new CommandViewBox();
   String commandText = box.getText();
-  List<Instructions> instructions = CommandCreator.buildInstructionPackage(commandText);
+  List<Instructions> instructions = Compiler.buildInstructionPackage(commandText);
   \\After this, the string is passed through the controller and throught the model, eventually back to the View,
   \\Running the simulation.  
 ```
@@ -430,33 +455,26 @@ public class CommandBoxView{
 
 * The user wishes to rerun the previous command
 ```java
-  // in commandCreator
-  Instruction instr = lookupCommand("lastCommand");
-  // in commandLookup
-  int index instanceManager.size() - 1;
-  int lastId = instanceManager.getHistory.get(index).getId();
-  List<Instruction> lastInstructions = new ArrayList<>();
-  while(lastId == instanceManager.getHistory.get(index).getId()){
-    lastInstruction.addFront(instanceManager.getHistory.get(index));
-    index--;
-  }
-  Command c = new Command(lastInstructions);
-  return c;
-  // in commandCreator
-  model.runInstruction(instruction)
+  // in Compiler
+  Instruction instr = history.getHistory.get(size - 1);
+  ModelPayload modelPayload = new ModelPayload(instr);
+  model.runPayload(modelPayload);
+
 ```
 
-* The user wishes to see user defined variable
+* The user wishes to see user defined variables
 ```java
   // handler is called from dropdown menu
   // inside handler
-  List<String> userVariables = commandCreator.getInstanceManager.getVariables();
-  // inside getVariables
-  List<String> userVariables = new ArrayList<>();
-  for(String key : userDefinedVariables.keySet()){
-    userVariables.add(key + " = " + userDefinedVariables.get(key));
-  }
-  return userVariables;
+  // compiler registers query as instruction
+  ModelPayload modelPayload = buildCommand(userInput)
+  model.runPayload(modelPayload)
+  // in model.runPayload
+  // model.runInstruction will call Workspace.getVariables
+  List<String> userVariables = Workspace.getVariables;
+  ViewPayload viewPayload = new ViewPayload(viewPayload, View);
+  history.add(modelPayload);
+  viewUpdateQueue.add(viewPayload);
 ```
 
 * The user wishes to see history
