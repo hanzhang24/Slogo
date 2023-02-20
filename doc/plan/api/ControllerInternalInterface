@@ -1,0 +1,10 @@
+Controller Internal Interface {
+  // looks up a command in the known data base and returns it if it exists, otherwise throws an error
+  public Command lookupCommand throws Exception (String userCommand);
+
+  // adds a custom command to the database
+  public void addCommand(Command command)
+
+
+
+}
