@@ -217,6 +217,8 @@ public class Workspace {
      public void writeValue(String variableName, double value);
      // flushes all updates to the original map
      public void updateOriginalMap();
+     // returns all user defined variables
+     public List<String> getUserVariables();
  }
 ```
 
