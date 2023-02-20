@@ -1,6 +1,6 @@
 # SLogo Design Plan
-### NAMES
-### TEAM
+### Aryan, Yegor, Alec, Jack, Han
+### TEAM 7
 
 
 #### Examples
