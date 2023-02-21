@@ -1,5 +1,9 @@
 Controller External Interface {
   // builds the instruction payload from the user input and calls the Model to run the payload
-  public void buildInstructionPackage(String userInput);
-  //
+  public Payload buildPayload(String userInput);
+
+  // gets the next instruction from the Payload
+  public Instruction getNextInstruction()
+  // skips the rest of a conditional statement and moves pointer to next valid instruction - applicable to ModelPayload only
+  public void skipBranch();
 }
