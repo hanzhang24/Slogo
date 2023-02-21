@@ -1,4 +1,4 @@
-Model Internal Interface {
+public interface InternalModel{
   // reads a value from the temporary map, or from the original map if not present
   public double readValue(String variableName);
   // writes a value to the temporary map

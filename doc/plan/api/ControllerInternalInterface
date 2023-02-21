@@ -1,4 +1,4 @@
-Controller Internal Interface {
+public interface InternalController {
 
   // runs the command on the model
   private void runCommand(Node root) throws RuntimeError
