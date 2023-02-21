@@ -24,10 +24,40 @@
 ```
 * The user wishes to access history item
 ```java
-  // 
   CommandHistory history = new CommandHistory();
   CommandViewBox box = new CommandViewBox();
   String historyText = history.getHistory().get(index);
-  box.
-  CommandBoxView.clear();
+  box.clear();
+  box.area.set(historyText);
+```
+
+* The user wishes to change avatar picture
+```java
+  AvatarView avatar = new AvatarView();
+  Image newImage = // the user input for a new avatar picture
+  avatar.setImage(newImage);
+```
+
+* The user wishes to change color Scheme 
+```java
+  DropDown CssSelector = new DropDown();
+  GameScene Container = new GameScene();
+  Container.setProperty(CssSelector.getValue())
+```
+
+* The user wishes to clear command text box
+```java
+  CommandViewBox box = new CommandViewBox();
+  box.clear();
+```
+* The user wishes to clear history
+```java
+  CommandHistory history = new CommandHistory();
+  history.clear();
+```
+* The user wishes to step to the next function 
+```java
+  ButtonView button = new ButtonView();
+  button.setOnMouseClick(e -> step());
+  \\Step() is a function that tells the ViewInsertionQueue to go one more command
 ```

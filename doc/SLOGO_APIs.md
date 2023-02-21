@@ -199,6 +199,7 @@ public class CommandHistory extends History{
      // adds a successful payload to the CommandHistory
      public void addPayloadToHistory(ControllerPayload payload);
      public List<String> getHistory();
+     public void clear();
  }
 ```
 
@@ -271,7 +272,7 @@ public class DropDownView{
   ComboBox<String>;
   ActionEvent event;
   String getSelection();
-  Void addSelection();
+  public Void addSelection();
 }
 ```
 This class's purpose is to provide a Button
@@ -305,7 +306,7 @@ public class DrawBoardView {
   Canvas canvas;
   TurtleView turtle;
   ActionEvent event;
-  void Draw();
+  public void Draw();
 }
 ```
 This class's purpose is to represent the Avatar
@@ -316,7 +317,7 @@ import javafx.scene.image.ImageView;
 
 public abstract class AvatarView {
   ImageView image;
-  void setImage();
+  public void setImage();
 }
 ```
 
@@ -328,8 +329,8 @@ public class PopupView {
 
   Alert alert;
 
-  void PopUpAppear();
-  void setErrorMessage();
+  public void PopUpAppear();
+  public void setErrorMessage();
 }
 ```
 
@@ -340,7 +341,7 @@ This class is to provide a container for CSS properties and formating, ex: Histo
 public abstract class Container{
   List<Nodes> objects;
   Pane container;
-  void setProperty();
+  public void setProperty();
 }
 ```
 This class HistoryView provides the option to view 
@@ -348,7 +349,7 @@ This class HistoryView provides the option to view
 
 public abstract class HistoryView extends Container{
   TextArea display;
-  void updateDisplay();  
+  public void updateDisplay();  
 }
 ```
 
@@ -358,8 +359,8 @@ This class is to provide an area for the User to type in code
 
 public class CommandBoxView{
   TextArea area;
-  String getText();
-  void clear();
+  public String getText();
+  public void clear();
 }
 ```
 
@@ -372,7 +373,7 @@ import java.util.Queue;
 public class ViewInstructionQueue {
   //Not Exactly sure what the Queue will hold just yet, but it will hold something that represents commands
   Queue<Object> test;
-  void getNext();
+  public void getNext();
 }
 ```
 
@@ -380,6 +381,6 @@ This class is AnimationTextBox, and it's job is to read values from the user for
 ```java
 
 public class AnimationTextBox throws InvalidInput{
-  float getSpeed();
+  public float getSpeed();
 }
 ```

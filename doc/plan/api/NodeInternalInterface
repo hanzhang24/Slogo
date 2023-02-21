@@ -1,4 +1,4 @@
-Node Internal Interface {
+public interface InternalNode{
     // gets the number of parameters which this interface has
     protected int getNumParams()
 

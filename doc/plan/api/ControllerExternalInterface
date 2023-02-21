@@ -1,4 +1,4 @@
-Controller External Interface {
+public interface ExternalController {
     // Given a payload, it will execute the command and update the model accordingly
     public void executePayload(ControllerPayload payload);
 

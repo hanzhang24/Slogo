@@ -1,4 +1,4 @@
-View External Interface {
+public interface ExternalView{
   //Can get Text from CommandBox
   String getText();
   //Allows the controller to call the Language to change

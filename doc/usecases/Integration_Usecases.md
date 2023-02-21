@@ -54,7 +54,7 @@
   }
 ```
 
-* The user inputs an invalid command 'jksldjsl'
+* The user inputs an invalid command 'fd50'
 ```java
   String commands = GameScreen.getValue()
   Compiler.buildPayload()
@@ -97,4 +97,19 @@
   ViewPayload viewPayload = new ViewPayload(viewPayload, View);
   history.add(modelPayload);
   viewUpdateQueue.add(viewPayload);
+```
+
+* The user runs a user defined function
+```java
+ControllerPayload controllerPayload = buildPayload(input);
+// returns the relevant command sequence
+List<Command> subComands = lookupCommand(parsedInput);
+// in controller, executes payload and conducts the rest of the process
+executePayload(controllerPayload); 
+```
+
+* The user changes the pen color
+```java
+ViewController.setPenColor(newColor);
+// changes are automatically reflected in the GUI
 ```

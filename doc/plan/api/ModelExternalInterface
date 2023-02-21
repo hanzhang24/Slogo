@@ -1,4 +1,4 @@
-Model External Interface {
+public interface ExternalModel {
   // creates a backup of the Model map to run the payload on
   public void createBackup();
 
