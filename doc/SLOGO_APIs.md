@@ -224,7 +224,17 @@ public class Workspace {
  }
 ```
 
-### Frontend Design CRCs
+This class's purpose is to hold a variety of program-associated collections of information
+```java
+public class InstanceManager {
+    List<Command> commandHistory;
+    List<Command> userDefinedCommands;
+    Map<T,T> userDefinedVariables; 
+    // getters and setters for all methods
+    // returns a list of user defined variables
+    public List<String> getVariables();
+}
+```
 
 This class's purpose is to 
 
@@ -319,6 +329,7 @@ public class PopupView {
   Alert alert;
 
   void PopUpAppear();
+  void setErrorMessage();
 }
 ```
 
@@ -352,6 +363,36 @@ public class CommandBoxView{
 }
 ```
 
+This class is to provide an area for the User to type in code
+
+```java
+
+public class CommandBoxView{
+  TextArea area;
+  String getText();
+  void clear();
+}
+```
+This class is the ViewTranslator, and it takes can of the input from the Model and inserts into InstructionQueue
+```java
+
+public class ViewTranslator{
+  void readInstructions(ViewPayload);
+  List<Commands> getInstructions();
+}
+```
+This class is ViewInstructionQueue, and it's job is to feed instructions into the Canvas one by one to control animation speed
+
+```java
+
+import java.util.Queue;
+
+public class ViewInstructionQueue {
+  //Not Exactly sure what the Queue will hold just yet, but it will hold something that represents commands
+  Queue<Object> test;
+  void getNext();
+}
+```
 
 ### Use Cases
 
