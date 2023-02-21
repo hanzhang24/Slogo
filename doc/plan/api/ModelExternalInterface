@@ -1,4 +1,7 @@
 Model External Interface {
-  // runs an instruction and adds a return payload to the ViewTranslator queue as needed
-  public void runInstructionPackage(List<Instruction> instructions);
+  // runs a Payload from the Compiler and adds a return payload to the ViewTranslator queue as needed
+  public void runPayload(Payload payload);
+
+  // gets the most recent payload of commands as a List of Strings
+  public List<String> getNewHistory();
 }
