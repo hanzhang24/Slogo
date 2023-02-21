@@ -240,26 +240,43 @@ This class's purpose is to
 
 This abstract class's purpose to set up the fundamental screen:
 ```java
-public interface Screen {
-  Pane pane;
-  Scene scene;
+public abstract class Screen {
+  Pane root;
+  
+  public Scene makeScene();
+  
+  
+  
  }
  ```
 
 This class's purpose is to display the splash screen:
 ```java
-public class SplashSpreen implements Screen {
-  Pane pane;
-  Scene scene;
+public class SplashSpreen extends Screen { 
+    @override 
+    public Scene makeScene();
+    
+    private Node drawButtons();
  }
  ```
 
 This class's purpose is to display the GameScreen and pass information to the commandlookup
 ```java
-public class GameScreen implements Screen {
-  Pane pane;
-  Queue inertionQueue;
-  Scene scene;
+public class GameScreen extends Screen {
+  Queue insertionQueue;
+  
+  @override
+  public Scene makeScene();
+  
+  private Node drawCommandBox();
+  private Node drawButtons();
+  private Node drawDropDown();
+  private Node drawSlider();
+  private Node drawPopUp();
+  private Node drawTurtle();
+
+
+  
  }
 ```
 This class's purpose is to provide a DropDown Selection
