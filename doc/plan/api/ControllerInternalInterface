@@ -1,0 +1,11 @@
+Controller Internal Interface {
+  // looks up a command in the known data base and returns it if it exists, otherwise throws an error
+  public List<Command> lookupCommand throws InvalidCommandException (String userCommand);
+  // adds a custom command to the database
+  public void addNewCommand throws InvalidCommandException(Command command);
+
+  // creates a Conditional Object based upon the userInput
+  public Conditional makeConditional(String userInput);
+  // adds an instruction to the Payload
+  public void addInstruction(Instruction instr);
+}

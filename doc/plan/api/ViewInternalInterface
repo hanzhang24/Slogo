@@ -1,0 +1,17 @@
+View Internal Interface {
+   //Allows for access to DropDown selection from the Screen class
+   String getSelection();
+   //Allows for adding of selections options to any dropdown class
+   Void addSelection();
+   //Allows for Screen to access the Canvas and draw, might need modification based futher reading of
+   //Javafx
+   void Draw();
+   //Allows for Screen to set image of Turtle class
+   void setImage();
+   //Allows for property to be set inside container class for CSS
+   void setProperty();
+   //Allows for Display to be updated in HistoryView based on Dropdown selection
+   void updateDisplay();
+   //Clears the CommandBox
+   void clear();
+}

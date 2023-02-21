@@ -1,0 +1,16 @@
+Model Internal Interface {
+  // reads a value from the temporary map, or from the original map if not present
+  public double readValue(String variableName);
+  // writes a value to the temporary map
+  public void writeValue(String variableName, double value);
+  // flushes all updates to the original map
+  public void updateOriginalMap();
+  // returns all user defined variables
+  public List<String> getUserVariables();
+
+  // makes a ViewPayload to return to the View based on changed parameters in the Model
+  public ViewPayload makeViewPayload(Map<T,T> affectedParameters);
+
+  // write to successful instruction history
+  public void writeToHistory(ModelPayload modelPayload);
+}
