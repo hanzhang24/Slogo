@@ -1,4 +1,8 @@
 View Internal Interface {
+   //Allows the PopUp to appear after Exception is thrown back to View
+   void PopUpAppear();
+   //Allows the Error Message to be set to whatever text is needed
+   void setErrorMessage();
    //Allows for access to DropDown selection from the Screen class
    String getSelection();
    //Allows for adding of selections options to any dropdown class
