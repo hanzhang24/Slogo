@@ -1,4 +1,8 @@
 View External Interface {
+  //Allows the PopUp to appear after the View is called
   void PopUpAppear();
-
+  //Allows the Error Message to be set to whatever text is needed
+  void setErrorMessage();
+  //Can get Text from CommandBox
+  String getText();
 }
