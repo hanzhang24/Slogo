@@ -186,7 +186,7 @@ This class's purpose is to compile commands for models to execute:
 ```java
 public class Compiler {
      // builds the list of commands for one user input
-     public ModelPayload buildInstructionPackage throws CompilationException (String userInput)
+     public ModelPayload buildPayload throws CompilationException (String userInput)
     
  }
 ```
@@ -399,7 +399,7 @@ public class ViewInstructionQueue {
  * The user types 'fd 50' in the command window, sees the turtle move in the display window leaving a trail, and has the command added to the environment's history.
  ``` java
   // Compiler is called as a handler
-  ModelPayload modelPayload = buildCommand(userInput);
+  ModelPayload modelPayload = buildPayload(userInput);
   model.runPayload(modelPayload);
   // in Model.runCommand
   try {
@@ -417,7 +417,7 @@ public class ViewInstructionQueue {
  ``` java
   // Compiler is called as a handler
   try {
-    ModelPayload modelPayload = buildCommand(userInput);
+    ModelPayload modelPayload = buildPayload(userInput);
   } catch (InstructionFormatError ie) {
     throw ie;
   }
@@ -426,7 +426,7 @@ public class ViewInstructionQueue {
  ``` java
   // Compiler is called as a handler
   try {
-    ModelPayload modelPayload = buildCommand(userInput);    model.runCommand(instructionSet);
+    ModelPayload modelPayload = buildPayload(userInput);    model.runCommand(instructionSet);
   } catch (InstructionFormatError ie) {
     // handle error
   }
@@ -439,7 +439,7 @@ public class ViewInstructionQueue {
  * User types in 'pu fd 100000000000000000000000000'
 ```java
   // Compiler is called as a handler
-  // inside buildCommand(userInput)
+  // inside buildPayload(userInput)
   List<Token> = Tokenizer.tokenize(userInput)
 
   // inside Tokenizer.tokenize(), it will detect that it is a number and try to initialize
@@ -462,7 +462,7 @@ public class ViewInstructionQueue {
 * The user inputs an invalid command 'jksldjsl'
 ```java
   String commands = GameScreen.getValue()
-  Compiler.buildInstructionPackage()
+  Compiler.buildPayload()
   \\Throws an exception, tells the view to display PopUp
   \\Inside exception handling      
   PopUp error = new Popup(Error)
@@ -480,7 +480,7 @@ public class ViewInstructionQueue {
 ```java
   CommandViewBox box = new CommandViewBox();
   String commandText = box.getText();
-  List<Instructions> instructions = Compiler.buildInstructionPackage(commandText);
+  List<Instructions> instructions = Compiler.buildPayload(commandText);
   \\After this, the string is passed through the controller and throught the model, eventually back to the View,
   \\Running the simulation.  
 ```
@@ -510,7 +510,7 @@ public class ViewInstructionQueue {
   // handler is called from dropdown menu
   // inside handler
   // compiler registers query as instruction
-  ModelPayload modelPayload = buildCommand(userInput)
+  ModelPayload modelPayload = buildPayload(userInput)
   model.runPayload(modelPayload)
   // in model.runPayload
   // model.runInstruction will call Workspace.getVariables
