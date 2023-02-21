@@ -98,6 +98,7 @@
   * ViewTranslator
   * ViewInstructionQueue
   * Screen
+  * Container
   * SplashScreen
     * DropDownView
     * ButtonView
@@ -297,6 +298,7 @@ public class PopupView {
   Alert alert;
 
   void PopUpAppear();
+  void setErrorMessage();
 }
 ```
 
@@ -329,7 +331,26 @@ public class CommandBoxView{
   void clear();
 }
 ```
+This class is the ViewTranslator, and it takes can of the input from the Model and inserts into InstructionQueue
+```java
 
+public class ViewTranslator{
+  void readInstructions(ViewPayload);
+  List<Commands> getInstructions();
+}
+```
+This class is ViewInstructionQueue, and it's job is to feed instructions into the Canvas one by one to control animation speed
+
+```java
+
+import java.util.Queue;
+
+public class ViewInstructionQueue {
+  //Not Exactly sure what the Queue will hold just yet, but it will hold something that represents commands
+  Queue<Object> test;
+  void getNext();
+}
+```
 
 ### Use Cases
 
@@ -398,6 +419,7 @@ public class CommandBoxView{
   \\Throws an exception, tells the view to display PopUp
   \\Inside exception handling      
   PopUp error = new Popup(Error)
+  error.setErrorMessage();
   
 ```
 * The user changes the dropdown selection from previous commands to User-Defined functions
