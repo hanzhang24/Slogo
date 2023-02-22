@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 public class ViewPayload implements Payload, Iterable<Instruction> {
 
-  private static final String VIEW_METHODS_PATH = "View.ViewControllerMethods.properties";
+  private static final String VIEW_METHODS_PATH = "View.ViewControllerMethods";
   private static final ResourceBundle METHODS = ResourceBundle.getBundle(VIEW_METHODS_PATH);
   List<Instruction> instructionList;
 
@@ -66,6 +66,11 @@ public class ViewPayload implements Payload, Iterable<Instruction> {
    * @return
    */
   public String toString() {
-    return "ViewPayloadObject, implemented linearly";
+    String payloadDescription = "ViewPayload{\n";
+    for(Instruction instr : instructionList){
+      payloadDescription += instr.getName() + ":" + instr.getParametersList() + "\n";
+    }
+    payloadDescription += "}\n";
+    return payloadDescription;
   }
 }

@@ -41,4 +41,13 @@ public class Instruction {
   public void setName(String name){
     this.name = name;
   }
+
+  /**
+   * Getter method
+   *
+   * @return the list of parameters
+   */
+  public List<String> getParametersList(){
+    return parametersList;
+  }
 }

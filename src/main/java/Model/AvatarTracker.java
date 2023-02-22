@@ -1,6 +1,6 @@
 /**
- * TODO: add change log support, test with another test class,
- *       consider changing everything to map implementation to allow for backup copies
+ * TODO: test with another class,
+ *        add classes for exception
  */
 package Model;
 
@@ -18,7 +18,7 @@ import java.util.Scanner;
  */
 public class AvatarTracker {
 
-  private static final String DEFAULT_PARAMETERS_PATH = "Model.DefaultParameters.properties";
+  private static final String DEFAULT_PARAMETERS_PATH = "Model.DefaultParameters";
   private static final ResourceBundle DEFAULT_PARAMETERS = ResourceBundle.getBundle(
       DEFAULT_PARAMETERS_PATH);
   private static final int X_INDEX = 0;
@@ -79,13 +79,27 @@ public class AvatarTracker {
     workspace.putAll(userVariables);
   }
 
+  /**
+   * End a Controller operation, signifying a success batch of work has been finished. All updates
+   * are returned to the original data
+   */
   public void endOp() {
     ViewPayload viewPayload = new ViewPayload(changeLog);
+    System.out.println(viewPayload.toString());
     changeLog = null;
 
     pushWorkspaceUpdates();
     workspace = null;
 
+  }
+
+  /**
+   * End a Controller operation abruptly, signifying an unsuccessful batch of work. All updates are
+   * rejected
+   */
+  public void bail() {
+    changeLog = null;
+    workspace = null;
   }
 
   /**
@@ -107,13 +121,13 @@ public class AvatarTracker {
    *
    * @return avatar's x position
    */
-  public double getAvatarX() throws NumberFormatException {
+  public double getAvatarX() {
     try {
       return Double.parseDouble(workspace.get(modelParameterNames.get(X_INDEX)));
     } catch (NumberFormatException numberFormatException) {
       workspace.put(modelParameterNames.get(X_INDEX),
           DEFAULT_PARAMETERS.getString(modelParameterNames.get(X_INDEX)));
-      return Double.parseDouble(workspace.get(modelParameterNames.get(X_INDEX)));
+      return -1.0;
     }
   }
 
@@ -139,7 +153,7 @@ public class AvatarTracker {
     } catch (NumberFormatException numberFormatException) {
       workspace.put(modelParameterNames.get(Y_INDEX),
           DEFAULT_PARAMETERS.getString(modelParameterNames.get(Y_INDEX)));
-      return Double.parseDouble(workspace.get(modelParameterNames.get(Y_INDEX)));
+      return -1.0;
     }
   }
 
@@ -178,7 +192,7 @@ public class AvatarTracker {
     } catch (NumberFormatException numberFormatException) {
       workspace.put(modelParameterNames.get(ROTATION_INDEX),
           DEFAULT_PARAMETERS.getString(modelParameterNames.get(ROTATION_INDEX)));
-      return Double.parseDouble(workspace.get(modelParameterNames.get(ROTATION_INDEX)));
+      return -1.0;
     }
   }
 
@@ -202,10 +216,96 @@ public class AvatarTracker {
     return workspace.get(modelParameterNames.get(PEN_COLOR_INDEX));
   }
 
-  public void setAvatarPenColor(String avatarPenColor){
+  /**
+   * Setter method
+   *
+   * @param avatarPenColor avatar's new pen color
+   */
+  public void setAvatarPenColor(String avatarPenColor) {
     avatarPenColor = avatarPenColor.toLowerCase();
     workspace.put(modelParameterNames.get(PEN_COLOR_INDEX), avatarPenColor);
     changeLog.add(new Instruction(modelParameterNames.get(PEN_COLOR_INDEX), avatarPenColor));
+  }
+
+  /**
+   * Attempts to fetch a user's declared double
+   *
+   * @param key variable name
+   * @return variable's value
+   */
+  public double getUserDouble(String key) {
+    try {
+      return Double.parseDouble(workspace.get(key));
+    } catch (NumberFormatException numberFormatException) {
+      return -1.0;
+    }
+  }
+
+  /**
+   * Declares a new variable inside the Model. Throws an exception if the given name is one of the
+   * default parameter names
+   *
+   * @param key
+   * @param value
+   * @throws RuntimeException
+   */
+  public void setUserDouble(String key, double value) throws RuntimeException {
+    if (defaultVariables.containsKey(key)) {
+      throw new RuntimeException(
+          "Cannot declare a variable name that overwrites a default parameter");
+    }
+    String convertedValue = value + "";
+    workspace.put(key, convertedValue);
+  }
+
+  /**
+   * Attempts to fetch a user's declared string
+   *
+   * @param key variable name
+   * @return variable's value
+   */
+  public String getUserString(String key) {
+    return workspace.get(key);
+  }
+
+  /**
+   * Declares a new variable inside the Model. Throws an exception if the given name is one of the
+   * default parameter names
+   *
+   * @param key
+   * @param value
+   * @throws RuntimeException
+   */
+  public void setUserString(String key, String value) throws RuntimeException {
+    if (defaultVariables.containsKey(key)) {
+      throw new RuntimeException(
+          "Cannot declare a variable name that overwrites a default parameter");
+    }
+    workspace.put(key, value);
+  }
+
+  /**
+   * Retrieves all user declared variables as a list of Strings
+   *
+   * @return list of all user variables
+   */
+  public List<String> getAllUserVariables() {
+    List<String> userVariables = new ArrayList<>();
+    for (String key : workspace.keySet()) {
+      if (!defaultVariables.containsKey(key)) {
+        userVariables.add(key + " => " + workspace.get(key));
+      }
+    }
+    return userVariables;
+  }
+
+  /**
+   * Debug function, not an API method
+   */
+  void printState(){
+    System.out.println(defaultVariables);
+    System.out.println(userVariables);
+    System.out.println(workspace);
   }
 
 }
