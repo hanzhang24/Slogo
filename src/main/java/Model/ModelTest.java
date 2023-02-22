@@ -16,7 +16,8 @@ public class ModelTest {
     avatarTracker.setAvatarPosition(-4, -3);
     avatarTracker.setUserDouble("a", 45);
     avatarTracker.printState();
-    avatarTracker.endOp();
+    // avatarTracker.endOp();
+    avatarTracker.bail();
     avatarTracker.printState();
   }
 
