@@ -1,12 +1,44 @@
-package Payload;
+package Payload.ViewPayloadManager;
 
+import Payload.Payload;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Meant to be specifically for the View pipeline (not for the Controller), as it has a simplified
+ * command structure/flow
+ */
 public class Instruction {
-  String name;
-  List<String> parameters;
-  public Instruction(String name, List<String> parameters){
+
+  private String name;
+  private List<String> parametersList;
+
+  /**
+   * Class constructor
+   * @param name name of the instruction or variable it references
+   * @param parameters values of parameters
+   */
+  public Instruction(String name, String... parameters) {
     this.name = name;
-    this.parameters = parameters;
+    this.parametersList = new ArrayList<>();
+    for(String str : parameters){
+      parametersList.add(str);
+    }
+  }
+
+  /**
+   * Getter method
+   * @return name of the instruction
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Setter method
+   * @param name new name of the instruction
+   */
+  public void setName(String name){
+    this.name = name;
   }
 }
