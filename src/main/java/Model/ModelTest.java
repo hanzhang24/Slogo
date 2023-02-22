@@ -2,23 +2,52 @@ package Model;
 
 public class ModelTest {
   public static void main(String[] args){
-    AvatarTracker avatarTracker = new AvatarTracker();
-    runPayload(avatarTracker);
+    ModelTracker modelTracker = new ModelTracker();
+    //runSuccessfulPayload(modelTracker);
+    //forgotToStartOp(modelTracker);
+    //forgotToEndLastOp(modelTracker);
+    tryToAssignNewTypeToDefaultVariable(modelTracker);
+    //bailThenSuccessfulPayload(modelTracker);
   }
 
-  // test run payload function
-  private static void runPayload(AvatarTracker avatarTracker){
-    avatarTracker.startOp();
-    avatarTracker.setAvatarX(500);
-    avatarTracker.setAvatarY(-100);
-    avatarTracker.setAvatarPenColor("red");
-    avatarTracker.setAvatarRotation(187);
-    avatarTracker.setAvatarPosition(-4, -3);
-    avatarTracker.setUserDouble("a", 45);
-    avatarTracker.printState();
-    // avatarTracker.endOp();
-    avatarTracker.bail();
-    avatarTracker.printState();
+  // test run payload successfully function
+  private static void runSuccessfulPayload(ModelTracker modelTracker){
+    modelTracker.startOp();
+    double d = modelTracker.getNumber("AvatarX");
+    d += 50;
+    modelTracker.setValue("AvatarX", d);
+    String penColor = modelTracker.getString("AvatarPenColor");
+    penColor = "blue";
+    modelTracker.setValue("AvatarPenColor", penColor);
+    modelTracker.setPosition(3, 6);
+    modelTracker.setValue("a", 112);
+    modelTracker.printState();
+    modelTracker.endOp();
+    modelTracker.printState();
   }
 
+  private static void forgotToStartOp(ModelTracker modelTracker){
+    modelTracker.getNumber("AvatarX");
+  }
+
+  private static void forgotToEndLastOp(ModelTracker modelTracker){
+    modelTracker.startOp();
+    modelTracker.getNumber("AvatarX");
+
+    modelTracker.startOp();
+  }
+
+  private static void tryToAssignNewTypeToDefaultVariable(ModelTracker modelTracker){
+    modelTracker.startOp();
+    modelTracker.setValue("AvatarX", "Hello");
+    modelTracker.endOp();
+  }
+
+  private static void bailThenSuccessfulPayload(ModelTracker modelTracker){
+    modelTracker.startOp();
+    modelTracker.getString("AvatarPenColor");
+    modelTracker.bail();
+
+    runSuccessfulPayload(modelTracker);
+  }
 }
