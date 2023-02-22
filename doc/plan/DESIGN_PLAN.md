@@ -336,7 +336,7 @@ Test Scenario 4.3: Fetching Failed Command History
     - Secondary - Parser
 * Yegor Kursakov
     - Primary - Compiler/Command/Controller
-    - Secondary - History
+    - Secondary - History, XML
 * Aryan Kothari
     - Primary - GUI
     - Secondary - Parser or XML duty
