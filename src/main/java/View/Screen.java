@@ -6,7 +6,7 @@ import javafx.scene.Group;
 
 public abstract class Screen {
 
-  Pane root;
-  Scene scene;
+  public Pane root;
+  public Scene scene;
   public abstract Scene makeScene();
 }
