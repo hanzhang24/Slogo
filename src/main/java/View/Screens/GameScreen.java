@@ -1,5 +1,13 @@
 package View.Screens;
 
-public class GameScreen {
+import View.Screen;
+import javafx.scene.Scene;
 
+public class GameScreen extends Screen {
+
+
+  @Override
+  public Scene makeScene() {
+    return null;
+  }
 }

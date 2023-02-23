@@ -1,5 +1,12 @@
 package View.Screens;
 
-public class SplashScreen {
+import View.Screen;
+import javafx.scene.Scene;
 
+public class SplashScreen extends Screen {
+
+  @Override
+  public Scene makeScene() {
+    return null;
+  }
 }
