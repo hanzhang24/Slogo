@@ -8,10 +8,5 @@ public abstract class Screen {
 
   Pane root;
   Scene scene;
-
-  public Scene makeScene(){
-    Group root = new Group();
-    Scene newScene = Scene(root, )
-    return Scene;
-  }
+  public abstract Scene makeScene();
 }
