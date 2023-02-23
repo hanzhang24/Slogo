@@ -1,11 +1,8 @@
-Controller Internal Interface {
-  // looks up a command in the known data base and returns it if it exists, otherwise throws an error
-  public List<Command> lookupCommand throws InvalidCommandException (String userCommand);
-  // adds a custom command to the database
-  public void addNewCommand throws InvalidCommandException(Command command);
+public interface InternalController {
 
-  // creates a Conditional Object based upon the userInput
-  public Conditional makeConditional(String userInput);
-  // adds an instruction to the Payload
-  public void addInstruction(Instruction instr);
+  // runs the command on the model
+  private void runCommand(Node root) throws RuntimeError
+
+  // adds a successful payload to the InstructionHistory
+  public void addPayloadToHistory(ControllerPayload payload);
 }

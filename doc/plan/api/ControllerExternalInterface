@@ -1,9 +1,9 @@
-Controller External Interface {
-  // builds the instruction payload from the user input and calls the Model to run the payload
-  public Payload buildPayload(String userInput);
+public interface ExternalController {
+    // Given a payload, it will execute the command and update the model accordingly
+    public void executePayload(ControllerPayload payload);
 
-  // gets the next instruction from the Payload
-  public Instruction getNextInstruction()
-  // skips the rest of a conditional statement and moves pointer to next valid instruction - applicable to ModelPayload only
-  public void skipBranch();
+    // Allow the View to get the History in packages of Strings to decode
+    public History getHistory throws NoHistoryException();
+    // Allow the View to tell the Controller to update the language
+    public void updateLanguage(String Language);
 }
