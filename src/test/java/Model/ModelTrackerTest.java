@@ -14,7 +14,6 @@ public class ModelTrackerTest {
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private ModelTracker modelTracker;
-
   @Nested
   @DisplayName("Configuration Tests")
   class ConfigurationTests{

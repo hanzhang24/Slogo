@@ -1,14 +1,12 @@
 /**
- * TODO: test with another class,
- *        add classes for exception
+ * TODO: expose setReturnValue
+ *
  */
 package Model;
 
-import Payload.ViewPayloadManager.Instruction;
+import Payload.ViewPayloadManager.ChangeLog;
 import Payload.ViewPayloadManager.ViewPayload;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -61,15 +59,15 @@ public class ModelTracker {
    * End a Controller operation, signifying a success batch of work has been finished. All updates
    * are returned to the original data
    */
-  public void endOp() {
+  public ViewPayload endOp() {
     checkCurrentOperationConfigured();
 
-    // System.out.print(viewPayload);
     viewPayload = null;
 
     pushWorkspaceUpdates();
     workspace = null;
 
+    return viewPayload;
   }
 
   /**
@@ -152,7 +150,7 @@ public class ModelTracker {
     if (defaultParameters.contains(key)) {
       if (defaultParameters.checkAppropriateType(key, value)) {
         workspace.put(key, value);
-        viewPayload.addInstruction(new Instruction(key, value));
+        viewPayload.addCommand(new ChangeLog(key, value));
       } else {
         throw new NumberFormatException(
             String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), key));
@@ -175,7 +173,7 @@ public class ModelTracker {
     if (defaultParameters.contains(key)) {
       if (defaultParameters.checkAppropriateType(key, value)) {
         workspace.put(key, value + "");
-        viewPayload.addInstruction(new Instruction(key, value));
+        viewPayload.addCommand(new ChangeLog(key, value));
       } else {
         throw new NumberFormatException(
             String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), key));
@@ -196,7 +194,7 @@ public class ModelTracker {
     checkCurrentOperationConfigured();
     workspace.put(AVATAR_X, avatarX + "");
     workspace.put(AVATAR_Y, avatarY + "");
-    viewPayload.addInstruction(new Instruction(POSITION_CODE, avatarX, avatarY));
+    viewPayload.addCommand(new ChangeLog(POSITION_CODE, avatarX, avatarY));
   }
 
 
