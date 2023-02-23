@@ -31,6 +31,24 @@ and controller.
 
 * Language config file
 
+  <Simulations>
+  <Simulation>
+  <canonical_name></canonical_name>
+  <title>Conway's Game of Life</title>
+  <author>John Horton Conway</author>
+  <description> This is the Blinker pattern for Cellular Automata. This is interesting because it is an oscillator! </description>
+  <width>3</width>
+  <height>3</height>
+  <!-- 0 = Dead, 1 = Alive -->
+  <initconfig>
+  0,0,0,
+  1,1,1,
+  0,0,0
+  </initconfig>
+  <extra></extra>
+  </Simulation>
+  </Simulations>
+
 
 * Instance functions & variables file
 
@@ -90,5 +108,5 @@ Is representative of program flow (user input -> parser -> command -> ...)
   - Primary
   - Secondary
 * Aryan Kothari
-  - Primary
+  - Primary: View Responsiblties
   - Secondary
