@@ -2,10 +2,11 @@ package Controller;
 
 import Payload.ViewPayloadManager.ViewCommands.Command;
 import Payload.ViewPayloadManager.ViewPayload;
+import View.Screens.GameScreen;
 
 public class ViewController {
-  private int gameScreen;
-  public ViewController(int gameScreen){
+  private GameScreen gameScreen;
+  public ViewController(GameScreen gameScreen){
     this.gameScreen = gameScreen;
   }
 

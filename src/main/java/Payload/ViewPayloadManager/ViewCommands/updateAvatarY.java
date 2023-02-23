@@ -5,20 +5,20 @@ import java.util.List;
 /**
  * Command to update the Avatar's X position in the Screen
  */
-public class updateAvatarX extends Command {
+public class updateAvatarY extends Command {
 
-  public updateAvatarX(List<String> parameters) {
+  public updateAvatarY(List<String> parameters) {
     super(parameters);
   }
 
   @Override
   public void execute() {
-    double newXPosition = Double.parseDouble(parameters.get(0));
-    // gameScreen.updateAvatarX(newPosition);
+    double newYPosition = Double.parseDouble(parameters.get(0));
+    // gameScreen.updateAvatarY(newPosition);
   }
 
   @Override
   public String getName() {
-    return "Update Avatar X";
+    return "Update Avatar Y";
   }
 }

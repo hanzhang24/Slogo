@@ -1,9 +1,10 @@
 package Payload.ViewPayloadManager.ViewCommands;
 
+import View.Screens.GameScreen;
 import java.util.List;
 
 public abstract class Command {
-  int gameScreen;
+  GameScreen gameScreen;
   List<String> parameters;
 
   /**
@@ -18,7 +19,7 @@ public abstract class Command {
    * Method to set GameScreen. Called by the ViewController
    * @param gameScreen
    */
-  public void setGameScreen(int gameScreen){
+  public void setGameScreen(GameScreen gameScreen){
     this.gameScreen = gameScreen;
   }
 
@@ -37,5 +38,7 @@ public abstract class Command {
    * Return the parameters in the command
    * @return parameters list
    */
-  public abstract List<String> getParameters();
+  public List<String> getParameters(){
+    return parameters;
+  }
 }

@@ -61,9 +61,6 @@ public class ModelTracker {
    */
   public ViewPayload endOp() {
     checkCurrentOperationConfigured();
-
-    viewPayload = null;
-
     pushWorkspaceUpdates();
     workspace = null;
 
@@ -228,5 +225,6 @@ public class ModelTracker {
     backendCopy.putAll(userParameters);
     return backendCopy;
   }
+
 
 }
