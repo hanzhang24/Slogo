@@ -31,8 +31,8 @@ public class ModelTracker {
   /**
    * Class constructor
    */
-  public ModelTracker() {
-    defaultParameters = new DefaultParameters();
+  public ModelTracker(String defaultParametersFilename) {
+    defaultParameters = new DefaultParameters(defaultParametersFilename, EXCEPTIONS);
     userParameters = new HashMap<>();
     workspace = null;
   }
@@ -153,7 +153,8 @@ public class ModelTracker {
       if (defaultParameters.checkAppropriateType(key, value)) {
         workspace.put(key, value);
       } else {
-        throw new NumberFormatException(String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), key));
+        throw new NumberFormatException(
+            String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), key));
       }
     } else {
       workspace.put(key, value);
@@ -175,7 +176,8 @@ public class ModelTracker {
         workspace.put(key, value + "");
         viewPayload.addInstruction(new Instruction(key, value));
       } else {
-        throw new NumberFormatException(String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), key));
+        throw new NumberFormatException(
+            String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), key));
       }
     } else {
       workspace.put(key, value + "");
@@ -213,12 +215,15 @@ public class ModelTracker {
   }
 
   /**
-   * Debug function, not an API method
+   * Creates a copy of the Model state
+   *
+   * @return copy of the current variables in the Model
    */
-  void printState() {
-    System.out.println("Default Parameters => " + defaultParameters.getAllDefaultElements());
-    System.out.println("User Parameters => " + userParameters);
-    System.out.println("Workspace => " + workspace);
+  public Map<String, String> getBackendState() {
+    Map<String, String> backendCopy = new HashMap<>();
+    backendCopy.putAll(defaultParameters.getAllDefaultElements());
+    backendCopy.putAll(userParameters);
+    return backendCopy;
   }
 
 }

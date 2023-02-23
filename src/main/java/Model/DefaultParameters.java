@@ -6,19 +6,22 @@ import java.util.ResourceBundle;
 
 public class DefaultParameters {
 
-  private static final String DEFAULT_PARAMETERS_PATH = "Model.DefaultParameters";
-  private static final ResourceBundle DEFAULT_PARAMETERS = ResourceBundle.getBundle(
-      DEFAULT_PARAMETERS_PATH);
+  private static final String DEFAULT_PARAMETERS_BASE_PATH = "Model.";
   private static final String REGEX = ",";
   private static final String STRING_TYPE = "String";
   private static final String DOUBLE_TYPE = "Double";
   private static final int TYPE_INDEX = 0;
   private static final int VALUE_INDEX = 1;
 
-  Map<String, Double> defaultNumericParameters;
-  Map<String, String> defaultStringParameters;
+  private ResourceBundle defaultParametersBundle;
+  private ResourceBundle exceptionResourceBundle;
+  private Map<String, Double> defaultNumericParameters;
+  private Map<String, String> defaultStringParameters;
 
-  DefaultParameters() {
+  DefaultParameters(String defaultParametersFilename, ResourceBundle exceptionResourceBundle) {
+    this.defaultParametersBundle = ResourceBundle.getBundle(
+        DEFAULT_PARAMETERS_BASE_PATH + defaultParametersFilename);
+    this.exceptionResourceBundle = exceptionResourceBundle;
     defaultNumericParameters = new HashMap<>();
     defaultStringParameters = new HashMap<>();
     addDefaultParameters();
@@ -28,18 +31,20 @@ public class DefaultParameters {
    * Add all default parameters and values to the default variable maps
    */
   private void addDefaultParameters() throws NumberFormatException {
-    for (String key : DEFAULT_PARAMETERS.keySet()) {
-      String[] parsedParameters = DEFAULT_PARAMETERS.getString(key).split(REGEX);
+    for (String key : defaultParametersBundle.keySet()) {
+      String[] parsedParameters = defaultParametersBundle.getString(key).split(REGEX);
       String type = parsedParameters[TYPE_INDEX];
       String value = parsedParameters[VALUE_INDEX];
       if (type.equals(STRING_TYPE)) {
         defaultStringParameters.put(key, value);
-      } else if (type.equals(DOUBLE_TYPE)){
+      } else if (type.equals(DOUBLE_TYPE)) {
         try {
           defaultNumericParameters.put(key, Double.parseDouble(value));
         } catch (NumberFormatException numberFormatException) {
           throw new NumberFormatException(
-              "Tried to assign a non-double value to a default double parameter");
+              String.format(exceptionResourceBundle.getString("ConfigurationParseDoubleError"),
+                  key)
+          );
         }
       }
     }
@@ -73,7 +78,7 @@ public class DefaultParameters {
    * Adds a updated default parameter to the correct map. Assumes that each default parameter is the
    * correct type
    *
-   * @param key name of the parameter
+   * @param key   name of the parameter
    * @param value value of the parameter
    */
   public void put(String key, String value) {
@@ -86,21 +91,23 @@ public class DefaultParameters {
 
   /**
    * Checks if the given default variable and value are appropriate types
-   * @param key default parameter name
+   *
+   * @param key   default parameter name
    * @param value default parameter value
    * @return if it is an appropriate type
    */
-  public boolean checkAppropriateType(String key, String value){
+  public boolean checkAppropriateType(String key, String value) {
     return defaultStringParameters.containsKey(key);
   }
 
   /**
    * Checks if the given default variable and value are appropriate types
-   * @param key default parameter name
+   *
+   * @param key   default parameter name
    * @param value default parameter value
    * @return if it is an appropriate type
    */
-  public boolean checkAppropriateType(String key, double value){
+  public boolean checkAppropriateType(String key, double value) {
     return defaultNumericParameters.containsKey(key);
   }
 }
