@@ -1,8 +1,8 @@
-View External Interface {
-  //Allows the PopUp to appear after the View is called
-  void PopUpAppear();
-  //Allows the Error Message to be set to whatever text is needed
-  void setErrorMessage();
+public interface ExternalView{
   //Can get Text from CommandBox
   String getText();
+  //Allows the controller to call the Language to change
+  String getLanguage();
+  //Allows the controller to ask for speed
+  float getSpeed();
 }
