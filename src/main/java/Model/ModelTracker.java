@@ -152,6 +152,7 @@ public class ModelTracker {
     if (defaultParameters.contains(key)) {
       if (defaultParameters.checkAppropriateType(key, value)) {
         workspace.put(key, value);
+        viewPayload.addInstruction(new Instruction(key, value));
       } else {
         throw new NumberFormatException(
             String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), key));
@@ -159,7 +160,7 @@ public class ModelTracker {
     } else {
       workspace.put(key, value);
     }
-    viewPayload.addInstruction(new Instruction(key, value));
+
   }
 
   /**
@@ -200,16 +201,20 @@ public class ModelTracker {
 
 
   /**
-   * Retrieves all user declared parameters as a list of Strings
+   * Retrieves a copy of all user declared parameters. Works inside or outside active operation.
    *
-   * @return list of all user parameters
+   * @return map of all user parameters
    */
-  public List<String> getAllUserParameters() {
-    List<String> userParametersCollection = new ArrayList<>();
-    for (String key : workspace.keySet()) {
-      if (!defaultParameters.contains(key)) {
-        userParametersCollection.add(key + " => " + workspace.get(key));
+  public Map<String, String> getAllUserParameters() {
+    Map<String, String> userParametersCollection = new HashMap<>();
+    if (workspace != null) {
+      for (String key : workspace.keySet()) {
+        if (!defaultParameters.contains(key)) {
+          userParametersCollection.put(key, workspace.get(key));
+        }
       }
+    } else {
+      userParametersCollection.putAll(userParameters);
     }
     return userParametersCollection;
   }

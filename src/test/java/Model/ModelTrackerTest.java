@@ -125,6 +125,21 @@ public class ModelTrackerTest {
     }
 
     @Test
+    void setUserVariables(){
+      modelTracker.startOp();
+      modelTracker.setValue("a", 5);
+      modelTracker.setValue("b", 1200);
+      modelTracker.setValue("c", "Hello");
+      modelTracker.endOp();
+
+      Map<String,String> userVariables = modelTracker.getAllUserParameters();
+      assertEquals(3, userVariables.size());
+      assertEquals("5.0", userVariables.get("a"));
+      assertEquals("1200.0", userVariables.get("b"));
+      assertEquals("Hello", userVariables.get("c"));
+    }
+
+    @Test
     void assignDefaultStringToDouble(){
       modelTracker.startOp();
       Exception exception = assertThrows(NumberFormatException.class, () -> {
