@@ -1,0 +1,14 @@
+public interface InternalNode{
+    // gets the number of parameters which this interface has
+    protected int getNumParams()
+
+    // gets the ith child of the node
+    protected Node getChild(int ith)
+
+    // looks up a node (command) in the known data base and returns it if it exists
+    // otherwise throws an error
+    protected List<Node> lookupNode throws InvalidCommandException (String userCommand);
+
+    // looks up a command in the known data base and returns it if it exists, otherwise throws an error
+    protected List<Command> lookupCommand throws InvalidCommandException (String userCommand);
+}
