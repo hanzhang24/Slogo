@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Map;
 import java.util.ResourceBundle;
-import org.assertj.core.internal.bytebuddy.matcher.StringMatcher.Mode;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -37,14 +35,14 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void openAndClose(){
+    void testOpenAndClose(){
       modelTracker.startOp();
       modelTracker.endOp();
       checkDefaultParameters();
     }
 
     @Test
-    void initializeBadDefaultParameters(){
+    void testInitializeBadDefaultParameters(){
       Exception exception = assertThrows(NumberFormatException.class, () -> {
         modelTracker = new ModelTracker("DefaultParametersBadType");
       });
@@ -54,7 +52,7 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void forgotToStartOp(){
+    void testForgotToStartOp(){
       Exception exception = assertThrows(RuntimeException.class, () -> {
         modelTracker.getNumber("AvatarX");
       });
@@ -64,7 +62,7 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void forgotToEndLastOp(){
+    void testForgotToEndLastOp(){
       modelTracker.startOp();
       modelTracker.getNumber("AvatarX");
 
@@ -77,7 +75,7 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void bailedUpdatesNotPushed(){
+    void testBailedUpdatesNotPushed(){
       modelTracker.startOp();
       modelTracker.setValue("AvatarPenColor", "blue");
       modelTracker.bail();
@@ -85,7 +83,7 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void bailThenRun(){
+    void testBailThenRun(){
       modelTracker.startOp();
       modelTracker.bail();
 
@@ -105,7 +103,7 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void runSuccessfulPayload(){
+    void testRunSuccessfulPayload(){
       modelTracker.startOp();
       double d = modelTracker.getNumber("AvatarX");
       d += 50;
@@ -125,7 +123,7 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void setUserVariables(){
+    void testSetUserVariables(){
       modelTracker.startOp();
       modelTracker.setValue("a", 5);
       modelTracker.setValue("b", 1200);
@@ -140,7 +138,7 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void assignDefaultStringToDouble(){
+    void testAssignDefaultStringToDouble(){
       modelTracker.startOp();
       Exception exception = assertThrows(NumberFormatException.class, () -> {
         modelTracker.setValue("AvatarPenColor", 4.0);
@@ -151,7 +149,7 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void assignDefaultDoubleToString(){
+    void testAssignDefaultDoubleToString(){
       modelTracker.startOp();
       Exception exception = assertThrows(NumberFormatException.class, () -> {
         modelTracker.setValue("AvatarX", "blue");
@@ -161,6 +159,4 @@ public class ModelTrackerTest {
       assertEquals(expected, actual);
     }
   }
-
-
 }
