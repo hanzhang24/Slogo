@@ -1,6 +1,7 @@
 package Payload.ViewPayloadManager;
 
 import Payload.Payload;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -13,14 +14,18 @@ public class ViewPayload implements Payload, Iterable<Instruction> {
 
   /**
    * Class constructor
-   *
-   * @param newlyAssignedValues a list of logged changes to Model parameters
    */
-  public ViewPayload(List<Instruction> newlyAssignedValues) {
-    instructionList = newlyAssignedValues;
-    for (Instruction instr : newlyAssignedValues) {
-      instr.setName(METHODS.getString(instr.getName()));
-    }
+  public ViewPayload() {
+    instructionList = new ArrayList<>();
+  }
+
+  /**
+   * Adds an instruction to the list
+   * @param instruction given instruction
+   */
+  public void addInstruction(Instruction instruction){
+    instruction.setName(METHODS.getString(instruction.getName()));
+    instructionList.add(instruction);
   }
 
   /**

@@ -27,6 +27,18 @@ public class Instruction {
   }
 
   /**
+   * Class constructor
+   * @param name name of the instruction or variable it references
+   * @param parameters values of parameters
+   */
+  public Instruction(String name, double... parameters) {
+    this.name = name;
+    this.parametersList = new ArrayList<>();
+    for(double num : parameters){
+      parametersList.add(num + "");
+    }
+  }
+  /**
    * Getter method
    * @return name of the instruction
    */
