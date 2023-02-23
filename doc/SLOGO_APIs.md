@@ -114,30 +114,16 @@
   * CommandLookup
   * Compiler
   * Command
-  * ModelPayload
+  * ControllerPayload
   * ViewPayload
 * Model
   * Pen
-  * InstructionHistory
+  * CommandHistory
   * Workspace
 
 ### Backend Design CRCs
 
 This class represents a generic instruction, which can be a command or a conditional
-```java
-public class Instruction { 
-     int id;
-     List<Instruction> instructions;
-     // returns the Instruction name to the screen
-     public String getInstructionName();
-     
-     // returns a ViewPayload object for the View to use to update itself
-     public ViewPayload makeViewPayload();
-       
-     // returns if the set of parameters is valid
-     public boolean hasValidParameters(List<T> parameters)
- }
- ```
 
 This class is meant to represent a return payload of a command
 ```java
@@ -150,19 +136,30 @@ public class ViewPayload {
 
 This class is meant to represent a input payload of a command
 ```java
-public class InputPayload {
-  List<Instruction> instructionList;
-  // returns the list of updates to the View to process
-  public List<Command> getInstructionList();
+public class ControllerPayload {
+  Node commandRoot;
+  String userCommands;
 }
+```
+
+This class is meant to represent a node in the tree structure for a command
+```java
+public class Node {
+  List<Node> children;
+  protected Node getChild(int ith)
+  protected int getNumParams()
+  public double execute()
+  public static void fromString(String input)
+  public void setLanguage(Document languageDoc)
+}
+
 ```
 
 This class's purpose is to store the information for a command name and the required parameters
 ```java
-public class Command extends Instruction {
+public class Command extends Node {
 
-  List<T> functionParameters
-  int returnValue
+  String name;
 
   // returns if the set of parameters is valid
   public boolean hasValidParameters(List<T> parameters)
@@ -172,22 +169,11 @@ public class Command extends Instruction {
 }
 ```
 
-```java
-public class Conditional extends Instruction{
-     List<T> booleanParameters
-     // returns if the set of parameters is valid
-     public boolean hasValidParameters(List<T> parameters)
-     // sets the boolean parameters
-     public void setBooleanParameters(List<T> parameters)
-}
-```
-
-This class's purpose is to compile commands for models to execute:
+This class's purpose is to compile commands for controller to execute:
 ```java
 public class Compiler {
      // builds the list of commands for one user input
-     public ModelPayload buildInstructionPackage throws CompilationException (String userInput)
-    
+     public ControllerPayload buildPayload throws CompilationException (String userInput);
  }
 ```
 
@@ -195,18 +181,25 @@ This class's purpose is to look up supported commands:
 ```java
 public class CommandLookup {
      // returns a Command object based on the lookup key, or throws an exception
-     public Command lookupCommand throws InvalidCommandException (String userCommand)
+     public Command lookupCommand throws InvalidCommandException (String userCommand);
      // adds a new user defined command to the lookup table
      public void addNewCommand throws InvalidCommandException (Command command);
-    
  }
+```
+This class is representation of the History
+
+```java
+public abstract class History{
+  
+}
 ```
 This class's purpose is to track the history of successful commands:
 ```java
-public class InstructionHistory {
-     // adds a successful payload to the InstructionHistory
-     public void addPayloadToHistory(ModelPayload modelPayload);
-    
+public class CommandHistory extends History{
+     // adds a successful payload to the CommandHistory
+     public void addPayloadToHistory(ControllerPayload payload);
+     public List<String> getHistory();
+     public void clear();
  }
 ```
 
@@ -224,44 +217,52 @@ public class Workspace {
  }
 ```
 
-This class's purpose is to hold a variety of program-associated collections of information
 ```java
-public class InstanceManager {
-    List<Command> commandHistory;
-    List<Command> userDefinedCommands;
-    Map<T,T> userDefinedVariables; 
-    // getters and setters for all methods
-    // returns a list of user defined variables
-    public List<String> getVariables();
+public class Controller {
+  // runs the given payload, accessing the Model for information as needed
+  public void runPayload(Payload payload);
+  public void setLanguage(Document languageDoc);
 }
 ```
 
-This class's purpose is to 
-
 This abstract class's purpose to set up the fundamental screen:
 ```java
-public interface Screen {
-  Pane pane;
+public abstract class Screen {
+  Pane root;
   Scene scene;
+  public Scene makeScene();
  }
  ```
 
 This class's purpose is to display the splash screen:
 ```java
-public class SplashSpreen implements Screen {
-  Pane pane;
-  Scene scene;
+public class SplashSpreen extends Screen { 
+    @override 
+    public Scene makeScene();
+    private Node drawButtons();
+    private Node drawDropDown();
  }
  ```
 
 This class's purpose is to display the GameScreen and pass information to the commandlookup
 ```java
-public class GameScreen implements Screen {
-  Pane pane;
-  Queue inertionQueue;
-  Scene scene;
+public class GameScreen extends Screen {
+  InsertionQueue insertionQueue;
+  
+  @override
+  public Scene makeScene();
+  public String getLanguage();
+  
+  private Node drawCommandBox();
+  private Node drawButtons();
+  private Node drawDropDown();
+  private Node drawSlider();
+  private Node drawPopUp();
+  private Node drawTurtle();
+  
  }
 ```
+
 This class's purpose is to provide a DropDown Selection
 
 ```java
@@ -271,7 +272,7 @@ public class DropDownView{
   ComboBox<String>;
   ActionEvent event;
   String getSelection();
-  Void addSelection();
+  public Void addSelection();
 }
 ```
 This class's purpose is to provide a Button
@@ -305,18 +306,18 @@ public class DrawBoardView {
   Canvas canvas;
   TurtleView turtle;
   ActionEvent event;
-  void Draw();
+  public void Draw();
 }
 ```
-This class's purpose is to represent the Turtle
+This class's purpose is to represent the Avatar
 
 ```java
 
 import javafx.scene.image.ImageView;
 
-public class TurtleView {
+public abstract class AvatarView {
   ImageView image;
-  void setImage();
+  public void setImage();
 }
 ```
 
@@ -328,8 +329,8 @@ public class PopupView {
 
   Alert alert;
 
-  void PopUpAppear();
-  void setErrorMessage();
+  public void PopUpAppear();
+  public void setErrorMessage();
 }
 ```
 
@@ -340,7 +341,7 @@ This class is to provide a container for CSS properties and formating, ex: Histo
 public abstract class Container{
   List<Nodes> objects;
   Pane container;
-  void setProperty();
+  public void setProperty();
 }
 ```
 This class HistoryView provides the option to view 
@@ -348,7 +349,7 @@ This class HistoryView provides the option to view
 
 public abstract class HistoryView extends Container{
   TextArea display;
-  void updateDisplay();  
+  public void updateDisplay();  
 }
 ```
 
@@ -358,29 +359,11 @@ This class is to provide an area for the User to type in code
 
 public class CommandBoxView{
   TextArea area;
-  String getText();
-  void clear();
+  public String getText();
+  public void clear();
 }
 ```
 
-This class is to provide an area for the User to type in code
-
-```java
-
-public class CommandBoxView{
-  TextArea area;
-  String getText();
-  void clear();
-}
-```
-This class is the ViewTranslator, and it takes can of the input from the Model and inserts into InstructionQueue
-```java
-
-public class ViewTranslator{
-  void readInstructions(ViewPayload);
-  List<Commands> getInstructions();
-}
-```
 This class is ViewInstructionQueue, and it's job is to feed instructions into the Canvas one by one to control animation speed
 
 ```java
@@ -390,139 +373,14 @@ import java.util.Queue;
 public class ViewInstructionQueue {
   //Not Exactly sure what the Queue will hold just yet, but it will hold something that represents commands
   Queue<Object> test;
-  void getNext();
+  public void getNext();
 }
 ```
 
-### Use Cases
-
- * The user types 'fd 50' in the command window, sees the turtle move in the display window leaving a trail, and has the command added to the environment's history.
- ``` java
-  // Compiler is called as a handler
-  ModelPayload modelPayload = buildCommand(userInput);
-  model.runPayload(modelPayload);
-  // in Model.runCommand
-  try {
-    for(Instruction instr : modelPayload){
-      model.runInstruction(instr);
-  } catch (Runtime Exception re) {
-      throw re;
-  }
-  history.add(modelPayload);
-  viewUpdateQueue.add(new ViewPayload(modelPayload));
-  
-```
-
- * The user types '50 fd' in the command window and sees an error message that the command was not formatted correctly.
- ``` java
-  // Compiler is called as a handler
-  try {
-    ModelPayload modelPayload = buildCommand(userInput);
-  } catch (InstructionFormatError ie) {
-    throw ie;
-  }
-```
- * The user types 'pu fd 50 pd fd 50' in the command window and sees the turtle move twice (once without a trail and once with a trail).
- ``` java
-  // Compiler is called as a handler
-  try {
-    ModelPayload modelPayload = buildCommand(userInput);    model.runCommand(instructionSet);
-  } catch (InstructionFormatError ie) {
-    // handle error
-  }
-  ... in model
-  for(Instruction instr : modelPayload){
-    runInstruction(instr); // this path is followed down accordingly
-  }
-```
-
- * User types in 'pu fd 100000000000000000000000000'
+This class is AnimationTextBox, and it's job is to read values from the user for animationSpeed
 ```java
-  // Compiler is called as a handler
-  // inside buildCommand(userInput)
-  List<Token> = Tokenizer.tokenize(userInput)
 
-  // inside Tokenizer.tokenize(), it will detect that it is a number and try to initialize
-  try {
-    floatToken = new FloatToken(token) // 
-  } catch (ValueError e){
-        throw new ValueError("Invalid float value "+token)
-  }
-```
-
-
- * The user changes the color of the environment's background.
-```java
-  List <Strings> colors = new List
-  DropDown colorSelection = new DropDown(options);
-  ColorSelection sends a value on ActionEvent, MouseClick to the Compiler
-
-```
-
-* The user inputs an invalid command 'jksldjsl'
-```java
-  String commands = GameScreen.getValue()
-  Compiler.buildInstructionPackage()
-  \\Throws an exception, tells the view to display PopUp
-  \\Inside exception handling      
-  PopUp error = new Popup(Error)
-  
-```
-* The user changes the dropdown selection from previous commands to User-Defined functions
-```java
-  Container history  = new HistoryView(DropDown, TextArea);
-/**
- * history.updateDisplay works by getting the Values from DropDown and updating 
- */the Text Area with whatever functions are in the Instance Manager
-  history.updateDisplay();
-```
-* The user clicks the run button
-```java
-  CommandViewBox box = new CommandViewBox();
-  String commandText = box.getText();
-  List<Instructions> instructions = Compiler.buildInstructionPackage(commandText);
-  \\After this, the string is passed through the controller and throught the model, eventually back to the View,
-  \\Running the simulation.  
-```
- * The user queries the turtle for its x-position
-```java
-  // instruction is parsed as specified above
-  // in model.runInstruction())
-  ViewPayload ViewPayload = instruction.makeViewPayload();
-  viewTranslator.add(ViewPayload);
-  // in View
-  for(Command c : ViewPayload){
-    runCommand(c);
-  }
-```
-
-* The user wishes to rerun the previous command
-```java
-  // in Compiler
-  Instruction instr = history.getHistory.get(size - 1);
-  ModelPayload modelPayload = new ModelPayload(instr);
-  model.runPayload(modelPayload);
-
-```
-
-* The user wishes to see user defined variables
-```java
-  // handler is called from dropdown menu
-  // inside handler
-  // compiler registers query as instruction
-  ModelPayload modelPayload = buildCommand(userInput)
-  model.runPayload(modelPayload)
-  // in model.runPayload
-  // model.runInstruction will call Workspace.getVariables
-  List<String> userVariables = Workspace.getVariables;
-  ViewPayload viewPayload = new ViewPayload(viewPayload, View);
-  history.add(modelPayload);
-  viewUpdateQueue.add(viewPayload);
-```
-
-* The user wishes to see history
-```java
-  // HistoryView is called as
-  
- 
+public class AnimationTextBox throws InvalidInput{
+  public float getSpeed();
+}
 ```
