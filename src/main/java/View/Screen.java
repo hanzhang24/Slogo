@@ -8,5 +8,5 @@ public abstract class Screen {
 
   Pane root;
   Scene scene;
-  public abstract Scene makeScene(int width, int height);
+  public abstract Scene makeScene();
 }
