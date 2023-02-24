@@ -1,5 +1,5 @@
 /**
- * TODO: expose setReturnValue
+ * TODO: expose setReturnValue, work on History class
  *
  */
 package Model;
@@ -61,9 +61,11 @@ public class ModelTracker {
    */
   public ViewPayload endOp() {
     checkCurrentOperationConfigured();
+
     pushWorkspaceUpdates();
     workspace = null;
 
+    viewPayload.addCommand(new ChangeLog("History"));
     return viewPayload;
   }
 

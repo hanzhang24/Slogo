@@ -13,6 +13,15 @@ public class ChangeLog {
   private List<String> parametersList;
 
   /**
+   * Class constructor. Encodes certain commands that need zero parameters
+   * @param name name of the instruction
+   */
+  public ChangeLog(String name){
+    this.name = name;
+    this.parametersList = new ArrayList<>();
+  }
+
+  /**
    * Class constructor
    * @param name name of the instruction or variable it references
    * @param parameters values of parameters
