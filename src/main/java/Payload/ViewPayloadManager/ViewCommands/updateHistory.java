@@ -21,6 +21,6 @@ public class updateHistory extends Command {
 
   @Override
   public String getName() {
-    return null;
+    return "Update User History";
   }
 }
