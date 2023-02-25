@@ -1,61 +1,42 @@
 package View.Screens;
 
-import View.Screen;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
+import javafx.scene.Node;
 import javafx.stage.Stage;
-import java.util.ResourceBundle;
 
 public class SplashScreen extends Screen {
-    public static final String DEFAULT_RESOURCE_PACKAGE = "example.";
-    public static final String DEFAULT_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/")+"Default.css";
 
-    private ResourceBundle myResources;
-    Stage stage;
+    public static final String SPLASHSCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "SplashScreen.css");
 
-    public SplashScreen(Stage stage) {
-        stage = stage;
+
+    public SplashScreen(Stage stage, String language) {
+        super(stage, language);
     }
 
+    @Override
     public Scene makeScene(int width, int height) {
         GridPane root = new GridPane();
-        Node label = makeLabel("Group 7");
-        root.add(label, 1, 0);
+        root.getStyleClass().add("grid-pane");
+        root.setId("Pane");
 
-        Scene scene = new Scene(root, width, height);
-        scene.getStylesheets().add(getClass().getResource(DEFAULT_STYLESHEET).toExternalForm());
+        Node label = makeLabel("Group");
 
+        Node buttons = makeActions(
+                makeButton("Start", e -> nextScreen())
+        );
+        root.add(buttons, 0, 30);
+        root.add(label, 0, 25);
+
+        this.scene = new Scene(root, width, height);
+
+        scene.getStylesheets().add(getClass().getResource(SPLASHSCREEN_STYLESHEET).toExternalForm());
         return scene;
     }
 
-    private Node makeActions (Node ... buttons) {
-        HBox panel = new HBox();
-        panel.getStyleClass().add("button-box");
-        panel.getChildren().addAll(buttons);
-        return panel;
+    private void nextScreen() {
+        GameScreen nextScreen = new GameScreen(this.stage, "English");
+        stage.setScene(nextScreen.makeScene(750, 750));
     }
 
-    private Node makeButton (String property, EventHandler<ActionEvent> response) {
-        Button result = new Button();
-        result.setText(myResources.getString(property));
-        result.setOnAction(response);
-        return setID(property, result);
-    }
-
-    private Node makeLabel (String property) {
-        Label label = new Label(myResources.getString(property));
-        return setID(property, label);
-    }
-
-    private Node setID (String id, Node node) {
-        node.setId(id);
-        return node;
-    }
 }
