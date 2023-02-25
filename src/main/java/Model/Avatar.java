@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * @author Alec Liu The DefaultParameters class is meant to manage the default set of parameters
- * used in the app. These are core values, and the abstraction supports rules that prevent the
+ * @author Alec Liu The Avatar class is meant to manage the associated default set of parameters
+ * describing an Avatar. These are core values, and the abstraction supports rules that prevent the
  * default parameters from changing in unexpected ways.
  */
-public class DefaultParameters {
+public class Avatar {
 
   private static final String DEFAULT_PARAMETERS_BASE_PATH = "Model.";
   private static final String REGEX = ",";
@@ -28,7 +28,7 @@ public class DefaultParameters {
    * @param defaultParametersFilename filename for the default parameters
    * @param exceptionResourceBundle   resource bundle for exception messages
    */
-  DefaultParameters(String defaultParametersFilename, ResourceBundle exceptionResourceBundle) {
+  Avatar(String defaultParametersFilename, ResourceBundle exceptionResourceBundle) {
     this.defaultParametersBundle = ResourceBundle.getBundle(
         DEFAULT_PARAMETERS_BASE_PATH + defaultParametersFilename);
     this.exceptionResourceBundle = exceptionResourceBundle;

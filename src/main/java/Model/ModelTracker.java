@@ -1,5 +1,7 @@
 /**
- * TODO: expose setReturnValue, work on History class
+ * TODO: expose setReturnValue, work on History class,
+ *       consider enumerations for things like colors and isPenDown,
+ *       consider creating an avatar class
  */
 package Model;
 
@@ -21,7 +23,7 @@ public class ModelTracker implements Model {
   private static final String AVATAR_X = "AvatarX";
   private static final String AVATAR_Y = "AvatarY";
   private static final String POSITION_CODE = "AvatarPosition";
-  private DefaultParameters defaultParameters;
+  private Avatar avatar;
   private Map<String, String> userParameters;
   private Map<String, String> workspace;
   private ViewPayload viewPayload;
@@ -31,7 +33,7 @@ public class ModelTracker implements Model {
    * Class constructor
    */
   public ModelTracker(String defaultParametersFilename) {
-    defaultParameters = new DefaultParameters(defaultParametersFilename, EXCEPTIONS);
+    avatar = new Avatar(defaultParametersFilename, EXCEPTIONS);
     userParameters = new HashMap<>();
     workspace = null;
   }
@@ -51,7 +53,7 @@ public class ModelTracker implements Model {
    */
   private void initializeWorkspace() {
     workspace = new HashMap<>();
-    workspace.putAll(defaultParameters.getAllDefaultElements());
+    workspace.putAll(avatar.getAllDefaultElements());
     workspace.putAll(userParameters);
   }
 
@@ -74,8 +76,8 @@ public class ModelTracker implements Model {
    */
   private void pushWorkspaceUpdates() {
     for (String key : workspace.keySet()) {
-      if (defaultParameters.contains(key)) {
-        defaultParameters.put(key, workspace.get(key));
+      if (avatar.contains(key)) {
+        avatar.put(key, workspace.get(key));
       } else {
         userParameters.put(key, workspace.get(key));
       }
@@ -146,8 +148,8 @@ public class ModelTracker implements Model {
    */
   public void setValue(String key, String value) {
     checkCurrentOperationConfigured();
-    if (defaultParameters.contains(key)) {
-      if (defaultParameters.checkAppropriateType(key, value)) {
+    if (avatar.contains(key)) {
+      if (avatar.checkAppropriateType(key, value)) {
         workspace.put(key, value);
         viewPayload.addCommand(new ChangeLog(key, value));
       } else {
@@ -169,8 +171,8 @@ public class ModelTracker implements Model {
    */
   public void setValue(String key, double value) {
     checkCurrentOperationConfigured();
-    if (defaultParameters.contains(key)) {
-      if (defaultParameters.checkAppropriateType(key, value)) {
+    if (avatar.contains(key)) {
+      if (avatar.checkAppropriateType(key, value)) {
         workspace.put(key, value + "");
         viewPayload.addCommand(new ChangeLog(key, value));
       } else {
@@ -206,7 +208,7 @@ public class ModelTracker implements Model {
     Map<String, String> userParametersCollection = new HashMap<>();
     if (workspace != null) {
       for (String key : workspace.keySet()) {
-        if (!defaultParameters.contains(key)) {
+        if (!avatar.contains(key)) {
           userParametersCollection.put(key, workspace.get(key));
         }
       }
@@ -223,7 +225,7 @@ public class ModelTracker implements Model {
    */
   public Map<String, String> getBackendState() {
     Map<String, String> backendCopy = new HashMap<>();
-    backendCopy.putAll(defaultParameters.getAllDefaultElements());
+    backendCopy.putAll(avatar.getAllDefaultElements());
     backendCopy.putAll(userParameters);
     return backendCopy;
   }
