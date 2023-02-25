@@ -4,7 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class DefaultParameters {
+/**
+ * @author Alec Liu The Avatar class is meant to manage the associated default set of parameters
+ * describing an Avatar. These are core values, and the abstraction supports rules that prevent the
+ * default parameters from changing in unexpected ways.
+ */
+public class Avatar {
 
   private static final String DEFAULT_PARAMETERS_BASE_PATH = "Model.";
   private static final String REGEX = ",";
@@ -12,13 +17,18 @@ public class DefaultParameters {
   private static final String DOUBLE_TYPE = "Double";
   private static final int TYPE_INDEX = 0;
   private static final int VALUE_INDEX = 1;
-
   private ResourceBundle defaultParametersBundle;
   private ResourceBundle exceptionResourceBundle;
   private Map<String, Double> defaultNumericParameters;
   private Map<String, String> defaultStringParameters;
 
-  DefaultParameters(String defaultParametersFilename, ResourceBundle exceptionResourceBundle) {
+  /**
+   * Class constructor
+   *
+   * @param defaultParametersFilename filename for the default parameters
+   * @param exceptionResourceBundle   resource bundle for exception messages
+   */
+  Avatar(String defaultParametersFilename, ResourceBundle exceptionResourceBundle) {
     this.defaultParametersBundle = ResourceBundle.getBundle(
         DEFAULT_PARAMETERS_BASE_PATH + defaultParametersFilename);
     this.exceptionResourceBundle = exceptionResourceBundle;

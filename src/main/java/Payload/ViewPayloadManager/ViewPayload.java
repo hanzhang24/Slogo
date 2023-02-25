@@ -1,31 +1,46 @@
 package Payload.ViewPayloadManager;
 
 import Payload.Payload;
+import Payload.ViewPayloadManager.ViewCommands.Command;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ViewPayload implements Payload, Iterable<Instruction> {
+/**
+ * @author Alec Liu The ViewPayload class is a simplified, linear sequence of update instructions
+ * generated in the Model and ran in the ViewController.
+ */
+public class ViewPayload implements Payload, Iterable<Command> {
 
+  private static final String COMMANDS_PATH = "Payload.ViewPayloadManager.ViewCommands.update";
   private static final String VIEW_METHODS_PATH = "View.ViewControllerMethods";
   private static final ResourceBundle METHODS = ResourceBundle.getBundle(VIEW_METHODS_PATH);
-  List<Instruction> instructionList;
+  List<Command> commandsList;
 
   /**
    * Class constructor
    */
   public ViewPayload() {
-    instructionList = new ArrayList<>();
+    commandsList = new ArrayList<>();
   }
 
   /**
    * Adds an instruction to the list
-   * @param instruction given instruction
+   *
+   * @param changeLog given instruction
    */
-  public void addInstruction(Instruction instruction){
-    instruction.setName(METHODS.getString(instruction.getName()));
-    instructionList.add(instruction);
+  public void addCommand(ChangeLog changeLog) {
+    // do the reflection here
+    try {
+      Class<?> command = Class.forName(COMMANDS_PATH + changeLog.getName());
+      Constructor<?> constructor = command.getDeclaredConstructor(List.class);
+      commandsList.add((Command) constructor.newInstance(changeLog.getParametersList()));
+    } catch (Exception e) {
+      // do something
+    }
+
   }
 
   /**
@@ -34,11 +49,11 @@ public class ViewPayload implements Payload, Iterable<Instruction> {
    * @return iterator for the View Controller to use
    */
   @Override
-  public Iterator<Instruction> iterator() {
+  public Iterator<Command> iterator() {
     return new ViewPayloadIterator();
   }
 
-  class ViewPayloadIterator implements Iterator<Instruction> {
+  class ViewPayloadIterator implements Iterator<Command> {
 
     int index = 0;
 
@@ -49,7 +64,7 @@ public class ViewPayload implements Payload, Iterable<Instruction> {
      */
     @Override
     public boolean hasNext() {
-      return index < instructionList.size();
+      return index < commandsList.size();
     }
 
     /**
@@ -58,22 +73,22 @@ public class ViewPayload implements Payload, Iterable<Instruction> {
      * @return next Instruction
      */
     @Override
-    public Instruction next() {
-      Instruction instr = instructionList.get(index);
+    public Command next() {
+      Command command = commandsList.get(index);
       index++;
-      return instr;
+      return command;
     }
   }
 
   /**
    * Generates String representation of the ViewPayload object
    *
-   * @return
+   * @return the String representation
    */
   public String toString() {
     String payloadDescription = "ViewPayload{\n";
-    for(Instruction instr : instructionList){
-      payloadDescription += instr.getName() + ":" + instr.getParametersList() + "\n";
+    for (Command command : commandsList) {
+      payloadDescription += command.getName() + ":" + command.getParameters() + "\n";
     }
     payloadDescription += "}\n";
     return payloadDescription;

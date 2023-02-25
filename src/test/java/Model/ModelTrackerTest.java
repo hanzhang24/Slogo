@@ -3,6 +3,7 @@ package Model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import Payload.ViewPayloadManager.ViewPayload;
 import java.util.Map;
 import java.util.ResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,6 @@ public class ModelTrackerTest {
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private ModelTracker modelTracker;
-
   @Nested
   @DisplayName("Configuration Tests")
   class ConfigurationTests{
@@ -113,7 +113,8 @@ public class ModelTrackerTest {
       modelTracker.setValue("AvatarPenColor", penColor);
       modelTracker.setPosition(3, 6);
       modelTracker.setValue("a", 112);
-      modelTracker.endOp();
+      ViewPayload viewPayload = modelTracker.endOp();
+      System.out.println(viewPayload);
 
       Map<String, String> backendCopy = modelTracker.getBackendState();
       assertEquals("112.0", backendCopy.get("a"));
