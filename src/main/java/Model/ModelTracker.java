@@ -1,6 +1,7 @@
 /**
- * TODO: expose setReturnValue
- *
+ * TODO: expose setReturnValue, work on History class,
+ *       consider enumerations for things like colors and isPenDown,
+ *       consider creating an avatar class
  */
 package Model;
 
@@ -11,16 +12,18 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * Meant to hold parameters related to the AvatarTracker
+ * @author Alec Liu The ModelTracker class is the default implementation of the model. It manages
+ * storage and access to default and user parameters, and throws exceptions for unexpected
+ * behavior.
  */
-public class ModelTracker {
+public class ModelTracker implements Model {
 
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private static final String AVATAR_X = "AvatarX";
   private static final String AVATAR_Y = "AvatarY";
   private static final String POSITION_CODE = "AvatarPosition";
-  private DefaultParameters defaultParameters;
+  private Avatar avatar;
   private Map<String, String> userParameters;
   private Map<String, String> workspace;
   private ViewPayload viewPayload;
@@ -30,14 +33,13 @@ public class ModelTracker {
    * Class constructor
    */
   public ModelTracker(String defaultParametersFilename) {
-    defaultParameters = new DefaultParameters(defaultParametersFilename, EXCEPTIONS);
+    avatar = new Avatar(defaultParametersFilename, EXCEPTIONS);
     userParameters = new HashMap<>();
     workspace = null;
   }
 
   /**
-   * Opens a change log and creates workspace at the beginning of each operation conducted by the
-   * Controller
+   * Initializes the proper workspace for a new Controller operation
    */
   public void startOp() {
     checkPreviousOperationClosed();
@@ -51,22 +53,21 @@ public class ModelTracker {
    */
   private void initializeWorkspace() {
     workspace = new HashMap<>();
-    workspace.putAll(defaultParameters.getAllDefaultElements());
+    workspace.putAll(avatar.getAllDefaultElements());
     workspace.putAll(userParameters);
   }
 
   /**
    * End a Controller operation, signifying a success batch of work has been finished. All updates
-   * are returned to the original data
+   * are committed to the original data.
    */
   public ViewPayload endOp() {
     checkCurrentOperationConfigured();
 
-    viewPayload = null;
-
     pushWorkspaceUpdates();
     workspace = null;
 
+    viewPayload.addCommand(new ChangeLog("History"));
     return viewPayload;
   }
 
@@ -75,8 +76,8 @@ public class ModelTracker {
    */
   private void pushWorkspaceUpdates() {
     for (String key : workspace.keySet()) {
-      if (defaultParameters.contains(key)) {
-        defaultParameters.put(key, workspace.get(key));
+      if (avatar.contains(key)) {
+        avatar.put(key, workspace.get(key));
       } else {
         userParameters.put(key, workspace.get(key));
       }
@@ -129,7 +130,7 @@ public class ModelTracker {
    * @return value of the variable
    * @throws NumberFormatException if the variable represents a String, not a double
    */
-  public Double getNumber(String key) {
+  public double getNumber(String key) {
     checkCurrentOperationConfigured();
     try {
       return Double.parseDouble(workspace.get(key));
@@ -147,8 +148,8 @@ public class ModelTracker {
    */
   public void setValue(String key, String value) {
     checkCurrentOperationConfigured();
-    if (defaultParameters.contains(key)) {
-      if (defaultParameters.checkAppropriateType(key, value)) {
+    if (avatar.contains(key)) {
+      if (avatar.checkAppropriateType(key, value)) {
         workspace.put(key, value);
         viewPayload.addCommand(new ChangeLog(key, value));
       } else {
@@ -170,8 +171,8 @@ public class ModelTracker {
    */
   public void setValue(String key, double value) {
     checkCurrentOperationConfigured();
-    if (defaultParameters.contains(key)) {
-      if (defaultParameters.checkAppropriateType(key, value)) {
+    if (avatar.contains(key)) {
+      if (avatar.checkAppropriateType(key, value)) {
         workspace.put(key, value + "");
         viewPayload.addCommand(new ChangeLog(key, value));
       } else {
@@ -184,7 +185,7 @@ public class ModelTracker {
   }
 
   /**
-   * Simultaneous update the Avatar's x and y position - might be expanded to execute an arbitrary
+   * Simultaneously update the Avatar's x and y position - might be expanded to execute an arbitrary
    * number of simultaneous updates
    *
    * @param avatarX avatar's new x position
@@ -207,7 +208,7 @@ public class ModelTracker {
     Map<String, String> userParametersCollection = new HashMap<>();
     if (workspace != null) {
       for (String key : workspace.keySet()) {
-        if (!defaultParameters.contains(key)) {
+        if (!avatar.contains(key)) {
           userParametersCollection.put(key, workspace.get(key));
         }
       }
@@ -224,9 +225,10 @@ public class ModelTracker {
    */
   public Map<String, String> getBackendState() {
     Map<String, String> backendCopy = new HashMap<>();
-    backendCopy.putAll(defaultParameters.getAllDefaultElements());
+    backendCopy.putAll(avatar.getAllDefaultElements());
     backendCopy.putAll(userParameters);
     return backendCopy;
   }
+
 
 }

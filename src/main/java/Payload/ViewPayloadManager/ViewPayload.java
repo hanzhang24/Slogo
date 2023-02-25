@@ -8,6 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * @author Alec Liu The ViewPayload class is a simplified, linear sequence of update instructions
+ * generated in the Model and ran in the ViewController.
+ */
 public class ViewPayload implements Payload, Iterable<Command> {
 
   private static final String COMMANDS_PATH = "Payload.ViewPayloadManager.ViewCommands.update";
@@ -24,9 +28,10 @@ public class ViewPayload implements Payload, Iterable<Command> {
 
   /**
    * Adds an instruction to the list
+   *
    * @param changeLog given instruction
    */
-  public void addCommand(ChangeLog changeLog){
+  public void addCommand(ChangeLog changeLog) {
     // do the reflection here
     try {
       Class<?> command = Class.forName(COMMANDS_PATH + changeLog.getName());
@@ -78,11 +83,11 @@ public class ViewPayload implements Payload, Iterable<Command> {
   /**
    * Generates String representation of the ViewPayload object
    *
-   * @return
+   * @return the String representation
    */
   public String toString() {
     String payloadDescription = "ViewPayload{\n";
-    for(Command command : commandsList){
+    for (Command command : commandsList) {
       payloadDescription += command.getName() + ":" + command.getParameters() + "\n";
     }
     payloadDescription += "}\n";

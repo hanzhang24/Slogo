@@ -3,7 +3,7 @@ package Payload.ViewPayloadManager.ViewCommands;
 import java.util.List;
 
 /**
- * Command to update the Avatar's X position in the Screen
+ * @author Alec Liu This command updates the Avatar's x position.
  */
 public class updateAvatarX extends Command {
 
@@ -20,10 +20,5 @@ public class updateAvatarX extends Command {
   @Override
   public String getName() {
     return "Update Avatar X";
-  }
-
-  @Override
-  public List<String> getParameters() {
-    return parameters;
   }
 }
