@@ -1,5 +1,7 @@
 package View;
 
-public abstract class ContainerView {
+import javafx.scene.layout.Pane;
 
+public abstract class ContainerView {
+  protected Pane container;
 }
