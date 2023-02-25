@@ -3,7 +3,7 @@ package Payload.ViewPayloadManager.ViewCommands;
 import java.util.List;
 
 /**
- * Command to update the Avatar's X position in the Screen
+ * @author Alec Liu This command updates the Avatar's y position.
  */
 public class updateAvatarY extends Command {
 

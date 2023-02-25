@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * @author Alec Liu The DefaultParameters class is meant to manage the default set of parameters
+ * used in the app. These are core values, and the abstraction supports rules that prevent the
+ * default parameters from changing in unexpected ways.
+ */
 public class DefaultParameters {
 
   private static final String DEFAULT_PARAMETERS_BASE_PATH = "Model.";
@@ -12,12 +17,17 @@ public class DefaultParameters {
   private static final String DOUBLE_TYPE = "Double";
   private static final int TYPE_INDEX = 0;
   private static final int VALUE_INDEX = 1;
-
   private ResourceBundle defaultParametersBundle;
   private ResourceBundle exceptionResourceBundle;
   private Map<String, Double> defaultNumericParameters;
   private Map<String, String> defaultStringParameters;
 
+  /**
+   * Class constructor
+   *
+   * @param defaultParametersFilename filename for the default parameters
+   * @param exceptionResourceBundle   resource bundle for exception messages
+   */
   DefaultParameters(String defaultParametersFilename, ResourceBundle exceptionResourceBundle) {
     this.defaultParametersBundle = ResourceBundle.getBundle(
         DEFAULT_PARAMETERS_BASE_PATH + defaultParametersFilename);

@@ -2,6 +2,9 @@ package Payload.ViewPayloadManager.ViewCommands;
 
 import java.util.List;
 
+/**
+ * @author Alec Liu This command updates the Avatar's rotation.
+ */
 public class updateAvatarRotation extends Command{
   public updateAvatarRotation(List<String> parameters) {
     super(parameters);

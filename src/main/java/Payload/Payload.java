@@ -1,9 +1,14 @@
 package Payload;
 
 /**
- * Meant to represent an arbitrary payload of instructions for the Controller or View to process
+ * @author Alec Liu The Payload class is represents an arbitrary payload of instructions for the
+ * Controller or ViewController to process
  */
 public interface Payload {
-  // return the Payload's instruction set as a string
+
+  /**
+   * Generate a string representation of a Payload
+   * @return
+   */
   String toString();
 }

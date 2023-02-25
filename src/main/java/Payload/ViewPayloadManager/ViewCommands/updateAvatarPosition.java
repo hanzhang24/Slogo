@@ -2,6 +2,9 @@ package Payload.ViewPayloadManager.ViewCommands;
 
 import java.util.List;
 
+/**
+ * @author Alec Liu This command updates the Avatar's position simultaneously.
+ */
 public class updateAvatarPosition extends Command{
   public updateAvatarPosition(List<String> parameters) {
     super(parameters);
