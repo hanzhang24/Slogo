@@ -14,8 +14,8 @@ public interface Model {
   void startOp();
 
   /**
-   * End a Controller operation, signifying a successful batch of work has been finished. All updates
-   * are committed to the original data.
+   * End a Controller operation, signifying a successful batch of work has been finished. All
+   * updates are committed to the original data.
    */
   ViewPayload endOp();
 
@@ -26,46 +26,82 @@ public interface Model {
   void bail();
 
   /**
-   * Gets a variable as a double
+   * Switches the avatar to the one with the specified ID. By default, the ID is set to zero for the
+   * initial avatar.
    *
-   * @param key name of the variable
-   * @return value of the variable
-   * @throws NumberFormatException if the variable represents a String, not a double
+   * @param id new avatar ID
    */
-  double getNumber(String key);
+  void setCurrentAvatar(int id);
 
   /**
-   * Gets a variable as a String
+   * Get the x position of the current avatar
    *
-   * @param key name of the variable
-   * @return value of the variable
+   * @return avatar's x-position
    */
-  String getString(String key);
+  double getAvatarX();
 
   /**
-   * Sets the value of a numeric parameter
+   * Get the y position of the current avatar
    *
-   * @param key   name of the parameter
-   * @param value value of the parameter
-   * @throws NumberFormatException if the method tries to reassign a default parameter's type
+   * @return avatar's y-position
    */
-  void setValue(String key, double value);
+  double getAvatarY();
 
   /**
-   * Sets the value of a String parameter
+   * Get the rotation of the current avatar
    *
-   * @param key   name of the parameter
-   * @param value value of the parameter
-   * @throws NumberFormatException if the method tries to reassign a default parameter's type
+   * @return avatar's
    */
-  void setValue(String key, String value);
+  double getAvatarRotation();
 
   /**
-   * Simultaneously update the Avatar's x and y position - might be expanded to execute an arbitrary
-   * number of simultaneous updates
-   *
-   * @param avatarX avatar's new x position
-   * @param avatarY avatar's new y position
+   * Gets the value of the variable with the specified key
+   * @return the variable's value
    */
-  void setPosition(double avatarX, double avatarY);
+  double getUserVariable(String key);
+
+  /**
+   * Sets the current avatar's x position
+   * @param x new x position
+   */
+  void setAvatarX(double x);
+
+  /**
+   * Sets the current avatar's y position
+   * @param y new y position
+   */
+  void setAvatarY(double y);
+
+  /**
+   * Simultaneously update the current Avatar's x and y position
+   *
+   * @param x new x position
+   * @param y new y position
+   */
+  void setAvatarPosition(double x, double y);
+
+  /**
+   * Sets the current avatar's rotation
+   * @param rotation new rotation
+   */
+  void setAvatarRotation(double rotation);
+
+  /**
+   * Sets the current avatar's pen color
+   * @param color new color
+   */
+  void setPenColor(String color);
+
+  /**
+   * Sets the current avatar's pen enable setting
+   * @param isPenDown new pen setting
+   */
+  void setPenDown(boolean isPenDown);
+
+  /**
+   * Sets the value of a user variable
+   * @param key variable name
+   * @param value variable value
+   */
+  void setUserVariable(String key, double value);
 }
