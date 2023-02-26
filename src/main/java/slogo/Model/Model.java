@@ -68,8 +68,4 @@ public interface Model {
    * @param avatarY avatar's new y position
    */
   void setPosition(double avatarX, double avatarY);
-
-  void forward(double distance) throws NoSuchMethodException;
-
-  void rotate(double degrees) throws NoSuchMethodException;
 }

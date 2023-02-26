@@ -21,6 +21,8 @@ public class ModelTracker implements Model {
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private static final String AVATAR_X = "AvatarX";
   private static final String AVATAR_Y = "AvatarY";
+
+  private static final String ROTATION = "Rotation";
   private static final String POSITION_CODE = "AvatarPosition";
   private Avatar avatar;
   private Map<String, String> userParameters;
@@ -226,15 +228,5 @@ public class ModelTracker implements Model {
     backendCopy.putAll(avatar.getAllDefaultElements());
     backendCopy.putAll(userParameters);
     return backendCopy;
-  }
-
-  public void forward(double distance) throws NoSuchMethodException {
-    System.out.println("Forward registered");
-    throw new NoSuchMethodException("Not implemented yet");
-  }
-
-  public void rotate(double degrees) throws NoSuchMethodException {
-    System.out.println("Rotation registered");
-    throw new NoSuchMethodException("Not implemented yet");
   }
 }
