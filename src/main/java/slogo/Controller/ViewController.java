@@ -1,6 +1,10 @@
 package slogo.Controller;
 
+<<<<<<< HEAD
 import slogo.Payload.ViewPayloadManager.ViewCommands.ViewCommand;
+=======
+import slogo.Payload.ViewPayloadManager.ViewCommands.Command;
+>>>>>>> 88ea743 (resolve merge conflicts)
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 import slogo.View.Screens.GameScreen;
 

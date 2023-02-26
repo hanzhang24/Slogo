@@ -1,7 +1,11 @@
 package slogo.Payload.ViewPayloadManager;
 
 import slogo.Payload.Payload;
+<<<<<<< HEAD
 import slogo.Payload.ViewPayloadManager.ViewCommands.ViewCommand;
+=======
+import slogo.Payload.ViewPayloadManager.ViewCommands.Command;
+>>>>>>> 88ea743 (resolve merge conflicts)
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;

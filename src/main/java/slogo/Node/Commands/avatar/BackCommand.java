@@ -1,10 +1,15 @@
 package slogo.Node.Commands.avatar;
 
+<<<<<<< HEAD
 import slogo.Geometry.Vector;
 import slogo.Node.Command;
 import slogo.Node.NodeValue;
 
 public class BackCommand extends Command {
+=======
+import slogo.Node.NodeValue;
+
+public class BackCommand {
     public int getNumParameters() {return 1;}
 
     public NodeValue execute() {
