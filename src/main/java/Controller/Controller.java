@@ -1,7 +1,7 @@
 package Controller;
 
 public class Controller {
-    public void runCommand(List<String> tokens) {
+    public NodeValue runCommand(Root root) {
         
     }
 }
