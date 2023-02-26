@@ -1,15 +1,10 @@
 package slogo.Node.Commands.avatar;
 
-<<<<<<< HEAD
 import slogo.Geometry.Vector;
 import slogo.Node.Command;
 import slogo.Node.NodeValue;
 
 public class BackCommand extends Command {
-=======
-import slogo.Node.NodeValue;
-
-public class BackCommand {
     public int getNumParameters() {return 1;}
 
     public NodeValue execute() {
@@ -26,7 +21,7 @@ public class BackCommand {
 
             Vector result = v.subtract(disp);
 
-            model.setPosition(result.getX(), result.getY());
+            model.setAvatarPosition(result.getX(), result.getY());
 
             return new NodeValue(distance);
         } catch (Exception e) {
