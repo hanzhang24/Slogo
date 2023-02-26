@@ -10,12 +10,9 @@ public class RandomCommand extends Command {
         checkContext();
         try {
             // TODO: This will need be modified when model is changed
-
             double upper = getChild(0).execute().getNumeric();
-
             Random rand = new Random();
             double randomNum = rand.nextInt((int) upper + 1);
-
             return new NodeValue(randomNum);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

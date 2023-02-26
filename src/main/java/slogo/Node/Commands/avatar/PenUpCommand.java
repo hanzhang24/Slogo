@@ -10,6 +10,8 @@ public class PenUpCommand extends Command {
         checkContext();
         try {
             // TODO: This will need be modified when model is changed
+            // TODO: This will need be modified when model is changed
+            // model.penDown()
 
             return new NodeValue(0);
         } catch (Exception e) {
