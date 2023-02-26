@@ -1,24 +1,21 @@
 package slogo.Parser;
-import Node.*;
-import Controller.*;
-import slogo.Controller.Controller;
-import base.Node.*;
 import slogo.Node.*;
+import slogo.Controller.*;
 
 public class Parser {
     private Tokenizer tokenizer;
-    private Controller controller;
-    public void setController(Controller controller) {
-        this.controller = controller;
+    private CommandManager commandManager;
+    public Parser(Controller controller, CommandManager commandManager) {
+        this.commandManager = commandManager;
     }
-    public NodeValue parseInput(String input) {
+    public Node parseInput(String input) {
         try {
             this.tokenizer = new Tokenizer(input);
             Root root = parseAll();
-            NodeValue result = controller.runCommand(root);
-            return result;
+            return root;
         } catch (Exception e) {
             // TODO: Handle exceptions
+            throw new RuntimeException("Not implemented");
         }
     }
     private Root parseAll() {
@@ -31,6 +28,7 @@ public class Parser {
             return root;
         } catch (Exception e) {
             // TODO: Handle exceptions
+            throw new RuntimeException("Not implemented");
         }
     }
     private Node parseExpression(){
@@ -43,36 +41,46 @@ public class Parser {
                     return parseVariable();
                 case GROUP_START:
                     throw new RuntimeException("Not yet implemented");
-                    break;
                 case POSSIBLY_COMMAND:
-
-
-                    break;
-                case BAD_TYPE, GROUP_END:
+                    return parseCommand();
+                default:
                     // TODO: Paramerize the error message
                     throw new IllegalArgumentException("Invalid token " + curToken);
             }
         } catch (Exception e) {
             // TODO: Handle exceptions
+            throw new RuntimeException("Not implemented");
         }
     };
 
-
-
     private Node parseGroup(){
-        throw new RuntimeException();
+        throw new RuntimeException("Not implemented");
     };
 
-    private Node parseCommand(){
-
+    private Node parseCommand() throws NoSuchMethodException {
+        if (commandManager.isSystemCommand(tokenizer.getCurToken())) {
+            return parseSystemCommand();
+        } else if (commandManager.isCustomCommand(tokenizer.getCurToken())) {
+            throw new RuntimeException("Not implemented");
+        } else {
+            //TODO make this language specific
+            throw new NoSuchMethodException("Not such command" + tokenizer.getCurToken());
+        }
     };
 
-    private parseSystemCommand(){
-
+    private Node parseSystemCommand(){
+        Command command = commandManager.getSystemCommand(tokenizer.getCurToken());
+        int numParameters = command.getNumParameters();
+        tokenizer.toNextToken();
+        for (int i = 0; i < numParameters; i++) {
+            Node child = parseExpression();
+            command.addChild(child);
+        }
+        return command;
     }
 
-    private parseCustomCommand(){
-
+    private Node parseCustomCommand(){
+        throw new RuntimeException("Not implemented");
     }
 
     private Node parseConstant(){
@@ -82,7 +90,7 @@ public class Parser {
     };
 
     private Node parseVariable(){
-        Node variable = new Variable(curToken);
+        Node variable = new Variable(tokenizer.getCurToken());
         tokenizer.toNextToken();
         return variable;
     };
