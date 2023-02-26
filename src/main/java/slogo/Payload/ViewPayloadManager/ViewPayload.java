@@ -15,8 +15,10 @@ import java.util.ResourceBundle;
  */
 public class ViewPayload implements Payload, Iterable<ViewCommand> {
 
-  private static final String COMMANDS_PATH = "Payload.ViewPayloadManager.ViewCommands.update";
-  private static final String VIEW_METHODS_PATH = "View.ViewControllerMethods";
+  private static final String COMMANDS_PATH = "slogo.Payload.ViewPayloadManager.ViewCommands.update";
+  private static final String VIEW_METHODS_PATH = "Payload.ViewControllerMethods";
+  private static final String EXCEPTIONS_PATH = "Payload.Exceptions";
+  private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private static final ResourceBundle METHODS = ResourceBundle.getBundle(VIEW_METHODS_PATH);
   List<ViewCommand> commandsList;
 
@@ -39,7 +41,7 @@ public class ViewPayload implements Payload, Iterable<ViewCommand> {
       Constructor<?> constructor = command.getDeclaredConstructor(List.class);
       commandsList.add((ViewCommand) constructor.newInstance(changeLog.getParametersList()));
     } catch (Exception e) {
-      // do something
+      throw new RuntimeException(EXCEPTIONS.getString("UnknownCommandCodeError"));
     }
 
   }

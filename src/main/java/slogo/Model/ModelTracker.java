@@ -5,11 +5,13 @@
  */
 package slogo.Model;
 
-import slogo.Payload.ViewPayloadManager.ChangeLog;
-import slogo.Payload.ViewPayloadManager.ViewPayload;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import slogo.Payload.ViewPayloadManager.ChangeLog;
+import slogo.Payload.ViewPayloadManager.ViewPayload;
 
 /**
  * @author Alec Liu The ModelTracker class is the default implementation of the model. It manages
@@ -17,13 +19,18 @@ import java.util.ResourceBundle;
  * behavior.
  */
 public class ModelTracker implements Model {
+  private static final String AVATAR_X_CODE = "AvatarX";
+  private static final String AVATAR_Y_CODE = "AvatarY";
+  private static final String POSITION_CODE = "AvatarPosition";
+  private static final String AVATAR_ROTATION_CODE = "AvatarRotation";
+  private static final String AVATAR_PEN_COLOR_CODE = "AvatarPenColor";
+  private static final String AVATAR_IS_PEN_DOWN_CODE = "AvatarIsPenDown";
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
-  private static final String AVATAR_X = "AvatarX";
-  private static final String AVATAR_Y = "AvatarY";
-  private static final String ROTATION = "Rotation";
-  private static final String POSITION_CODE = "AvatarPosition";
-  private Avatar avatar;
+  private List<Avatar> avatarList;
+  private int currentAvatarID;
+  private OperationSignatureGenerator operationSignatureGenerator;
+  private int operationSignature;
   private Map<String, String> userParameters;
   private Map<String, String> workspace;
   private ViewPayload viewPayload;
@@ -32,28 +39,33 @@ public class ModelTracker implements Model {
    * Class constructor
    */
   public ModelTracker(String defaultParametersFilename) {
-    avatar = new Avatar(defaultParametersFilename, EXCEPTIONS);
+    initializeAvatars(defaultParametersFilename);
     userParameters = new HashMap<>();
     workspace = null;
+    operationSignatureGenerator = new OperationSignatureGenerator();
+    operationSignature = -1;
+
   }
 
   /**
-   * Initializes the proper workspace for a new Controller operation
+   * Initialize avatar-related settings
+   */
+  private void initializeAvatars(String defaultParametersFilename) {
+    Avatar initialAvatar = new Avatar(defaultParametersFilename, EXCEPTIONS);
+    avatarList = new ArrayList<>();
+    avatarList.add(initialAvatar);
+    currentAvatarID = 0;
+  }
+
+  /**
+   * Initializes the proper workspace for a new Controller operation, generating a new associated
+   * operation signature
    */
   public void startOp() {
     checkPreviousOperationClosed();
     viewPayload = new ViewPayload();
-    initializeWorkspace();
-  }
-
-  /**
-   * Initializes a workspace copy of all model parameters and user parameters that is safe work
-   * with.
-   */
-  private void initializeWorkspace() {
     workspace = new HashMap<>();
-    workspace.putAll(avatar.getAllDefaultElements());
-    workspace.putAll(userParameters);
+    operationSignature = operationSignatureGenerator.generateOperationSignature();
   }
 
   /**
@@ -75,13 +87,24 @@ public class ModelTracker implements Model {
    */
   private void pushWorkspaceUpdates() {
     for (String key : workspace.keySet()) {
-      if (avatar.contains(key)) {
-        avatar.put(key, workspace.get(key));
+      if (key.contains(operationSignature + "")) { // belongs to an avatar
+        updateAvatar(key);
       } else {
         userParameters.put(key, workspace.get(key));
       }
     }
-    workspace = null;
+  }
+
+  /**
+   * Updates a specific Avatar with information associated with the given key
+   *
+   * @param key key that represents one updated Avatar value
+   */
+  private void updateAvatar(String key) {
+    String[] splitKey = key.split("_");
+    int id = Integer.parseInt(splitKey[1].substring(3));
+    String parameter = splitKey[2];
+    avatarList.get(id).setValue(parameter, workspace.get(key));
   }
 
   /**
@@ -94,11 +117,21 @@ public class ModelTracker implements Model {
   }
 
   /**
+   * Gets if there is an active operation running
+   *
+   * @return if there is an active operation
+   */
+  private boolean activeOpRunning() {
+    return workspace != null;
+  }
+
+
+  /**
    * Protects against cases when startOp() was not called before working with the Model
    */
   private void checkCurrentOperationConfigured() {
-    if (workspace == null) {
-      throw new RuntimeException(EXCEPTIONS.getString("StartOpNotCalled"));
+    if (!activeOpRunning()) {
+      throw new RuntimeException(EXCEPTIONS.getString("StartOpNotCalledError"));
     }
   }
 
@@ -106,126 +139,234 @@ public class ModelTracker implements Model {
    * Protects against cases when endOp() was not called before closing the previous operation
    */
   private void checkPreviousOperationClosed() {
-    if (workspace != null) {
-      throw new RuntimeException(EXCEPTIONS.getString("EndOpNotCalled"));
+    if (activeOpRunning()) {
+      throw new RuntimeException(EXCEPTIONS.getString("EndOpNotCalledError"));
     }
   }
 
   /**
-   * Gets a value as a String
+   * Formats the lookup string
    *
-   * @param key name of the variable
-   * @return value of the variable
+   * @param key original lookup String
+   * @return formatted lookup String
    */
-  public String getString(String key) {
-    checkCurrentOperationConfigured();
-    return workspace.get(key);
+  private String formatLookupString(String key) {
+    return String.format("Signature:%d_ID:%d_%s", operationSignature, currentAvatarID, key);
   }
 
   /**
-   * Gets a value as a double
+   * Switches the avatar to the one with the specified ID. By default, the ID is set to zero for the
+   * initial avatar.
    *
-   * @param key name of the variable
-   * @return value of the variable
-   * @throws NumberFormatException if the variable represents a String, not a double
+   * @param id new avatar ID
    */
-  public double getNumber(String key) {
-    checkCurrentOperationConfigured();
-    try {
-      return Double.parseDouble(workspace.get(key));
-    } catch (NumberFormatException numberFormatException) {
-      throw new NumberFormatException(EXCEPTIONS.getString("ReadStringAsDouble"));
+  @Override
+  public void setCurrentAvatar(int id) {
+    if(id >= 0 && id < avatarList.size()){
+      currentAvatarID = id;
+    } else {
+      throw new RuntimeException(EXCEPTIONS.getString("NonexistentAvatarError"));
     }
   }
 
   /**
-   * Sets the value of a parameter
+   * Get the x position of the current avatar
    *
-   * @param key   name of the parameter
-   * @param value value of the parameter
-   * @throws NumberFormatException if the method tries to reassign a default parameter's type
+   * @return avatar's x-position
    */
-  public void setValue(String key, String value) {
-    checkCurrentOperationConfigured();
-    if (avatar.contains(key)) {
-      if (avatar.checkAppropriateType(key, value)) {
-        workspace.put(key, value);
-        viewPayload.addCommand(new ChangeLog(key, value));
+  @Override
+  public double getAvatarX() {
+    if (activeOpRunning()) {
+      String formattedKey = formatLookupString(AVATAR_X_CODE);
+      if (workspace.containsKey(formattedKey)) {
+        return Double.parseDouble(workspace.get(formattedKey));
       } else {
-        throw new NumberFormatException(
-            String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), key));
+        return avatarList.get(currentAvatarID).getDouble(AVATAR_X_CODE);
       }
     } else {
-      workspace.put(key, value);
+      return avatarList.get(currentAvatarID).getDouble(AVATAR_X_CODE);
     }
-
   }
 
   /**
-   * Sets the value of a parameter
+   * Get the y position of the current avatar
    *
-   * @param key   name of the parameter
-   * @param value value of the parameter
-   * @throws NumberFormatException if the method tries to reassign a default parameter's type
+   * @return avatar's y-position
    */
-  public void setValue(String key, double value) {
-    checkCurrentOperationConfigured();
-    if (avatar.contains(key)) {
-      if (avatar.checkAppropriateType(key, value)) {
-        workspace.put(key, value + "");
-        viewPayload.addCommand(new ChangeLog(key, value));
+  @Override
+  public double getAvatarY() {
+    if (activeOpRunning()) {
+      String formattedKey = formatLookupString(AVATAR_Y_CODE);
+      if (workspace.containsKey(formattedKey)) {
+        return Double.parseDouble(workspace.get(formattedKey));
       } else {
-        throw new NumberFormatException(
-            String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), key));
+        return avatarList.get(currentAvatarID).getDouble(AVATAR_Y_CODE);
       }
     } else {
-      workspace.put(key, value + "");
+      return avatarList.get(currentAvatarID).getDouble(AVATAR_Y_CODE);
     }
   }
 
   /**
-   * Simultaneously update the Avatar's x and y position - might be expanded to execute an arbitrary
-   * number of simultaneous updates
+   * Get the rotation of the current avatar
    *
-   * @param avatarX avatar's new x position
-   * @param avatarY avatar's new y position
+   * @return avatar's
    */
-  public void setPosition(double avatarX, double avatarY) {
+  @Override
+  public double getAvatarRotation() {
+    if (activeOpRunning()) {
+      String formattedKey = formatLookupString(AVATAR_ROTATION_CODE);
+      if (workspace.containsKey(formattedKey)) {
+        return Double.parseDouble(workspace.get(formattedKey));
+      } else {
+        return avatarList.get(currentAvatarID).getDouble(AVATAR_ROTATION_CODE);
+      }
+    } else {
+      return avatarList.get(currentAvatarID).getDouble(AVATAR_ROTATION_CODE);
+    }
+  }
+
+  /**
+   * Gets the pen color of the current avatar
+   *
+   * @return pen color
+   */
+  @Override
+  public String getAvatarPenColor() {
+    if (activeOpRunning()) {
+      String formattedKey = formatLookupString(AVATAR_PEN_COLOR_CODE);
+      if (workspace.containsKey(formattedKey)) {
+        return workspace.get(formattedKey);
+      } else {
+        return avatarList.get(currentAvatarID).getString(AVATAR_PEN_COLOR_CODE);
+      }
+    } else {
+      return avatarList.get(currentAvatarID).getString(AVATAR_PEN_COLOR_CODE);
+    }
+  }
+
+  /**
+   * Gets the state of the pen
+   *
+   * @return if the pen is down
+   */
+  @Override
+  public boolean getAvatarIsPenDown() {
+    if (activeOpRunning()) {
+      String formattedKey = formatLookupString(AVATAR_IS_PEN_DOWN_CODE);
+      if (workspace.containsKey(formattedKey)) {
+        return Boolean.parseBoolean(workspace.get(formattedKey));
+      } else {
+        return avatarList.get(currentAvatarID).getBoolean(AVATAR_IS_PEN_DOWN_CODE);
+      }
+    } else {
+      return avatarList.get(currentAvatarID).getBoolean(AVATAR_IS_PEN_DOWN_CODE);
+    }
+  }
+
+
+  /**
+   * Gets the value of the variable with the specified key
+   *
+   * @param key
+   * @return the variable's value
+   */
+  @Override
+  public double getUserVariable(String key) {
+    if (activeOpRunning()) {
+      if (workspace.containsKey(key)) {
+        return Double.parseDouble(workspace.get(key));
+      } else {
+        return Double.parseDouble(userParameters.get(key));
+      }
+    } else {
+      return Double.parseDouble(userParameters.get(key));
+    }
+  }
+
+  /**
+   * Sets the current avatar's x position
+   *
+   * @param x new x position
+   */
+  @Override
+  public void setAvatarX(double x) {
     checkCurrentOperationConfigured();
-    workspace.put(AVATAR_X, avatarX + "");
-    workspace.put(AVATAR_Y, avatarY + "");
-    viewPayload.addCommand(new ChangeLog(POSITION_CODE, avatarX, avatarY));
-  }
-
-
-  /**
-   * Retrieves a copy of all user declared parameters. Works inside or outside active operation.
-   *
-   * @return map of all user parameters
-   */
-  public Map<String, String> getAllUserParameters() {
-    Map<String, String> userParametersCollection = new HashMap<>();
-    if (workspace != null) {
-      for (String key : workspace.keySet()) {
-        if (!avatar.contains(key)) {
-          userParametersCollection.put(key, workspace.get(key));
-        }
-      }
-    } else {
-      userParametersCollection.putAll(userParameters);
-    }
-    return userParametersCollection;
+    workspace.put(formatLookupString(AVATAR_X_CODE), x + "");
+    viewPayload.addCommand(new ChangeLog(AVATAR_X_CODE, x));
   }
 
   /**
-   * Creates a copy of the Model state
+   * Sets the current avatar's y position
    *
-   * @return copy of the current variables in the Model
+   * @param y new y position
    */
-  public Map<String, String> getBackendState() {
-    Map<String, String> backendCopy = new HashMap<>();
-    backendCopy.putAll(avatar.getAllDefaultElements());
-    backendCopy.putAll(userParameters);
-    return backendCopy;
+  @Override
+  public void setAvatarY(double y) {
+    checkCurrentOperationConfigured();
+    workspace.put(formatLookupString(AVATAR_Y_CODE), y + "");
+    viewPayload.addCommand(new ChangeLog(AVATAR_X_CODE, y));
+  }
+
+  /**
+   * Simultaneously update the current Avatar's x and y position
+   *
+   * @param x new x position
+   * @param y new y position
+   */
+  @Override
+  public void setAvatarPosition(double x, double y) {
+    checkCurrentOperationConfigured();
+    workspace.put(formatLookupString(AVATAR_X_CODE), x + "");
+    workspace.put(formatLookupString(AVATAR_Y_CODE), y + "");
+    viewPayload.addCommand(new ChangeLog(POSITION_CODE, x, y));
+  }
+
+  /**
+   * Sets the current avatar's rotation
+   *
+   * @param rotation new rotation
+   */
+  @Override
+  public void setAvatarRotation(double rotation) {
+    checkCurrentOperationConfigured();
+    workspace.put(formatLookupString(AVATAR_ROTATION_CODE), rotation + "");
+    viewPayload.addCommand(new ChangeLog(AVATAR_ROTATION_CODE, rotation));
+  }
+
+  /**
+   * Sets the current avatar's pen color
+   *
+   * @param color new color
+   */
+  @Override
+  public void setAvatarPenColor(String color) {
+    checkCurrentOperationConfigured();
+    workspace.put(formatLookupString(AVATAR_PEN_COLOR_CODE), color);
+    viewPayload.addCommand(new ChangeLog(AVATAR_PEN_COLOR_CODE, color));
+  }
+
+  /**
+   * Sets the current avatar's pen enable setting
+   *
+   * @param isPenDown new pen setting
+   */
+  @Override
+  public void setAvatarPenDown(boolean isPenDown) {
+    checkCurrentOperationConfigured();
+    workspace.put(formatLookupString(AVATAR_IS_PEN_DOWN_CODE), isPenDown + "");
+    viewPayload.addCommand(new ChangeLog(AVATAR_IS_PEN_DOWN_CODE, isPenDown + ""));
+  }
+
+  /**
+   * Sets the value of a user variable
+   *
+   * @param key   variable name
+   * @param value variable value
+   */
+  @Override
+  public void setUserVariable(String key, double value) {
+    checkCurrentOperationConfigured();
+    workspace.put(key, value + "");
   }
 }

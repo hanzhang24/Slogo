@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
+import slogo.View.Screens.SplashScreen;
 import util.DukeApplicationTest;
 
 class SplashScreenTest extends DukeApplicationTest {
