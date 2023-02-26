@@ -20,9 +20,9 @@ public class Avatar {
   private static final int VALUE_INDEX = 1;
   private ResourceBundle defaultParametersBundle;
   private ResourceBundle exceptionResourceBundle;
-  private Map<String, Double> defaultNumericParameters;
-  private Map<String, String> defaultStringParameters;
-  private Map<String, Boolean> defaultBooleanParameters;
+  private Map<String, Double> numericParameters;
+  private Map<String, String> stringParameters;
+  private Map<String, Boolean> booleanParameters;
 
   /**
    * Class constructor
@@ -34,14 +34,14 @@ public class Avatar {
     this.defaultParametersBundle = ResourceBundle.getBundle(
         DEFAULT_PARAMETERS_BASE_PATH + defaultParametersFilename);
     this.exceptionResourceBundle = exceptionResourceBundle;
-    defaultNumericParameters = new HashMap<>();
-    defaultStringParameters = new HashMap<>();
-    defaultBooleanParameters = new HashMap<>();
+    numericParameters = new HashMap<>();
+    stringParameters = new HashMap<>();
+    booleanParameters = new HashMap<>();
     addDefaultParameters();
   }
 
   /**
-   * Add all default parameters and values to the default variable maps
+   * Add all default parameters and values to the default parameter maps
    */
   private void addDefaultParameters() throws NumberFormatException {
     for (String key : defaultParametersBundle.keySet()) {
@@ -50,12 +50,12 @@ public class Avatar {
       String value = parsedParameters[VALUE_INDEX];
 
       if (type.equals(STRING_TYPE)) {
-        defaultStringParameters.put(key, value);
+        stringParameters.put(key, value);
       } else if (type.equals(BOOLEAN_TYPE)){
-        defaultBooleanParameters.put(key, Boolean.parseBoolean(value)); // no supported exception
+        booleanParameters.put(key, Boolean.parseBoolean(value)); // no supported exception
       } else if (type.equals(DOUBLE_TYPE)) {
         try {
-          defaultNumericParameters.put(key, Double.parseDouble(value));
+          numericParameters.put(key, Double.parseDouble(value));
         } catch (NumberFormatException numberFormatException) {
           throw new NumberFormatException(
               String.format(exceptionResourceBundle.getString("ConfigurationParsingError"),
@@ -74,7 +74,7 @@ public class Avatar {
    * @return value of the given parameter
    */
   public double getDouble(String key){
-    return defaultNumericParameters.get(key);
+    return numericParameters.get(key);
   }
 
   /**
@@ -83,7 +83,7 @@ public class Avatar {
    * @return value of the given parameter
    */
   public String getString(String key){
-    return defaultStringParameters.get(key);
+    return stringParameters.get(key);
   }
 
   /**
@@ -92,7 +92,7 @@ public class Avatar {
    * @return value of the given parameter
    */
   public boolean getBoolean(String key){
-    return defaultBooleanParameters.get(key);
+    return booleanParameters.get(key);
   }
 
   /**
@@ -103,12 +103,12 @@ public class Avatar {
    * @param value value of the parameter
    */
   public void setValue(String key, String value) {
-    if (defaultStringParameters.containsKey(key)) {
-      defaultStringParameters.put(key, value);
-    } else if(defaultNumericParameters.containsKey(key)){
-      defaultNumericParameters.put(key, Double.parseDouble(value));
-    } else if(defaultBooleanParameters.containsKey(key)){
-      defaultBooleanParameters.put(key, Boolean.parseBoolean(value));
+    if (stringParameters.containsKey(key)) {
+      stringParameters.put(key, value);
+    } else if(numericParameters.containsKey(key)){
+      numericParameters.put(key, Double.parseDouble(value));
+    } else if(booleanParameters.containsKey(key)){
+      booleanParameters.put(key, Boolean.parseBoolean(value));
     } else {
       throw new RuntimeException(exceptionResourceBundle.getString("UnknownAvatarParameterError"));
     }

@@ -15,7 +15,7 @@ import slogo.Payload.ViewPayloadManager.ViewPayload;
 
 /**
  * @author Alec Liu The ModelTracker class is the default implementation of the model. It manages
- * storage and access to default and user parameters, and throws exceptions for unexpected
+ * storage and access to Avatar parameters and user variable, and throws exceptions for unexpected
  * behavior.
  */
 public class ModelTracker implements Model {
@@ -31,7 +31,7 @@ public class ModelTracker implements Model {
   private int currentAvatarID;
   private OperationSignatureGenerator operationSignatureGenerator;
   private int operationSignature;
-  private Map<String, String> userParameters;
+  private Map<String, String> userVariables;
   private Map<String, String> workspace;
   private ViewPayload viewPayload;
 
@@ -40,7 +40,7 @@ public class ModelTracker implements Model {
    */
   public ModelTracker(String defaultParametersFilename) {
     initializeAvatars(defaultParametersFilename);
-    userParameters = new HashMap<>();
+    userVariables = new HashMap<>();
     workspace = null;
     operationSignatureGenerator = new OperationSignatureGenerator();
     operationSignature = -1;
@@ -83,14 +83,14 @@ public class ModelTracker implements Model {
   }
 
   /**
-   * Pushes all updates to model parameters and user parameters in the workspace back to the Model
+   * Pushes all updates to model parameters and user variables in the workspace back to the Model
    */
   private void pushWorkspaceUpdates() {
     for (String key : workspace.keySet()) {
       if (key.contains(operationSignature + "")) { // belongs to an avatar
         updateAvatar(key);
       } else {
-        userParameters.put(key, workspace.get(key));
+        userVariables.put(key, workspace.get(key));
       }
     }
   }
@@ -277,10 +277,10 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(key)) {
         return Double.parseDouble(workspace.get(key));
       } else {
-        return Double.parseDouble(userParameters.get(key));
+        return Double.parseDouble(userVariables.get(key));
       }
     } else {
-      return Double.parseDouble(userParameters.get(key));
+      return Double.parseDouble(userVariables.get(key));
     }
   }
 
