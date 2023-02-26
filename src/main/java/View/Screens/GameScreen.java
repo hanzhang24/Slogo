@@ -19,11 +19,12 @@ public class GameScreen extends Screen {
 
   @Override
   public Scene makeScene(int width, int height) {
-    GridPane root = new GridPane();
+    root = new GridPane();
     root.getStyleClass().add("grid-pane");
     root.setId("Pane");
+    DrawBoardView canvas = new DrawBoardView();
+    root.getChildren().add(canvas.getContainer());
     this.scene = new Scene(root, width, height);
-
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
     return scene;
 
