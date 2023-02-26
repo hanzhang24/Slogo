@@ -13,17 +13,6 @@ public class Tokenizer {
             throw new RuntimeException(e.getMessage());
         }
     }
-
-    public void setCurIndex(int value) {
-        if (value < 0 || value >= tokens.length) {
-            //TODO: parameterize this error message by language
-            throw new IndexOutOfBoundsException("Cannot set index to " + value);
-        }
-        curIndex = value;
-    }
-    public int getCurIndex() {
-        return curIndex;
-    }
     public void toNextToken() {
         if (curIndex < tokens.length) {
             curIndex += 1;
@@ -33,6 +22,9 @@ public class Tokenizer {
         }
     }
     public String getCurToken() {
+        if (curIndex >= tokens.length) {
+            throw new IndexOutOfBoundsException("Cannot get token at/beyond end of input");
+        }
         return tokens[curIndex];
     }
     public String peekNextToken() {

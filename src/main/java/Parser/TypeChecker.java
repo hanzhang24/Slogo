@@ -6,10 +6,17 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public abstract class TypeChecker {
+
+    private static boolean initialized = false;
     private static String syntaxPath = "resources/Parser/TokenPatterns";
     private static List<Pair<TokenType, Pattern>> patterns;
 
     public static TokenType getType(String token) {
+        if (!TypeChecker.initialized) {
+            initPatternMap();
+            TypeChecker.initialized = true;
+        }
+
         for (Pair<TokenType, Pattern> p: TypeChecker.patterns) {
             Pattern pattern = p.getValue();
             TokenType tokenType = p.getKey();
@@ -18,7 +25,7 @@ public abstract class TypeChecker {
         }
         return TokenType.BAD_TYPE;
     }
-    public static void initPatternMap() {
+    private static void initPatternMap() {
         ResourceBundle resources = ResourceBundle.getBundle(syntaxPath);
         Enumeration<String> iter = resources.getKeys();
         TypeChecker.patterns = new ArrayList<Pair<TokenType, Pattern>>();
