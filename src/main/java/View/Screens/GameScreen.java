@@ -1,5 +1,11 @@
 package View.Screens;
 
+import View.AvatarView;
+import View.Avatars.Turtle;
+import View.Containers.CommandBoxView;
+import View.DrawBoardView;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -25,11 +31,19 @@ public class GameScreen extends Screen {
 
   @Override
   public Scene makeScene(int width, int height) {
-    GridPane root = new GridPane();
+    root = new GridPane();
     root.getStyleClass().add("grid-pane");
     root.setId("Pane");
-    this.scene = new Scene(root, width, height);
-
+    DrawBoardView canvas = new DrawBoardView();
+    root.getChildren().add(canvas.getContainer());
+    CommandBoxView commandBox = new CommandBoxView();
+    root.getChildren().add(commandBox.getContainer());
+    GridPane.setConstraints(commandBox.getContainer(), 0, 1);
+    AvatarView avatar = new Turtle();
+    Group all = new Group();
+    all.getChildren().add(root);
+    all.getChildren().add(avatar.getImage());
+    this.scene = new Scene(all, width, height);
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
     return scene;
 
