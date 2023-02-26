@@ -13,7 +13,7 @@ public class BackCommand extends Command {
             double distance = getChild(0).execute().getNumeric();
             // TODO: This will need be modified when model is
             // Get x, y, rotation
-            double x=3, y=4, rotation = Math.PI / 4;
+            double x=model.getAvatarX(), y=model.getAvatarY(), rotation=model.getAvatarRotation();
             // END TODO
 
             Vector v = Vector.vectorFromCoord(x, y);
