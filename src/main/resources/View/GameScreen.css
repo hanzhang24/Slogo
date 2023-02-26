@@ -5,3 +5,10 @@
   -fx-background-color: WHITE;
   -fx-padding: 50;
 }
+
+#Command-HBox{
+  -fx-spacing: 20;
+}
+#Command-VBox{
+  -fx-spacing: 30;
+}

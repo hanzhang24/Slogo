@@ -2,6 +2,7 @@ package View.Screens;
 
 import View.AvatarView;
 import View.Avatars.Turtle;
+import View.Containers.CommandBoxView;
 import View.DrawBoardView;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -26,6 +27,9 @@ public class GameScreen extends Screen {
     root.setId("Pane");
     DrawBoardView canvas = new DrawBoardView();
     root.getChildren().add(canvas.getContainer());
+    CommandBoxView commandBox = new CommandBoxView();
+    root.getChildren().add(commandBox.getContainer());
+    GridPane.setConstraints(commandBox.getContainer(), 0, 1);
     AvatarView avatar = new Turtle();
     Group all = new Group();
     all.getChildren().add(root);
