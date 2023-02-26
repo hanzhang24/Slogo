@@ -7,9 +7,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.awt.*;
 
 public class SplashScreen extends Screen {
 
@@ -17,6 +16,7 @@ public class SplashScreen extends Screen {
 
     private String chosenLanguage;
     private Color chosenColor;
+
     private Screen nextScreen;
 
     private Label label;
@@ -41,8 +41,11 @@ public class SplashScreen extends Screen {
         buttons = makeActions(
                 makeButton("Start", e -> startClicked())
         );
+        buttons.setId("Go-Button");
         colorPicker = makeColorPicker("Picker");
+        colorPicker.setId("Color-Selector");
         languagePicker = makeLanguagePicker(languageOptions);
+        languagePicker.setId("Language-Box");
 
 
         root.add(buttons, 0, 30);
@@ -57,8 +60,15 @@ public class SplashScreen extends Screen {
 
 
     private void startClicked() {
-        nextScreen = new GameScreen(this.stage, languagePicker.getValue().toString(), colorPicker.getValue());
+        chosenLanguage = languagePicker.getValue().toString();
+        chosenColor = colorPicker.getValue();
+        nextScreen = new GameScreen(this.stage, chosenLanguage, chosenColor);
         stage.setScene(nextScreen.makeScene(750, 750));
     }
-
+    public String getChosenLanguage(){
+        return chosenLanguage;
+    }
+    public Color getChosenColor(){
+        return chosenColor;
+    }
 }

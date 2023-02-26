@@ -37,6 +37,9 @@
     -fx-background-color: lightgray;
     -fx-padding: 10px;
 }
+#Go-Button{
+
+}
 
 .label {
     -fx-text-fill: text_color;
