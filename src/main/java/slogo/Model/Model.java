@@ -58,6 +58,7 @@ public interface Model {
    * Gets the value of the variable with the specified key
    * @return the variable's value
    */
+<<<<<<< HEAD
   double getUserVariable(String key);
 
   /**
