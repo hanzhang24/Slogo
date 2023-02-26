@@ -13,15 +13,26 @@ public class CommandBoxView extends ContainerView {
     TextArea textBox = new TextArea();
     textBox.setId("Text-Box");
     container.getChildren().add(textBox);
+    createButtons(textBox);
+  }
+
+  private void createButtons(TextArea textBox) {
     VBox buttons = new VBox();
     buttons.setId("Command-VBox");
     Button run = new Button("Run");
     run.setId("Run");
+    run.setOnAction(e -> sendText(textBox));
     Button clear = new Button("Clear");
     run.setId("Clear");
+    clear.setOnAction(e -> textBox.clear());
     buttons.getChildren().add(run);
     buttons.getChildren().add(clear);
     container.getChildren().add(buttons);
   }
 
+  private void sendText(TextArea textBox){
+    String input = textBox.getText();
+    //send to the control/parser
+    //parser.parseInput(input)
+  }
 }

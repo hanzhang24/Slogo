@@ -12,3 +12,9 @@
 #Command-VBox{
   -fx-spacing: 30;
 }
+
+#Text-Box{
+  -fx-pref-height: 100;
+  -fx-pref-width: 500;
+}
+
