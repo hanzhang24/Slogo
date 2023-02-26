@@ -45,7 +45,7 @@
   Container.setProperty(CssSelector.getValue())
 ```
 
-* The user wishes to clear command text box
+* The user wishes to clear viewCommand text box
 ```java
   CommandViewBox box = new CommandViewBox();
   box.clear();
@@ -59,5 +59,5 @@
 ```java
   ButtonView button = new ButtonView();
   button.setOnMouseClick(e -> step());
-  \\Step() is a function that tells the ViewInsertionQueue to go one more command
+  \\Step() is a function that tells the ViewInsertionQueue to go one more viewCommand
 ```

@@ -3,7 +3,8 @@ package Model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import Payload.ViewPayloadManager.ViewPayload;
+import slogo.Model.ModelTracker;
+import slogo.Payload.ViewPayloadManager.ViewPayload;
 import java.util.Map;
 import java.util.ResourceBundle;
 import org.junit.jupiter.api.BeforeEach;

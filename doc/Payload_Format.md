@@ -61,8 +61,8 @@ Payload{
 * When Model runs this function:
     * If getTurtleX > 0 is false, the Payload will be asked to skip to the first instruction without
       id = 1
-        * Moves pointer to setRotation command
+        * Moves pointer to setRotation viewCommand
     * If getTurtleY > 0 is false, the Payload will be asked to skip to the first instruction without
       id = 2
-        * Moves pointer to the moveUp command
+        * Moves pointer to the moveUp viewCommand
     * Then, the Model can request the next instruction as normal using Payload.nextInstruction()
