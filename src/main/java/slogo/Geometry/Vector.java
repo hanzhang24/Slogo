@@ -44,7 +44,7 @@ public class Vector {
         }
         return new Vector(this.x/length, this.y/length);
     }
-    public Vector substract(Vector v) {
+    public Vector subtract(Vector v) {
         return new Vector(this.x - v.getX(), this.y - v.getY());
     }
     public Vector add(Vector v) {

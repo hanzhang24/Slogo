@@ -21,8 +21,7 @@ public class ModelTracker implements Model {
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private static final String AVATAR_X = "AvatarX";
   private static final String AVATAR_Y = "AvatarY";
-
-  private static final String ROTATION = "Rotation";
+  private static final String ROTATION = "AvatarRotation";
   private static final String POSITION_CODE = "AvatarPosition";
   private Avatar avatar;
   private Map<String, String> userParameters;

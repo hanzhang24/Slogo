@@ -1,5 +1,6 @@
 package slogo.Node.Commands.avatar;
 
+import slogo.Geometry.Vector;
 import slogo.Node.Command;
 import slogo.Node.NodeValue;
 
@@ -9,9 +10,20 @@ public class ForwardCommand extends Command {
     public NodeValue execute() {
         checkContext();
         try {
-            NodeValue distance = getChild(0).execute();
-            model.forward(distance.getNumeric());
-            return distance;
+            double distance = getChild(0).execute().getNumeric();
+            // TODO: This will need be modified when model is
+            // Get x, y, rotation
+            double x=3, y=4, rotation = Math.PI / 4;
+            // END TODO
+
+            Vector v = Vector.vectorFromCoord(x, y);
+            Vector disp = Vector.vectorFromRadial(distance, rotation);
+
+            Vector result = v.add(disp);
+
+            model.setPosition(result.getX(), result.getY());
+
+            return new NodeValue(distance);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
