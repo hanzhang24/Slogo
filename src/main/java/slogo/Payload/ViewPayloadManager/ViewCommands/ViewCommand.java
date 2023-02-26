@@ -8,7 +8,7 @@ import java.util.List;
  * @author Alec Liu The Command class is a parent class for each View command. These Commands are
  * generically run in the ViewController by calling command.execute().
  */
-public abstract class Command {
+public abstract class ViewCommand {
 
   GameScreen gameScreen;
   List<String> parameters;
@@ -18,7 +18,7 @@ public abstract class Command {
    *
    * @param parameters list of parameters
    */
-  public Command(List<String> parameters) {
+  public ViewCommand(List<String> parameters) {
     this.parameters = parameters;
   }
 

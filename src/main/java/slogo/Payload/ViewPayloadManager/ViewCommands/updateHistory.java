@@ -6,7 +6,7 @@ import java.util.List;
  * @author Alec Liu This command prompts the View to add the last user-entered command into the
  * history section.
  */
-public class updateHistory extends Command {
+public class updateHistory extends ViewCommand {
 
   public updateHistory(List<String> parameters) {
     super(parameters);

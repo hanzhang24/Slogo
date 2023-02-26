@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author Alec Liu This command updates the Avatar's position simultaneously.
  */
-public class updateAvatarPosition extends Command{
+public class updateAvatarPosition extends ViewCommand {
   public updateAvatarPosition(List<String> parameters) {
     super(parameters);
   }

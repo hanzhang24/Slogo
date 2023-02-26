@@ -1,6 +1,6 @@
 ### Use Cases
 
-* The user types 'fd 50' in the command window, sees the turtle move in the display window leaving a trail, and has the command added to the environment's history.
+* The user types 'fd 50' in the viewCommand window, sees the turtle move in the display window leaving a trail, and has the viewCommand added to the environment's history.
  ``` java
   // Compiler is called as a handler
   ModelPayload modelPayload = buildPayload(userInput);
@@ -17,7 +17,7 @@
   
 ```
 
-* The user types '50 fd' in the command window and sees an error message that the command was not formatted correctly.
+* The user types '50 fd' in the viewCommand window and sees an error message that the viewCommand was not formatted correctly.
  ``` java
   // Compiler is called as a handler
   try {
@@ -26,7 +26,7 @@
     throw ie;
   }
 ```
-* The user types 'pu fd 50 pd fd 50' in the command window and sees the turtle move twice (once without a trail and once with a trail).
+* The user types 'pu fd 50 pd fd 50' in the viewCommand window and sees the turtle move twice (once without a trail and once with a trail).
  ``` java
   // Compiler is called as a handler
   try {
@@ -54,7 +54,7 @@
   }
 ```
 
-* The user inputs an invalid command 'fd50'
+* The user inputs an invalid viewCommand 'fd50'
 ```java
   String commands = GameScreen.getValue()
   Compiler.buildPayload()
@@ -75,7 +75,7 @@
   }
 ```
 
-* The user wishes to rerun the previous command
+* The user wishes to rerun the previous viewCommand
 ```java
   // in Compiler
   Instruction instr = history.getHistory.get(size - 1);
@@ -102,7 +102,7 @@
 * The user runs a user defined function
 ```java
 ControllerPayload controllerPayload = buildPayload(input);
-// returns the relevant command sequence
+// returns the relevant viewCommand sequence
 List<Command> subComands = lookupCommand(parsedInput);
 // in controller, executes payload and conducts the rest of the process
 executePayload(controllerPayload); 

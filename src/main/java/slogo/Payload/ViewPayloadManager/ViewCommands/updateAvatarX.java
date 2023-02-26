@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author Alec Liu This command updates the Avatar's x position.
  */
-public class updateAvatarX extends Command {
+public class updateAvatarX extends ViewCommand {
 
   public updateAvatarX(List<String> parameters) {
     super(parameters);

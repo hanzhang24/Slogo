@@ -1,6 +1,6 @@
 package slogo.Controller;
 
-import slogo.Payload.ViewPayloadManager.ViewCommands.Command;
+import slogo.Payload.ViewPayloadManager.ViewCommands.ViewCommand;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 import slogo.View.Screens.GameScreen;
 
@@ -26,9 +26,9 @@ public class ViewController {
    * @param viewPayload model-generated payload after one complete operation
    */
   public void runPayload(ViewPayload viewPayload) {
-    for (Command command : viewPayload) {
-      command.setGameScreen(gameScreen);
-      command.execute();
+    for (ViewCommand viewCommand : viewPayload) {
+      viewCommand.setGameScreen(gameScreen);
+      viewCommand.execute();
     }
   }
 }

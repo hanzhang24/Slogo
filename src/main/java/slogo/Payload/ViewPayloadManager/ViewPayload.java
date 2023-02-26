@@ -1,7 +1,7 @@
 package slogo.Payload.ViewPayloadManager;
 
 import slogo.Payload.Payload;
-import slogo.Payload.ViewPayloadManager.ViewCommands.Command;
+import slogo.Payload.ViewPayloadManager.ViewCommands.ViewCommand;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -13,12 +13,12 @@ import java.util.ResourceBundle;
  * @author Alec Liu The ViewPayload class is a simplified, linear sequence of update instructions
  * generated in the Model and ran in the ViewController.
  */
-public class ViewPayload implements Payload, Iterable<Command> {
+public class ViewPayload implements Payload, Iterable<ViewCommand> {
 
   private static final String COMMANDS_PATH = "Payload.ViewPayloadManager.ViewCommands.update";
   private static final String VIEW_METHODS_PATH = "View.ViewControllerMethods";
   private static final ResourceBundle METHODS = ResourceBundle.getBundle(VIEW_METHODS_PATH);
-  List<Command> commandsList;
+  List<ViewCommand> commandsList;
 
   /**
    * Class constructor
@@ -37,7 +37,7 @@ public class ViewPayload implements Payload, Iterable<Command> {
     try {
       Class<?> command = Class.forName(COMMANDS_PATH + changeLog.getName());
       Constructor<?> constructor = command.getDeclaredConstructor(List.class);
-      commandsList.add((Command) constructor.newInstance(changeLog.getParametersList()));
+      commandsList.add((ViewCommand) constructor.newInstance(changeLog.getParametersList()));
     } catch (Exception e) {
       // do something
     }
@@ -50,11 +50,11 @@ public class ViewPayload implements Payload, Iterable<Command> {
    * @return iterator for the View Controller to use
    */
   @Override
-  public Iterator<Command> iterator() {
+  public Iterator<ViewCommand> iterator() {
     return new ViewPayloadIterator();
   }
 
-  class ViewPayloadIterator implements Iterator<Command> {
+  class ViewPayloadIterator implements Iterator<ViewCommand> {
 
     int index = 0;
 
@@ -74,10 +74,10 @@ public class ViewPayload implements Payload, Iterable<Command> {
      * @return next Instruction
      */
     @Override
-    public Command next() {
-      Command command = commandsList.get(index);
+    public ViewCommand next() {
+      ViewCommand viewCommand = commandsList.get(index);
       index++;
-      return command;
+      return viewCommand;
     }
   }
 
@@ -88,8 +88,8 @@ public class ViewPayload implements Payload, Iterable<Command> {
    */
   public String toString() {
     String payloadDescription = "ViewPayload{\n";
-    for (Command command : commandsList) {
-      payloadDescription += command.getName() + ":" + command.getParameters() + "\n";
+    for (ViewCommand viewCommand : commandsList) {
+      payloadDescription += viewCommand.getName() + ":" + viewCommand.getParameters() + "\n";
     }
     payloadDescription += "}\n";
     return payloadDescription;

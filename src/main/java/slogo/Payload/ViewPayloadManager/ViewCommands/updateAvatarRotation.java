@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author Alec Liu This command updates the Avatar's rotation.
  */
-public class updateAvatarRotation extends Command{
+public class updateAvatarRotation extends ViewCommand {
   public updateAvatarRotation(List<String> parameters) {
     super(parameters);
   }

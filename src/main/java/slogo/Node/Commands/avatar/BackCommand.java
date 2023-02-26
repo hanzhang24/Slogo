@@ -2,7 +2,7 @@ package slogo.Node.Commands.avatar;
 
 import slogo.Node.NodeValue;
 
-public class BackCommand {
+public class BackCommand extends Command{
     public int getNumParameters() {return 1;}
 
     public NodeValue execute() {

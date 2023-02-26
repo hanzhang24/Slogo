@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author Alec Liu This command updates the Avatar's y position.
  */
-public class updateAvatarY extends Command {
+public class updateAvatarY extends ViewCommand {
 
   public updateAvatarY(List<String> parameters) {
     super(parameters);
