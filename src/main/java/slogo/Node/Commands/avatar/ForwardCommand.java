@@ -11,17 +11,15 @@ public class ForwardCommand extends Command {
         checkContext();
         try {
             double distance = getChild(0).execute().getNumeric();
-            // TODO: This will need be modified when model is
-            // Get x, y, rotation
-            double x=3, y=4, rotation = Math.PI / 4;
-            // END TODO
+
+            double x=model.getAvatarX(), y=model.getAvatarY(), rotation=model.getAvatarRotation();
 
             Vector v = Vector.vectorFromCoord(x, y);
             Vector disp = Vector.vectorFromRadial(distance, rotation);
 
             Vector result = v.add(disp);
 
-            model.setPosition(result.getX(), result.getY());
+            model.setAvatarPosition(result.getX(), result.getY());
 
             return new NodeValue(distance);
         } catch (Exception e) {

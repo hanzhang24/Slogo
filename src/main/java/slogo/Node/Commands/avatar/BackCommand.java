@@ -11,10 +11,8 @@ public class BackCommand extends Command {
         checkContext();
         try {
             double distance = getChild(0).execute().getNumeric();
-            // TODO: This will need be modified when model is
-            // Get x, y, rotation
+
             double x=model.getAvatarX(), y=model.getAvatarY(), rotation=model.getAvatarRotation();
-            // END TODO
 
             Vector v = Vector.vectorFromCoord(x, y);
             Vector disp = Vector.vectorFromRadial(distance, rotation);
