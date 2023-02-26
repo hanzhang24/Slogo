@@ -28,7 +28,6 @@ public class ModelTracker implements Model {
   private Map<String, String> workspace;
   private ViewPayload viewPayload;
 
-
   /**
    * Class constructor
    */
