@@ -106,4 +106,3 @@ public interface Model {
    */
   void setUserVariable(String key, double value);
 }
-
