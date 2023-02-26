@@ -35,16 +35,14 @@ public class Parser {
             String curToken = tokenizer.getCurToken();
             switch (TypeChecker.getType(curToken)) {
                 case CONSTANT:
-
-                    break;
+                    return parseConstant();
                 case VARIABLE:
-
-                    break;
-
+                    return parseVariable();
                 case GROUP_START:
+                    throw new RuntimeException("Not yet implemented");
                     break;
-
                 case POSSIBLY_COMMAND:
+
 
                     break;
                 case BAD_TYPE, GROUP_END:
@@ -58,15 +56,32 @@ public class Parser {
 
 
 
-    private Node parseGroup(){};
+    private Node parseGroup(){
+        throw new RuntimeException();
+    };
 
-    private Node parseCommand(){};
-
-    private Node parseConstant(){
+    private Node parseCommand(){
 
     };
 
-    private Node parseVariable(){};
+    private parseSystemCommand(){
+    }
+
+    private parseCustomCommand(){
+
+    }
+
+    private Node parseConstant(){
+        Node constant = new Constant(tokenizer.getCurToken());
+        tokenizer.toNextToken();
+        return constant;
+    };
+
+    private Node parseVariable(){
+        Node variable = new Variable(curToken);
+        tokenizer.toNextToken();
+        return variable;
+    };
 
 
 }
