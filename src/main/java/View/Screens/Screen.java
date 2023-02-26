@@ -1,16 +1,24 @@
 package View.Screens;
 
+import View.Main;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
+import java.awt.*;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 
 
 public abstract class Screen {
@@ -32,16 +40,16 @@ public abstract class Screen {
     return null;
   };
 
-  protected Node makeLabel (String property) {
+  protected Label makeLabel (String property) {
     Label label = new Label(resources.getString(property));
-    return setID(property, label);
+    return label;
   }
 
-  protected Node makeButton(String property, EventHandler<ActionEvent> response) {
+  protected Button makeButton(String property, EventHandler<ActionEvent> response) {
     Button result = new Button();
     result.setText(resources.getString(property));
     result.setOnAction(response);
-    return setID(property, result);
+    return result;
   }
 
   protected Node makeActions (Node ... buttons) {
@@ -51,12 +59,14 @@ public abstract class Screen {
     return panel;
   }
 
+  protected ColorPicker makeColorPicker (String id) {
+    ColorPicker picker = new ColorPicker();
+    return picker;
+  }
 
-
-
-  protected Node setID (String id, Node node) {
-    node.setId(id);
-    return node;
+  protected ComboBox makeLanguagePicker (ObservableList<String> options) {
+    ComboBox languageComboBox = new ComboBox(options);
+    return languageComboBox;
   }
 
 }

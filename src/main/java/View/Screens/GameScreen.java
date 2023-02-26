@@ -9,15 +9,24 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
+
+import java.awt.*;
 
 public class GameScreen extends Screen {
 
   public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
 
+  private static Color color;
 
   public GameScreen(Stage stage, String language) {
     super(stage, language);
+  }
+
+  public GameScreen(Stage stage, String language, Color color) {
+    super(stage, language);
     this.root = new GridPane();
+    this.color = color;
   }
 
   @Override
