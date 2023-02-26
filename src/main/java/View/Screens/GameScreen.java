@@ -1,5 +1,7 @@
 package View.Screens;
 
+import View.AvatarView;
+import View.Avatars.Turtle;
 import View.DrawBoardView;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -24,7 +26,11 @@ public class GameScreen extends Screen {
     root.setId("Pane");
     DrawBoardView canvas = new DrawBoardView();
     root.getChildren().add(canvas.getContainer());
-    this.scene = new Scene(root, width, height);
+    AvatarView avatar = new Turtle();
+    Group all = new Group();
+    all.getChildren().add(root);
+    all.getChildren().add(avatar.getImage());
+    this.scene = new Scene(all, width, height);
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
     return scene;
 

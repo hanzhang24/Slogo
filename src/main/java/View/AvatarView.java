@@ -10,6 +10,9 @@ public abstract class AvatarView {
   protected double YCor;
 
   //TODO checkout what kind of variable this should be
-  protected String URL =
+  public static final String IMAGE_PATH = "/View/Images/";
 
+  public ImageView getImage() {
+    return image;
+  }
 }

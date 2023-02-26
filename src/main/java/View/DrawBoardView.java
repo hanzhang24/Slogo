@@ -18,7 +18,6 @@ public class DrawBoardView {
     canvas = new Canvas(500, 500);
     GraphicsContext gc = canvas.getGraphicsContext2D();
     HBox.getChildren().add(canvas);
-    gc.fillRect(100,100,100,100);
   }
   public Node getCanvas() {
     return canvas;
