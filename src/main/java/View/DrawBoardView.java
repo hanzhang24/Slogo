@@ -14,11 +14,10 @@ public class DrawBoardView {
   public DrawBoardView(){
     //TODO move into actual class
     HBox = new HBox();
+    HBox.setId("Canvas");
     canvas = new Canvas(500, 500);
-    canvas.setId("Canvas");
     GraphicsContext gc = canvas.getGraphicsContext2D();
     HBox.getChildren().add(canvas);
-
     gc.fillRect(100,100,100,100);
   }
   public Node getCanvas() {
