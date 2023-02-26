@@ -34,25 +34,37 @@ public interface Model {
   void setCurrentAvatar(int id);
 
   /**
-   * Get the x position of the current avatar
+   * Gets the x position of the current avatar
    *
    * @return avatar's x-position
    */
   double getAvatarX();
 
   /**
-   * Get the y position of the current avatar
+   * Gets the y position of the current avatar
    *
    * @return avatar's y-position
    */
   double getAvatarY();
 
   /**
-   * Get the rotation of the current avatar
+   * Gets the rotation of the current avatar
    *
    * @return avatar's
    */
   double getAvatarRotation();
+
+  /**
+   * Gets the pen color of the current avatar
+   * @return pen color
+   */
+  String getAvatarPenColor();
+
+  /**
+   * Gets the state of the pen
+   * @return if the pen is down
+   */
+  boolean getAvatarIsPenDown();
 
   /**
    * Gets the value of the variable with the specified key
@@ -90,13 +102,13 @@ public interface Model {
    * Sets the current avatar's pen color
    * @param color new color
    */
-  void setPenColor(String color);
+  void setAvatarPenColor(String color);
 
   /**
    * Sets the current avatar's pen enable setting
    * @param isPenDown new pen setting
    */
-  void setPenDown(boolean isPenDown);
+  void setAvatarPenDown(boolean isPenDown);
 
   /**
    * Sets the value of a user variable
