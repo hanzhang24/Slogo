@@ -11,9 +11,7 @@ public class Parser {
     private CommandManager commandManager;
 
     public Parser(){};
-    public Parser(Controller controller, CommandManager commandManager) {
-        this.commandManager = commandManager;
-    }
+    public Parser(CommandManager commandManager) {this.commandManager = commandManager;}
     public Node parseInput(String input) {
         try {
             this.tokenizer = new Tokenizer(input);
