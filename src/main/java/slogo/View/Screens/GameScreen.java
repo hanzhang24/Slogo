@@ -56,6 +56,7 @@ public class GameScreen extends Screen {
     avatar.updatePen(penStatus);
   }
   public void updatePenColor(Color newcolor) {
+    avatar.updateColor(newcolor);
   }
 
   public void updateAvatarPosXY(double newX, double newY) {
@@ -76,4 +77,7 @@ public class GameScreen extends Screen {
     return commandBoxView;
   }
 
+  public AvatarView getAvatar(){
+    return avatar;
+  }
 }
