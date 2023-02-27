@@ -29,7 +29,7 @@ public class ModelTracker implements Model {
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private List<Avatar> avatarList;
   private int currentAvatarID;
-  private OperationSignatureGenerator operationSignatureGenerator;
+  private final OperationSignatureGenerator operationSignatureGenerator;
   private int operationSignature;
   private Map<String, String> userVariables;
   private Map<String, String> workspace;
@@ -170,22 +170,31 @@ public class ModelTracker implements Model {
   }
 
   /**
+   * Helper method to get a particular Avatar parameter
+   * @param avatarKeyCode parameter name
+   * @return value of the parameter
+   */
+  private double getAvatarParameter(String avatarKeyCode) {
+    if (activeOpRunning()) {
+      String formattedKey = formatLookupString(avatarKeyCode);
+      if (workspace.containsKey(formattedKey)) {
+        return Double.parseDouble(workspace.get(formattedKey));
+      } else {
+        return avatarList.get(currentAvatarID).getDouble(avatarKeyCode);
+      }
+    } else {
+      return avatarList.get(currentAvatarID).getDouble(avatarKeyCode);
+    }
+  }
+
+  /**
    * Get the x position of the current avatar
    *
    * @return avatar's x-position
    */
   @Override
   public double getAvatarX() {
-    if (activeOpRunning()) {
-      String formattedKey = formatLookupString(AVATAR_X_CODE);
-      if (workspace.containsKey(formattedKey)) {
-        return Double.parseDouble(workspace.get(formattedKey));
-      } else {
-        return avatarList.get(currentAvatarID).getDouble(AVATAR_X_CODE);
-      }
-    } else {
-      return avatarList.get(currentAvatarID).getDouble(AVATAR_X_CODE);
-    }
+    return getAvatarParameter(AVATAR_X_CODE);
   }
 
   /**
@@ -195,16 +204,7 @@ public class ModelTracker implements Model {
    */
   @Override
   public double getAvatarY() {
-    if (activeOpRunning()) {
-      String formattedKey = formatLookupString(AVATAR_Y_CODE);
-      if (workspace.containsKey(formattedKey)) {
-        return Double.parseDouble(workspace.get(formattedKey));
-      } else {
-        return avatarList.get(currentAvatarID).getDouble(AVATAR_Y_CODE);
-      }
-    } else {
-      return avatarList.get(currentAvatarID).getDouble(AVATAR_Y_CODE);
-    }
+    return getAvatarParameter(AVATAR_Y_CODE);
   }
 
   /**
@@ -214,16 +214,7 @@ public class ModelTracker implements Model {
    */
   @Override
   public double getAvatarRotation() {
-    if (activeOpRunning()) {
-      String formattedKey = formatLookupString(AVATAR_ROTATION_CODE);
-      if (workspace.containsKey(formattedKey)) {
-        return Double.parseDouble(workspace.get(formattedKey));
-      } else {
-        return avatarList.get(currentAvatarID).getDouble(AVATAR_ROTATION_CODE);
-      }
-    } else {
-      return avatarList.get(currentAvatarID).getDouble(AVATAR_ROTATION_CODE);
-    }
+    return getAvatarParameter(AVATAR_ROTATION_CODE);
   }
 
   /**
@@ -266,10 +257,10 @@ public class ModelTracker implements Model {
 
 
   /**
-   * Gets the value of the variable with the specified key
+   * Gets the value of the user variable with the specified key
    *
-   * @param key
-   * @return the variable's value
+   * @param key variable name
+   * @return variable value
    */
   @Override
   public double getUserVariable(String key) {
