@@ -36,7 +36,18 @@ public class ModelTracker implements Model {
   private ViewPayload viewPayload;
 
   /**
-   * Class constructor
+   * Class constructor - for custom filenames
+   */
+  public ModelTracker() {
+    initializeAvatars("DefaultParameters");
+    userVariables = new HashMap<>();
+    workspace = null;
+    operationSignatureGenerator = new OperationSignatureGenerator();
+    operationSignature = -1;
+  }
+
+  /**
+   * Class constructor - for custom filenames
    */
   public ModelTracker(String defaultParametersFilename) {
     initializeAvatars(defaultParametersFilename);
@@ -44,7 +55,6 @@ public class ModelTracker implements Model {
     workspace = null;
     operationSignatureGenerator = new OperationSignatureGenerator();
     operationSignature = -1;
-
   }
 
   /**

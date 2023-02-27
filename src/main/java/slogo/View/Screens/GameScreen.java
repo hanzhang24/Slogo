@@ -16,6 +16,7 @@ public class GameScreen extends Screen {
 
   private static Color color;
   private AvatarView avatar;
+  private CommandBoxView commandBoxView;
 
   public GameScreen(Stage stage, String language, Color color) {
     super(stage, language);
@@ -30,10 +31,10 @@ public class GameScreen extends Screen {
     root.setId("Pane");
     DrawBoardView canvas = new DrawBoardView();
     root.getChildren().add(canvas.getContainer());
-    CommandBoxView commandBox = new CommandBoxView();
-    root.getChildren().add(commandBox.getContainer());
-    GridPane.setConstraints(commandBox.getContainer(), 0, 1);
-    avatar = new Turtle();
+    commandBoxView = new CommandBoxView();
+    root.getChildren().add(commandBoxView.getContainer());
+    GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
+    AvatarView avatar = new Turtle();
     Group all = new Group();
     all.getChildren().add(root);
     all.getChildren().add(avatar.getImage());
@@ -56,7 +57,8 @@ public class GameScreen extends Screen {
     avatar.updateRot(newRot);
   }
 
-
-
+  public CommandBoxView getCommandBoxView(){
+    return commandBoxView;
+  }
 
 }

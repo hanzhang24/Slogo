@@ -1,8 +1,7 @@
 package slogo.Parser;
 
-import slogo.Node.Command;
+import slogo.Node.NodeCategories.Command;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class CommandManager {

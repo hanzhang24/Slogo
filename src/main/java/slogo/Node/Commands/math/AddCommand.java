@@ -1,7 +1,7 @@
 package slogo.Node.Commands.math;
 
 
-import slogo.Node.Command;
+import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
 public class AddCommand extends Command {

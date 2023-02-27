@@ -1,7 +1,6 @@
 package slogo.Node.Commands.avatar;
 
-import slogo.Node.Command;
-import slogo.Node.Node;
+import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
 public class PenUpCommand extends Command {
@@ -10,8 +9,7 @@ public class PenUpCommand extends Command {
         checkContext();
         try {
             // TODO: This will need be modified when model is changed
-            // TODO: This will need be modified when model is changed
-            // model.penDown()
+            model.setAvatarPenDown(false);
 
             return new NodeValue(0);
         } catch (Exception e) {

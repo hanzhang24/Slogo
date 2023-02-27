@@ -1,7 +1,7 @@
 package slogo.Node.Commands.avatar;
 
 import slogo.Geometry.Vector;
-import slogo.Node.Command;
+import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
 public class ForwardCommand extends Command {

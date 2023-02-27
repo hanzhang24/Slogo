@@ -1,6 +1,9 @@
-package slogo.Node;
+package slogo.Node.NodeCategories;
 
-public class Variable extends Node{
+import slogo.Node.Node;
+import slogo.Node.NodeValue;
+
+public class Variable extends Node {
 
     private String name;
 

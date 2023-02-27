@@ -1,10 +1,10 @@
 package slogo.Controller;
 
 import slogo.Node.NodeValue;
-import slogo.Node.Root;
+import slogo.Node.NodeCategories.Root;
 
 public class Controller {
-    public NodeValue runCommand(Root root) {
+    NodeValue runInput(String string) {
         return null;
-    }
+    };
 }

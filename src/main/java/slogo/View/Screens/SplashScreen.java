@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import slogo.SlogoInitializer;
 
 public class SplashScreen extends Screen {
 
@@ -24,11 +25,13 @@ public class SplashScreen extends Screen {
     private ColorPicker colorPicker;
     private ComboBox languagePicker;
     ObservableList<String> languageOptions;
+    private SlogoInitializer slogoInitializer;
 
 
-    public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions) {
+    public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions, SlogoInitializer slogoInitializer) {
         super(stage, language);
         this.languageOptions = languageOptions;
+        this.slogoInitializer = slogoInitializer;
     }
 
     @Override
@@ -64,6 +67,8 @@ public class SplashScreen extends Screen {
         chosenColor = colorPicker.getValue();
         nextScreen = new GameScreen(this.stage, chosenLanguage, chosenColor);
         stage.setScene(nextScreen.makeScene(750, 750));
+
+        slogoInitializer.setGameScreen((GameScreen) nextScreen);
     }
 
     public String getChosenLanguage(){
