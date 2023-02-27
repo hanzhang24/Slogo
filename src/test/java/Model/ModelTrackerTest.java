@@ -3,8 +3,8 @@ package Model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import Payload.ViewPayloadManager.ViewPayload;
-import java.util.Map;
+import slogo.Model.ModelTracker;
+import slogo.Payload.ViewPayloadManager.ViewPayload;
 import java.util.ResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,11 +23,11 @@ public class ModelTrackerTest {
      * Checks if the modelTracker has all default parameters
      */
     void checkDefaultParameters(){
-      Map<String, String> backendCopy = modelTracker.getBackendState();
-      assertEquals("0.0", backendCopy.get("AvatarX"));
-      assertEquals("0.0", backendCopy.get("AvatarY"));
-      assertEquals("0.0", backendCopy.get("AvatarRotation"));
-      assertEquals("black", backendCopy.get("AvatarPenColor"));
+      assertEquals(0.0, modelTracker.getAvatarX());
+      assertEquals(0.0, modelTracker.getAvatarY());
+      assertEquals(0.0, modelTracker.getAvatarRotation());
+      assertEquals("black", modelTracker.getAvatarPenColor());
+      assertEquals(true, modelTracker.getAvatarIsPenDown());
     }
     @BeforeEach
     void setup(){
@@ -46,7 +46,7 @@ public class ModelTrackerTest {
       Exception exception = assertThrows(NumberFormatException.class, () -> {
         modelTracker = new ModelTracker("DefaultParametersBadType");
       });
-      String expected = String.format(EXCEPTIONS.getString("ConfigurationParseDoubleError"), "AvatarX");
+      String expected = String.format(EXCEPTIONS.getString("ConfigurationParsingError"), "AvatarX");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
     }
@@ -54,9 +54,9 @@ public class ModelTrackerTest {
     @Test
     void testForgotToStartOp(){
       Exception exception = assertThrows(RuntimeException.class, () -> {
-        modelTracker.getNumber("AvatarX");
+        modelTracker.setAvatarX(13.2);
       });
-      String expected = EXCEPTIONS.getString("StartOpNotCalled");
+      String expected = EXCEPTIONS.getString("StartOpNotCalledError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
     }
@@ -64,12 +64,12 @@ public class ModelTrackerTest {
     @Test
     void testForgotToEndLastOp(){
       modelTracker.startOp();
-      modelTracker.getNumber("AvatarX");
+      modelTracker.getAvatarY();
 
       Exception exception = assertThrows(RuntimeException.class, () -> {
         modelTracker.startOp();
       });
-      String expected = EXCEPTIONS.getString("EndOpNotCalled");
+      String expected = EXCEPTIONS.getString("EndOpNotCalledError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
     }
@@ -77,7 +77,7 @@ public class ModelTrackerTest {
     @Test
     void testBailedUpdatesNotPushed(){
       modelTracker.startOp();
-      modelTracker.setValue("AvatarPenColor", "blue");
+      modelTracker.setAvatarPenColor("blue");
       modelTracker.bail();
       checkDefaultParameters();
     }
@@ -105,57 +105,60 @@ public class ModelTrackerTest {
     @Test
     void testRunSuccessfulPayload(){
       modelTracker.startOp();
-      double d = modelTracker.getNumber("AvatarX");
+
+      double d = modelTracker.getAvatarX();
       d += 50;
-      modelTracker.setValue("AvatarX", d);
-      String penColor = modelTracker.getString("AvatarPenColor");
+      modelTracker.setAvatarX(d);
+
+      double e = modelTracker.getAvatarY();
+      e += 30;
+      modelTracker.setAvatarY(e);
+
+      double r = modelTracker.getAvatarRotation();
+      r += 90;
+      modelTracker.setAvatarRotation(r);
+
+      String penColor = modelTracker.getAvatarPenColor();
       penColor = "blue";
-      modelTracker.setValue("AvatarPenColor", penColor);
-      modelTracker.setPosition(3, 6);
-      modelTracker.setValue("a", 112);
+      modelTracker.setAvatarPenColor(penColor);
+
+      double x = modelTracker.getAvatarX();
+      double y = modelTracker.getAvatarY();
+      x += 3;
+      y += 6;
+      modelTracker.setAvatarPosition(x, y);
+
+      modelTracker.setUserVariable("a", 112);
+      modelTracker.setAvatarPenDown(false);
+
       ViewPayload viewPayload = modelTracker.endOp();
       System.out.println(viewPayload);
 
-      Map<String, String> backendCopy = modelTracker.getBackendState();
-      assertEquals("112.0", backendCopy.get("a"));
-      assertEquals("blue", backendCopy.get("AvatarPenColor"));
-      assertEquals("3.0", backendCopy.get("AvatarX"));
-      assertEquals("6.0", backendCopy.get("AvatarY"));
+      assertEquals(112.0, modelTracker.getUserVariable("a"));
+      assertEquals("blue", modelTracker.getAvatarPenColor());
+      assertEquals(53.0, modelTracker.getAvatarX());
+      assertEquals(36.0, modelTracker.getAvatarY());
     }
 
     @Test
     void testSetUserVariables(){
       modelTracker.startOp();
-      modelTracker.setValue("a", 5);
-      modelTracker.setValue("b", 1200);
-      modelTracker.setValue("c", "Hello");
+      modelTracker.setUserVariable("a", 5);
+      double a = modelTracker.getUserVariable("a");
+      a += 20;
+      modelTracker.setUserVariable("a", a);
       modelTracker.endOp();
 
-      Map<String,String> userVariables = modelTracker.getAllUserParameters();
-      assertEquals(3, userVariables.size());
-      assertEquals("5.0", userVariables.get("a"));
-      assertEquals("1200.0", userVariables.get("b"));
-      assertEquals("Hello", userVariables.get("c"));
+      assertEquals(25.0, modelTracker.getUserVariable("a"));
     }
 
     @Test
-    void testAssignDefaultStringToDouble(){
+    void setNonexistentAvatarID(){
       modelTracker.startOp();
-      Exception exception = assertThrows(NumberFormatException.class, () -> {
-        modelTracker.setValue("AvatarPenColor", 4.0);
+      Exception exception = assertThrows(RuntimeException.class, () -> {
+        modelTracker.setCurrentAvatar(12);
       });
-      String expected = String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), "AvatarPenColor");
-      String actual = exception.getMessage();
-      assertEquals(expected, actual);
-    }
-
-    @Test
-    void testAssignDefaultDoubleToString(){
-      modelTracker.startOp();
-      Exception exception = assertThrows(NumberFormatException.class, () -> {
-        modelTracker.setValue("AvatarX", "blue");
-      });
-      String expected = String.format(EXCEPTIONS.getString("DefaultTypeReassignment"), "AvatarX");
+      String expected = EXCEPTIONS.getString("NonexistentAvatarError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
     }

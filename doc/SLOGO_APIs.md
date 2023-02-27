@@ -27,13 +27,13 @@
   * Errors are caught by the same class that handles parsing
 
 * What do different commands need to know, when do they know it, and how do they get it?
-  * The different commands need to know what kind of commands they are, such as whether it’s a variable, basic command, or a function. 
-  * They also need to know how many parameters the command takes. 
+  * The different commands need to know what kind of commands they are, such as whether it’s a variable, basic viewCommand, or a function. 
+  * They also need to know how many parameters the viewCommand takes. 
   * These need to be defined before entering Controller, and they learn about all these things inside the Parsing class.
-* What behaviors does the result of a command need to have to be used by the View?
+* What behaviors does the result of a viewCommand need to have to be used by the View?
   * The resulting changes in coordinates, color, rotation, and various other ints and strings
   * View receives numbers and strings only (JSON perhaps?)
-* How is the View updated after a command has completed execution?
+* How is the View updated after a viewCommand has completed execution?
   * The View is only updated from what the Model gives it, which is taken from the Controller.
 * What value would Controller(s) have in mediating between the Model and View?
   * Allows users to enter desired changes, which move to the Controller so it can update the model, and those changes are reflected in changes in the view
@@ -73,8 +73,8 @@
   * Methods to calculate paths, etc
   * Each Command will have public methods that can be call upon to modify the backend class that stores the turtle info.
 * Contract
-  * Each command has a valid set of parameters
-  * Each command touches only relevant states
+  * Each viewCommand has a valid set of parameters
+  * Each viewCommand touches only relevant states
 * Services
   * Updates internal state
 
@@ -123,9 +123,9 @@
 
 ### Backend Design CRCs
 
-This class represents a generic instruction, which can be a command or a conditional
+This class represents a generic instruction, which can be a viewCommand or a conditional
 
-This class is meant to represent a return payload of a command
+This class is meant to represent a return payload of a viewCommand
 ```java
 public class ViewPayload {
   List<Command> updateList;
@@ -134,7 +134,7 @@ public class ViewPayload {
 }
 ```
 
-This class is meant to represent a input payload of a command
+This class is meant to represent a input payload of a viewCommand
 ```java
 public class ControllerPayload {
   Node commandRoot;
@@ -142,7 +142,7 @@ public class ControllerPayload {
 }
 ```
 
-This class is meant to represent a node in the tree structure for a command
+This class is meant to represent a node in the tree structure for a viewCommand
 ```java
 public class Node {
   List<Node> children;
@@ -155,7 +155,7 @@ public class Node {
 
 ```
 
-This class's purpose is to store the information for a command name and the required parameters
+This class's purpose is to store the information for a viewCommand name and the required parameters
 ```java
 public class Command extends Node {
 
@@ -182,8 +182,8 @@ This class's purpose is to look up supported commands:
 public class CommandLookup {
      // returns a Command object based on the lookup key, or throws an exception
      public Command lookupCommand throws InvalidCommandException (String userCommand);
-     // adds a new user defined command to the lookup table
-     public void addNewCommand throws InvalidCommandException (Command command);
+     // adds a new user defined viewCommand to the lookup table
+     public void addNewCommand throws InvalidCommandException (Command viewCommand);
  }
 ```
 This class is representation of the History

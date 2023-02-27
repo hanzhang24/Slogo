@@ -1,9 +1,9 @@
 public interface ExternalNode{
-    // executes corresponding command associated with node
+    // executes corresponding viewCommand associated with node
     // and returns a double
     public double execute(Model model)
 
-    // attempts to construct a new node command tree from a string
+    // attempts to construct a new node viewCommand tree from a string
     public static Node fromString(String input)
 
     // Set language. May only be called at the beginning of the program

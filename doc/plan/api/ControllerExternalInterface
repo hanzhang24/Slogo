@@ -1,5 +1,5 @@
 public interface ExternalController {
-    // Given a payload, it will execute the command and update the model accordingly
+    // Given a payload, it will execute the viewCommand and update the model accordingly
     public void executePayload(ControllerPayload payload);
 
     // Allow the View to get the History in packages of Strings to decode
