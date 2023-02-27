@@ -35,6 +35,11 @@ public class ModelTrackerTest {
     }
 
     @Test
+    void testDefaultConstructor(){
+      modelTracker = new ModelTracker();
+      checkDefaultParameters();
+    }
+    @Test
     void testOpenAndClose(){
       modelTracker.startOp();
       modelTracker.endOp();
@@ -54,7 +59,7 @@ public class ModelTrackerTest {
     @Test
     void testForgotToStartOp(){
       Exception exception = assertThrows(RuntimeException.class, () -> {
-        modelTracker.setAvatarX(13.2);
+        modelTracker.setAvatarPosition(13.2, 3.2);
       });
       String expected = EXCEPTIONS.getString("StartOpNotCalledError");
       String actual = exception.getMessage();
@@ -106,14 +111,6 @@ public class ModelTrackerTest {
     void testRunSuccessfulPayload(){
       modelTracker.startOp();
 
-      double d = modelTracker.getAvatarX();
-      d += 50;
-      modelTracker.setAvatarX(d);
-
-      double e = modelTracker.getAvatarY();
-      e += 30;
-      modelTracker.setAvatarY(e);
-
       double r = modelTracker.getAvatarRotation();
       r += 90;
       modelTracker.setAvatarRotation(r);
@@ -128,6 +125,12 @@ public class ModelTrackerTest {
       y += 6;
       modelTracker.setAvatarPosition(x, y);
 
+      double x2 = modelTracker.getAvatarX();
+      double y2 = modelTracker.getAvatarY();
+      x += 3;
+      y += 6;
+      modelTracker.setAvatarPosition(x, y);
+
       modelTracker.setUserVariable("a", 112);
       modelTracker.setAvatarPenDown(false);
 
@@ -136,8 +139,8 @@ public class ModelTrackerTest {
 
       assertEquals(112.0, modelTracker.getUserVariable("a"));
       assertEquals("blue", modelTracker.getAvatarPenColor());
-      assertEquals(53.0, modelTracker.getAvatarX());
-      assertEquals(36.0, modelTracker.getAvatarY());
+      assertEquals(6.0, modelTracker.getAvatarX());
+      assertEquals(12.0, modelTracker.getAvatarY());
     }
 
     @Test

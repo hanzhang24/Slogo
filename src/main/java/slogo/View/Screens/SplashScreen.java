@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.SlogoInitializer;
 
+
 public class SplashScreen extends Screen {
 
     public static final String SPLASHSCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "SplashScreen.css");
@@ -42,13 +43,16 @@ public class SplashScreen extends Screen {
 
         label = makeLabel("Group");
         buttons = makeActions(
-                makeButton("Start", e -> startClicked())
+                makeButton("Start", e -> {
+                    try {
+                        startClicked();
+                    } catch (ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                })
         );
-        buttons.setId("Go-Button");
         colorPicker = makeColorPicker("Picker");
-        colorPicker.setId("Color-Selector");
         languagePicker = makeLanguagePicker(languageOptions);
-        languagePicker.setId("Language-Box");
 
 
         root.add(buttons, 0, 30);
@@ -62,7 +66,7 @@ public class SplashScreen extends Screen {
     }
 
 
-    private void startClicked() {
+    private void startClicked() throws ClassNotFoundException {
         chosenLanguage = languagePicker.getValue().toString();
         chosenColor = colorPicker.getValue();
         nextScreen = new GameScreen(this.stage, chosenLanguage, chosenColor);

@@ -3,10 +3,11 @@ package slogo.Node;
 import slogo.Model.Model;
 import org.w3c.dom.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Node {
-    protected List<Node> children;
+    protected List<Node> children = new ArrayList<Node>();
 
     protected boolean hasContext = false;
     protected Model model;

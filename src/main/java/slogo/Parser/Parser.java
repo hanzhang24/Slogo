@@ -11,9 +11,7 @@ public class Parser {
     private CommandManager commandManager;
 
     public Parser(){};
-    public Parser(Controller controller, CommandManager commandManager) {
-        this.commandManager = commandManager;
-    }
+    public Parser(CommandManager commandManager) {this.commandManager = commandManager;}
     public Node parseInput(String input) {
         try {
             this.tokenizer = new Tokenizer(input);
@@ -21,7 +19,7 @@ public class Parser {
             return root;
         } catch (Exception e) {
             // TODO: Handle exceptions
-            throw new RuntimeException("Not implemented");
+            throw new RuntimeException(e.getMessage());
         }
     }
     private Root parseAll() {
@@ -34,7 +32,7 @@ public class Parser {
             return root;
         } catch (Exception e) {
             // TODO: Handle exceptions
-            throw new RuntimeException("Not implemented");
+            throw new RuntimeException("parseAll has not implemented error handling");
         }
     }
     private Node parseExpression(){

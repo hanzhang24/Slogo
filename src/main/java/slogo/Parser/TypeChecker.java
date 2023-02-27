@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public abstract class TypeChecker {
 
     private static boolean initialized = false;
-    private static String syntaxPath = "resources/Parser/TokenPatterns";
+    private static String syntaxPath = "Parser.TokenPatterns";
     private static List<Pair<TokenType, Pattern>> patterns;
 
     public static TokenType getType(String token) {
@@ -26,15 +26,19 @@ public abstract class TypeChecker {
         return TokenType.BAD_TYPE;
     }
     private static void initPatternMap() {
-        ResourceBundle resources = ResourceBundle.getBundle(syntaxPath);
-        Enumeration<String> iter = resources.getKeys();
-        TypeChecker.patterns = new ArrayList<Pair<TokenType, Pattern>>();
-        while (iter.hasMoreElements()) {
-            String key = iter.nextElement();
-            TokenType tokenType = TokenType.valueOf(key);
-            String regex = resources.getString(key);
-            Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-            TypeChecker.patterns.add(new Pair<TokenType, Pattern>(tokenType, pattern));
+        try{
+            ResourceBundle resources = ResourceBundle.getBundle(syntaxPath);
+            Enumeration<String> iter = resources.getKeys();
+            TypeChecker.patterns = new ArrayList<Pair<TokenType, Pattern>>();
+            while (iter.hasMoreElements()) {
+                String key = iter.nextElement();
+                TokenType tokenType = TokenType.valueOf(key);
+                String regex = resources.getString(key);
+                Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+                TypeChecker.patterns.add(new Pair<TokenType, Pattern>(tokenType, pattern));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

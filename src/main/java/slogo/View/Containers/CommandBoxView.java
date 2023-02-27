@@ -34,7 +34,7 @@ public class CommandBoxView extends ContainerView {
   private void sendText(TextArea textBox){
     String input = textBox.getText();
     //send to the control/parser
-    //controller.parseInput(input);
+    controller.runInput(input);
   }
 
   public void setController(Controller controller){
