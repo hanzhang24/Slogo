@@ -8,7 +8,6 @@ public class PenUpCommand extends Command {
     public NodeValue execute() {
         checkContext();
         try {
-            // TODO: This will need be modified when model is changed
             model.setAvatarPenDown(false);
 
             return new NodeValue(0);

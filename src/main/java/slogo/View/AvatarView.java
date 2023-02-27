@@ -28,7 +28,7 @@ public abstract class AvatarView {
     image.setX(newX + 275);
     image.setY(newY + 275);
   }
-  public void updateRot(double newRot) { image.setRotate(image.getRotate() + newRot); }
+  public void updateRot(double newRot) { image.setRotate(newRot); }
 
 
 }
