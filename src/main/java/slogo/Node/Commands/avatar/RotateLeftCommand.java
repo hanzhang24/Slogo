@@ -12,7 +12,6 @@ public class RotateLeftCommand extends Command {
         checkContext();
         try {
             double rotation = getChild(0).execute().getNumeric();
-
             double newRotation = model.getAvatarRotation() + rotation;
 
             model.setAvatarRotation(newRotation);
