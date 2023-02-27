@@ -26,7 +26,7 @@ public class ParserTest {
         model.endOp();
 
         assertEquals(result.getNumeric(), 50);
-        System.out.println(model.getAvatarX());
-        System.out.println(model.getAvatarY());
+        assertEquals(model.getAvatarX(), 50);
+        assertEquals(model.getAvatarY(), 0);
     }
 }
