@@ -18,7 +18,7 @@ public class ParserTest {
 
         CommandManager commandManager = new CommandManager();
         Model model = new ModelTracker();
-        Parser parser = new Parser(){};
+        Parser parser = new Parser(commandManager){};
         Node root = parser.parseInput("fd 50");
         root.initContext(model);
         model.startOp();
