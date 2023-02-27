@@ -18,7 +18,7 @@ public class ParserTest {
 
         CommandManager commandManager = new CommandManager();
         Model model = new ModelTracker();
-        Parser parser = new Parser(){};
+        Parser parser = new Parser(commandManager){};
         Node root = parser.parseInput("fd 50");
         root.initContext(model);
         model.startOp();
@@ -26,7 +26,7 @@ public class ParserTest {
         model.endOp();
 
         assertEquals(result.getNumeric(), 50);
-        System.out.println(model.getAvatarX());
-        System.out.println(model.getAvatarY());
+        assertEquals(model.getAvatarX(), 50);
+        assertEquals(model.getAvatarY(), 0);
     }
 }

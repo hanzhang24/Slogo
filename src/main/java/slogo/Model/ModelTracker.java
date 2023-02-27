@@ -293,31 +293,6 @@ public class ModelTracker implements Model {
     return new HashMap<>(userVariables);
   }
 
-
-//  /**
-//   * Sets the current avatar's x position
-//   *
-//   * @param x new x position
-//   */
-//  @Override
-//  public void setAvatarX(double x) {
-//    checkCurrentOperationConfigured();
-//    workspace.put(formatLookupString(AVATAR_X_CODE), x + "");
-//    viewPayload.addCommand(new ChangeLog(AVATAR_X_CODE, x));
-//  }
-//
-//  /**
-//   * Sets the current avatar's y position
-//   *
-//   * @param y new y position
-//   */
-//  @Override
-//  public void setAvatarY(double y) {
-//    checkCurrentOperationConfigured();
-//    workspace.put(formatLookupString(AVATAR_Y_CODE), y + "");
-//    viewPayload.addCommand(new ChangeLog(AVATAR_X_CODE, y));
-//  }
-
   /**
    * Simultaneously update the current Avatar's x and y position
    *

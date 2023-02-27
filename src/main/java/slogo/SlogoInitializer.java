@@ -49,11 +49,11 @@ public class SlogoInitializer {
    * Called by handler function in splash screen to continue setup
    * @param gameScreen initialized game screen
    */
-  public void setGameScreen(GameScreen gameScreen) {
+  public void setGameScreen(GameScreen gameScreen) throws ClassNotFoundException {
     this.gameScreen = gameScreen;
-    this.modelController = new Controller();
+    // this.modelController = new Controller();
     this.viewController = new ViewController(gameScreen);
     // Controller.setViewController(viewController);
-    gameScreen.getCommandBoxView().setController(modelController);
+    //gameScreen.getCommandBoxView().setController(modelController);
   }
 }

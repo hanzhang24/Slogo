@@ -19,7 +19,7 @@ public class Parser {
             return root;
         } catch (Exception e) {
             // TODO: Handle exceptions
-            throw new RuntimeException("Not implemented");
+            throw new RuntimeException(e.getMessage());
         }
     }
     private Root parseAll() {
@@ -32,7 +32,7 @@ public class Parser {
             return root;
         } catch (Exception e) {
             // TODO: Handle exceptions
-            throw new RuntimeException("Not implemented");
+            throw new RuntimeException("parseAll has not implemented error handling");
         }
     }
     private Node parseExpression(){
