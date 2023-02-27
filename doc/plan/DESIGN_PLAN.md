@@ -18,7 +18,7 @@ Example 1
 
 ```xml
 
-<command>
+<viewCommand>
   <type>single_step</type>
   <name>subtract</name>
   <function-class>Sum</function-class>
@@ -27,14 +27,14 @@ Example 1
   <returns>Number</returns>
   <description>Subtracts two numbers</description>
   <documentation></documentation>
-</command>
+</viewCommand>
 ```
 
 Example 2
 
 ```xml
 
-<command>
+<viewCommand>
   <type>multi_step</type>
   <name>move square</name>
   <numparameters>2</numparameters>
@@ -42,14 +42,14 @@ Example 2
   <commandlist>move up (a), move right (b), move down (a), move left (b)</commandlist>
   <description>Creates a square</description>
   <documentation></documentation>
-</command>
+</viewCommand>
 ```
 
 ## Design Overview
 
 * The design follows MVC format
 * The Model is responsible for tracking the internal state of the on-screen objects (locations,
-  rotations, etc.) and computing the effects of each command
+  rotations, etc.) and computing the effects of each viewCommand
 * The View is responsible for displaying and updating the on-screen objects, accepting user input,
   and changing frontend settings like color schemes.
 * The Controller is responsible for parsing user input, throwing format errors, and creating
@@ -94,7 +94,7 @@ Example 2
 * Our ModelExternalInterface allows us to read values from the Model, and allows the Controller to
   set the Avatar's various parameters for the purposes of calculation. The ModelInternalIInterface
   allows the model to construct a Payload and update its own values for different variables,
-  as well as keep two separate copies of the model in case errors happens on the next command. The
+  as well as keep two separate copies of the model in case errors happens on the next viewCommand. The
   feature supported
   is running the code pass in through the controller.
 * Our NodeExternalInterface allows the Model to be updated based on the commands in the Node trees.
@@ -127,7 +127,7 @@ Example 2
         * Can get complicated with passing from one class to another (e.g. model -> view has to go
           through mediator)
     * Pros of cyclic interactions
-        * Is representative of program flow (user input -> parser -> command -> ...)
+        * Is representative of program flow (user input -> parser -> viewCommand -> ...)
     * Cons of cyclic interactions
         * Can bloat the functionality of the Controller class
 
@@ -261,11 +261,11 @@ Test Scenario 2.3: String Input
 Test Scenario 3.1: Successfully Create Function
 
 1. User defines a new function with correct syntax in the text input field, then clicks "Run".
-2. System logs the new function as a command in the user library command structure, then returns.
+2. System logs the new function as a viewCommand in the user library viewCommand structure, then returns.
 3. Expected outcome: The user can see the new function in the View, and the user can call the
    function in future inputs.
 4. Testing support: We can expose the CommandLookup class to output to the console or GUI directly
-   to manually review that the command has been logged with the correct name and parameters.
+   to manually review that the viewCommand has been logged with the correct name and parameters.
    Additionally, we can use the InvalidCommandExceptions to check the existence and syntax of the
    newly declared functions.
 
@@ -315,13 +315,13 @@ Test Scenario 4.2: Fetching Non-Existent History
 
 Test Scenario 4.3: Fetching Failed Command History
 
-1. The user runs a command that fails, then tries to view that failed command in history.
-2. System goes to history and fetches the most recent successful command, ignoring the unsuccessful
+1. The user runs a viewCommand that fails, then tries to view that failed viewCommand in history.
+2. System goes to history and fetches the most recent successful viewCommand, ignoring the unsuccessful
    commands.
-3. Expected outcome: the user is not able to view a record of the failed command.
+3. Expected outcome: the user is not able to view a record of the failed viewCommand.
 4. Testing support: We can use the getHistory() method from the API to return the most recent
-   action. We can then verify that the returned History describes the most recent successful command
-   instead of the failed command.
+   action. We can then verify that the returned History describes the most recent successful viewCommand
+   instead of the failed viewCommand.
 
 ## Team Responsibilities
 

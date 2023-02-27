@@ -3,6 +3,7 @@ package slogo.example;
 import java.util.InputMismatchException;
 import java.lang.IllegalArgumentException;
 import java.util.concurrent.TimeUnit;
+
 import javafx.animation.Animation;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
