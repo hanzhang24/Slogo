@@ -2,8 +2,8 @@ package slogo.Payload.ViewPayloadManager.ViewCommands;
 
 import java.util.List;
 
-public class updateAvatarIsPenDown extends ViewCommand {
-  public updateAvatarIsPenDown(List<String> parameters) {
+public class UpdateAvatarIsPenDown extends ViewCommand {
+  public UpdateAvatarIsPenDown(List<String> parameters) {
     super(parameters);
   }
 
