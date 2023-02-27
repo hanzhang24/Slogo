@@ -38,7 +38,7 @@ public class ModelTracker implements Model {
   private ViewPayload viewPayload;
 
   /**
-   * Class constructor - for custom filenames
+   * Class constructor - default
    */
   public ModelTracker() {
     initializeAvatars("DefaultParameters");
