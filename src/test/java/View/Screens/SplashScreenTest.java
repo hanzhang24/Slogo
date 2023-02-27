@@ -44,8 +44,6 @@ class SplashScreenTest extends DukeApplicationTest {
     languages = lookup("#Language-Box").query();
     button = lookup("#Go-Button").query();
     color = lookup("#Color-Selector").query();
-
-
   }
 
   @Test
