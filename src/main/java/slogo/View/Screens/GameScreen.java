@@ -15,6 +15,7 @@ public class GameScreen extends Screen {
   public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
 
   private static Color color;
+  private CommandBoxView commandBoxView;
 
   public GameScreen(Stage stage, String language) {
     super(stage, language);
@@ -33,9 +34,9 @@ public class GameScreen extends Screen {
     root.setId("Pane");
     DrawBoardView canvas = new DrawBoardView();
     root.getChildren().add(canvas.getContainer());
-    CommandBoxView commandBox = new CommandBoxView();
-    root.getChildren().add(commandBox.getContainer());
-    GridPane.setConstraints(commandBox.getContainer(), 0, 1);
+    commandBoxView = new CommandBoxView();
+    root.getChildren().add(commandBoxView.getContainer());
+    GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
     AvatarView avatar = new Turtle();
     Group all = new Group();
     all.getChildren().add(root);
@@ -51,6 +52,10 @@ public class GameScreen extends Screen {
 //    Scene primaryScene = new Scene(Root, Double.parseDouble(this.resources.getString("Width")), Double.parseDouble(this.resources.getString("Height")));
 //    primaryScene.getStylesheets().add(GAMESCREEN_STYLESHEET);
 //    return primaryScene;
+  }
+
+  public CommandBoxView getCommandBoxView(){
+    return commandBoxView;
   }
 
 }
