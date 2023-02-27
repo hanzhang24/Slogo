@@ -10,9 +10,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import slogo.SlogoInitializer;
+import slogo.View.Screens.GameScreen;
+import slogo.View.Screens.SplashScreen;
 import util.DukeApplicationTest;
 
 class GameScreenTest extends DukeApplicationTest {
@@ -26,19 +30,19 @@ class GameScreenTest extends DukeApplicationTest {
           "Spanish"
       );
 
-  private SplashScreen thisScreen;
+  private GameScreen thisScreen;
   private Node button;
   private TextArea area;
   private Button clear;
 
   @Override
   public void start (Stage stage) {
-    thisScreen = new SplashScreen(stage, DEFAULT_LANGUAGE, LANGUAGE_OPTIONS);
+    thisScreen = new GameScreen(stage, DEFAULT_LANGUAGE, Color.BLACK);
     stage.setScene(thisScreen.makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
     stage.setTitle(TITLE);
     stage.show();
-    button = lookup("#Go-Button").query();
-    clickOn(button);
+
+    button = lookup("#Run").query();
     area =  lookup("#Text-Box").query();
     clear = lookup("#Clear").query();
   }
