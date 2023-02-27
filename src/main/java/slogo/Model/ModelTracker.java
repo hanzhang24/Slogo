@@ -1,6 +1,9 @@
 /**
  * TODO: expose setReturnValue, work on History class,
  *      talk about History and return value implementations
+ *      talk about behavior once turtle is at edge
+ *      talk about xml files
+ *      talk about removing magic numbers
  */
 package slogo.Model;
 
