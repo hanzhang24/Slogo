@@ -5,8 +5,8 @@ import java.util.List;
 /**
  * @author Alec Liu This command updates the pen color.
  */
-public class updateAvatarPenColor extends ViewCommand {
-  public updateAvatarPenColor(List<String> parameters) {
+public class UpdateAvatarPenColor extends ViewCommand {
+  public UpdateAvatarPenColor(List<String> parameters) {
     super(parameters);
   }
 
