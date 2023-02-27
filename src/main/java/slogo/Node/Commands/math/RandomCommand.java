@@ -1,6 +1,6 @@
 package slogo.Node.Commands.math;
 
-import slogo.Node.Command;
+import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 import java.util.Random;
 

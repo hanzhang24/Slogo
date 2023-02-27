@@ -22,10 +22,10 @@ public abstract class Node {
             throw new NullPointerException("Model not attached to node");
         }
     }
-    protected Node getChild(int ith) {
+    public Node getChild(int ith) {
         return this.children.get(ith);
     }
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
         return this.children;
     }
     public void addChild(Node node) {

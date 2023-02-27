@@ -1,10 +1,16 @@
 package slogo.Parser;
 import slogo.Node.*;
 import slogo.Controller.*;
+import slogo.Node.NodeCategories.Command;
+import slogo.Node.NodeCategories.Constant;
+import slogo.Node.NodeCategories.Root;
+import slogo.Node.NodeCategories.Variable;
 
 public class Parser {
     private Tokenizer tokenizer;
     private CommandManager commandManager;
+
+    public Parser(){};
     public Parser(Controller controller, CommandManager commandManager) {
         this.commandManager = commandManager;
     }
