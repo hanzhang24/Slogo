@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 public class GameScreen extends Screen {
 
@@ -37,7 +38,7 @@ public class GameScreen extends Screen {
     avatar = new Turtle();
     Group all = new Group();
     all.getChildren().add(root);
-    all.getChildren().add(avatar.getImage());
+    all.getChildren().add(avatar.getView());
     this.scene = new Scene(all, width, height);
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
     return scene;

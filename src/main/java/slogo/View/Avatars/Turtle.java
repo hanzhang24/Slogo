@@ -4,6 +4,8 @@ import slogo.View.AvatarView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import javax.sound.sampled.Line;
+
 public class Turtle extends AvatarView {
 
   public static final int TURTLE_SIZE = 50;
