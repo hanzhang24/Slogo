@@ -10,7 +10,6 @@ public abstract class AvatarView {
   protected ImageView image;
   protected double XCor;
   protected double YCor;
-  protected double rotation;
   protected boolean penActive;
   protected Color color;
 
@@ -27,7 +26,7 @@ public abstract class AvatarView {
     this.XCor = newX;
     this.YCor = newY;
   }
-  public void updateRot(double newRot) { this.rotation = newRot;}
+  public void updateRot(double newRot) { image.setRotate(image.getRotate() + newRot); }
 
 
 }
