@@ -38,7 +38,7 @@ public class GameScreen extends Screen {
     commandBoxView = new CommandBoxView();
     root.getChildren().add(commandBoxView.getContainer());
     GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
-    AvatarView avatar = new Turtle();
+    avatar = new Turtle();
     animations = new Animator(avatar);
     Group all = new Group();
     all.getChildren().add(root);
@@ -52,6 +52,7 @@ public class GameScreen extends Screen {
     avatar.updatePen(penStatus);
   }
   public void updatePenColor(Color newcolor) {
+    avatar.updateColor(newcolor);
   }
 
   public void updateAvatarPosXY(double newX, double newY) {
@@ -67,4 +68,7 @@ public class GameScreen extends Screen {
     return commandBoxView;
   }
 
+  public AvatarView getAvatar(){
+    return avatar;
+  }
 }

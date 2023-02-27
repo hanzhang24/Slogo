@@ -52,4 +52,20 @@ class GameScreenTest extends DukeApplicationTest {
     clickOn(clear);
     assertEquals(area.getText(), "");
   }
+@Test
+  void testUpdatePosition(){
+    thisScreen.updateAvatarPosXY(10,10);
+    assertEquals(285, thisScreen.getAvatar().getXCor());
+    assertEquals(285, thisScreen.getAvatar().getYCor());
+  }
+@Test
+  void testUpdatePenStatus(){
+    Boolean test = false;
+    thisScreen.updateAvatarIsPenDown(test);
+    assertEquals(test, thisScreen.getAvatar().getPenActive());
+    Color PenTest = Color.RED;
+    thisScreen.updatePenColor(PenTest);
+    assertEquals(PenTest, thisScreen.getAvatar().getColor());
+}
+
 }

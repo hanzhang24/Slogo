@@ -2,15 +2,15 @@ package slogo.View;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
-import java.awt.*;
 
 public abstract class AvatarView {
-
   protected ImageView image;
   protected double XCor;
   protected double YCor;
   protected boolean penActive;
+
   protected Color color;
 
   //TODO checkout what kind of variable this should be
@@ -29,6 +29,8 @@ public abstract class AvatarView {
     image.setY(newY + 275);
   }
   public void updateRot(double newRot) { image.setRotate(-1 * newRot + 90); } // to keep the orientation consistent - Alec :))))
-
-
+  public double getXCor(){return XCor;}
+  public double getYCor(){return YCor;}
+  public boolean getPenActive(){return penActive;}
+  public Color getColor(){return color;}
 }
