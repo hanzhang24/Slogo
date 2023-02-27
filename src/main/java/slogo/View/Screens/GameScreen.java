@@ -39,7 +39,7 @@ public class GameScreen extends Screen {
     commandBoxView = new CommandBoxView();
     root.getChildren().add(commandBoxView.getContainer());
     GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
-    AvatarView avatar = new Turtle();
+    avatar = new Turtle();
     animations = new Animator(avatar);
     Group all = new Group();
     all.getChildren().add(root);
@@ -56,7 +56,7 @@ public class GameScreen extends Screen {
   }
 
   public void updateAvatarPosXY(double newX, double newY) {
-    animations.makeTranslation(newX, newY);
+    // animations.makeTranslation(newX, newY);
     avatar.updatePosXY(newX, newY);
   }
 
