@@ -80,17 +80,17 @@ public interface Model {
    */
   Map<String, Double> getAllUserVariables();
 
-  /**
-   * Sets the current avatar's x position
-   * @param x new x position
-   */
-  void setAvatarX(double x);
-
-  /**
-   * Sets the current avatar's y position
-   * @param y new y position
-   */
-  void setAvatarY(double y);
+//  /**
+//   * Sets the current avatar's x position
+//   * @param x new x position
+//   */
+//  void setAvatarX(double x);
+//
+//  /**
+//   * Sets the current avatar's y position
+//   * @param y new y position
+//   */
+//  void setAvatarY(double y);
 
   /**
    * Simultaneously update the current Avatar's x and y position
