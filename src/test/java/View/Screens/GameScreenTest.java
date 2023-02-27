@@ -2,7 +2,8 @@ package View.Screens;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.awt.Dimension;
+import java.awt.*;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
