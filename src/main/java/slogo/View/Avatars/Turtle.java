@@ -11,6 +11,7 @@ public class Turtle extends AvatarView {
 
   public Turtle(){
     image = new ImageView(new Image(getClass().getResourceAsStream(TURTLE_URL)));
+    image.setRotate(90); // to orient turtle facing right - Alec :)))
     image.setFitWidth(TURTLE_SIZE);
     image.setFitHeight(TURTLE_SIZE);
     //TODO fix magic numbers
