@@ -1,6 +1,8 @@
 package slogo.View.Screens;
 
 import javafx.animation.Animation;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import slogo.View.Animator;
 import slogo.View.AvatarView;
 import slogo.View.Avatars.Turtle;
@@ -22,6 +24,7 @@ public class GameScreen extends Screen {
 
   private Animator animations;
   private CommandBoxView commandBoxView;
+  private Group all;
 
   public GameScreen(Stage stage, String language, Color color) {
     super(stage, language);
@@ -41,7 +44,7 @@ public class GameScreen extends Screen {
     GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
     avatar = new Turtle();
     animations = new Animator(avatar);
-    Group all = new Group();
+    all = new Group();
     all.getChildren().add(root);
     all.getChildren().add(avatar.getView());
     this.scene = new Scene(all, width, height);
@@ -57,7 +60,12 @@ public class GameScreen extends Screen {
 
   public void updateAvatarPosXY(double newX, double newY) {
     // animations.makeTranslation(newX, newY);
+    double xCor = avatar.getXCor();
+    double yCor = avatar.getYCor();
     avatar.updatePosXY(newX, newY);
+    if(avatar.getPenActive()){
+      all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300, -1 * newY + 300));
+    }
   }
 
   public void updateAvatarRot(double newRot) {

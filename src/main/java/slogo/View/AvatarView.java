@@ -22,6 +22,7 @@ public abstract class AvatarView {
   public AvatarView() {
     line = new Line(XCor + 300, YCor + 300, XCor + 300, YCor + 300);
     line.setFill(Color.BLACK);
+    penActive = true;
   }
 
   public Group getView() {
@@ -39,17 +40,17 @@ public abstract class AvatarView {
     this.color = color;
   }
 
-  public void updatePosXY(double newX, double newY) {
-    if(penActive){
-      line = new Line(XCor, YCor, newX + 300, newY + 300);
-    }
+  public boolean getPenActive(){
+    return penActive;
+  }
 
+  public void updatePosXY(double newX, double newY) {
 //    line.setEndX(newX + 300);
 //    line.setEndY(newY + 300);
     this.XCor = newX + 275;
-    this.YCor = newY + 275;
+    this.YCor = -1 * newY + 275;
     image.setX(newX + 275);
-    image.setY(newY + 275);
+    image.setY(-1 * newY + 275);
   }
 
   public void updateRot(double newRot) { image.setRotate(-1*(newRot-90)); }
