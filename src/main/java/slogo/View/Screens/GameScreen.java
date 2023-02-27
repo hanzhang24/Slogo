@@ -1,5 +1,7 @@
 package slogo.View.Screens;
 
+import javafx.animation.Animation;
+import slogo.View.Animator;
 import slogo.View.AvatarView;
 import slogo.View.Avatars.Turtle;
 import slogo.View.Containers.CommandBoxView;
@@ -16,6 +18,8 @@ public class GameScreen extends Screen {
 
   private static Color color;
   private AvatarView avatar;
+
+  private Animator animations;
   private CommandBoxView commandBoxView;
 
   public GameScreen(Stage stage, String language, Color color) {
@@ -34,7 +38,8 @@ public class GameScreen extends Screen {
     commandBoxView = new CommandBoxView();
     root.getChildren().add(commandBoxView.getContainer());
     GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
-    avatar = new Turtle();
+    AvatarView avatar = new Turtle();
+    animations = new Animator(avatar);
     Group all = new Group();
     all.getChildren().add(root);
     all.getChildren().add(avatar.getImage());
@@ -50,6 +55,7 @@ public class GameScreen extends Screen {
   }
 
   public void updateAvatarPosXY(double newX, double newY) {
+    animations.makeTranslation(newX, newY);
     avatar.updatePosXY(newX, newY);
   }
 
