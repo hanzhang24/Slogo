@@ -16,7 +16,7 @@ public class Controller {
         this.model = new ModelTracker();
         this.commandManager = new CommandManager();
     }
-    NodeValue runInput(String input) {
+    public NodeValue runInput(String input) {
         try {
             Parser parser = new Parser(commandManager);
             Node root = parser.parseInput(input);
