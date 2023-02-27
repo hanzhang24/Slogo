@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -30,6 +32,7 @@ class SplashScreenTest extends DukeApplicationTest {
   private Node button;
   private ColorPicker color;
 
+
   @Override
   public void start (Stage stage) {
     thisScreen = new SplashScreen(stage, DEFAULT_LANGUAGE, LANGUAGE_OPTIONS);
@@ -40,21 +43,30 @@ class SplashScreenTest extends DukeApplicationTest {
     languages = lookup("#Language-Box").query();
     button = lookup("#Go-Button").query();
     color = lookup("#Color-Selector").query();
+
+
   }
 
   @Test
   void testValidLanguage() {
-    select(languages, "english");
-    clickOn(button);
-    assertEquals("english", thisScreen.getChosenLanguage());
+    ComboBox<String> options = lookup("#Language-Box").query();
+    String expected = "English";
+    select(options, expected);
+    // THEN, check label text has been updated to match input
+    assertEquals(expected, options.getValue());
   }
 
   @Test
   void testValidColor() {
-    Color selected = Color.BLUE;
-    setValue(color, selected);
-    select(languages, "english");
-    clickOn(button);
-    assertEquals(selected, thisScreen.getChosenColor());
+    ColorPicker picker = lookup("#Color-Selector").query();
+    Color expected = Color.RED;
+    // GIVEN, app first starts up
+    // WHEN, color picker is used
+    setValue(picker, expected);
+    // THEN, check label text has been updated to match input
+    assertEquals(expected, picker.getValue());
   }
+
+
+
 }

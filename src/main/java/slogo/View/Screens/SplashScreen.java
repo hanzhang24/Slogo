@@ -14,7 +14,7 @@ public class SplashScreen extends Screen {
 
     public static final String SPLASHSCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "SplashScreen.css");
 
-    private String chosenLanguage;
+    private String chosenLanguage = "blah";
     private Color chosenColor;
 
     private Screen nextScreen;
@@ -65,6 +65,7 @@ public class SplashScreen extends Screen {
         nextScreen = new GameScreen(this.stage, chosenLanguage, chosenColor);
         stage.setScene(nextScreen.makeScene(750, 750));
     }
+
     public String getChosenLanguage(){
         return chosenLanguage;
     }

@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-    private static final String TITLE = "SLogo Team 6";
+    private static final String TITLE = "SLogo Team 7";
     private static final Dimension DEFAULT_SIZE = new Dimension(1000, 1000);
     private static final String DEFAULT_LANGUAGE = "English";
     private static final ObservableList<String> LANGUAGE_OPTIONS  =

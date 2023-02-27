@@ -15,10 +15,7 @@ public class GameScreen extends Screen {
   public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
 
   private static Color color;
-
-  public GameScreen(Stage stage, String language) {
-    super(stage, language);
-  }
+  private AvatarView avatar;
 
   public GameScreen(Stage stage, String language, Color color) {
     super(stage, language);
@@ -36,21 +33,30 @@ public class GameScreen extends Screen {
     CommandBoxView commandBox = new CommandBoxView();
     root.getChildren().add(commandBox.getContainer());
     GridPane.setConstraints(commandBox.getContainer(), 0, 1);
-    AvatarView avatar = new Turtle();
+    avatar = new Turtle();
     Group all = new Group();
     all.getChildren().add(root);
     all.getChildren().add(avatar.getImage());
     this.scene = new Scene(all, width, height);
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
     return scene;
-
-//    Node label = makeLabel("Group");
-//    DrawBoardView canvas = new DrawBoardView();
-//    this.root.getChildren().add(canvas.getCanvas());
-//    Group Root = new Group();
-//    Scene primaryScene = new Scene(Root, Double.parseDouble(this.resources.getString("Width")), Double.parseDouble(this.resources.getString("Height")));
-//    primaryScene.getStylesheets().add(GAMESCREEN_STYLESHEET);
-//    return primaryScene;
   }
+
+  public void updateAvatarIsPenDown(boolean penStatus) {
+    avatar.updatePen(penStatus);
+  }
+  public void updatePenColor(Color newcolor) {
+  }
+
+  public void updateAvatarPosXY(double newX, double newY) {
+    avatar.updatePosXY(newX, newY);
+  }
+
+  public void updateAvatarRot(double newRot) {
+    avatar.updateRot(newRot);
+  }
+
+
+
 
 }
