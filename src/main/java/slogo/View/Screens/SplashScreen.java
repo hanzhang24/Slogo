@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.SlogoInitializer;
 
+
 public class SplashScreen extends Screen {
 
     public static final String SPLASHSCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "SplashScreen.css");
@@ -50,11 +51,8 @@ public class SplashScreen extends Screen {
                     }
                 })
         );
-        buttons.setId("Go-Button");
         colorPicker = makeColorPicker("Picker");
-        colorPicker.setId("Color-Selector");
         languagePicker = makeLanguagePicker(languageOptions);
-        languagePicker.setId("Language-Box");
 
 
         root.add(buttons, 0, 30);
