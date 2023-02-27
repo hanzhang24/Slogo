@@ -42,7 +42,13 @@ public class SplashScreen extends Screen {
 
         label = makeLabel("Group");
         buttons = makeActions(
-                makeButton("Start", e -> startClicked())
+                makeButton("Start", e -> {
+                    try {
+                        startClicked();
+                    } catch (ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                })
         );
         buttons.setId("Go-Button");
         colorPicker = makeColorPicker("Picker");
@@ -62,7 +68,7 @@ public class SplashScreen extends Screen {
     }
 
 
-    private void startClicked() {
+    private void startClicked() throws ClassNotFoundException {
         chosenLanguage = languagePicker.getValue().toString();
         chosenColor = colorPicker.getValue();
         nextScreen = new GameScreen(this.stage, chosenLanguage, chosenColor);
