@@ -34,7 +34,7 @@ public class GameScreen extends Screen {
     commandBoxView = new CommandBoxView();
     root.getChildren().add(commandBoxView.getContainer());
     GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
-    AvatarView avatar = new Turtle();
+    avatar = new Turtle();
     Group all = new Group();
     all.getChildren().add(root);
     all.getChildren().add(avatar.getImage());
