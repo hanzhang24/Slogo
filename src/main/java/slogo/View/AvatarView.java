@@ -52,9 +52,7 @@ public abstract class AvatarView {
     image.setY(newY + 275);
   }
 
-  public void updateRot(double newRot) {
-    image.setRotate(-1 * newRot + 90);
-  } // to keep the orientation consistent - Alec :)))); }
+  public void updateRot(double newRot) { image.setRotate(-1*(newRot-90)); }
 
   public double getXCor() {
     return XCor;
@@ -63,6 +61,4 @@ public abstract class AvatarView {
   public double getYCor() {
     return YCor;
   }
-
-
 }
