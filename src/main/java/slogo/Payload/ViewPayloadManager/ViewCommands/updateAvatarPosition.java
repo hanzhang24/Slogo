@@ -14,7 +14,7 @@ public class updateAvatarPosition extends ViewCommand {
   public void execute() {
     double newXPosition = Double.parseDouble(parameters.get(0));
     double newYPosition = Double.parseDouble(parameters.get(1));
-    // gameScreen.updateAvatarPosition(newXPosition, newYPosition);
+    gameScreen.updateAvatarPosXY(newXPosition, newYPosition);
   }
 
   @Override

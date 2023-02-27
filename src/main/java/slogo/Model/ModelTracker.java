@@ -1,7 +1,6 @@
 /**
  * TODO: expose setReturnValue, work on History class,
- *       consider enumerations for things like colors and isPenDown,
- *       consider creating an avatar class
+ *      talk about History and return value implementations
  */
 package slogo.Model;
 
@@ -88,7 +87,6 @@ public class ModelTracker implements Model {
     pushWorkspaceUpdates();
     workspace = null;
 
-    viewPayload.addCommand(new ChangeLog("History"));
     return viewPayload;
   }
 
@@ -296,29 +294,29 @@ public class ModelTracker implements Model {
   }
 
 
-  /**
-   * Sets the current avatar's x position
-   *
-   * @param x new x position
-   */
-  @Override
-  public void setAvatarX(double x) {
-    checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(AVATAR_X_CODE), x + "");
-    viewPayload.addCommand(new ChangeLog(AVATAR_X_CODE, x));
-  }
-
-  /**
-   * Sets the current avatar's y position
-   *
-   * @param y new y position
-   */
-  @Override
-  public void setAvatarY(double y) {
-    checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(AVATAR_Y_CODE), y + "");
-    viewPayload.addCommand(new ChangeLog(AVATAR_X_CODE, y));
-  }
+//  /**
+//   * Sets the current avatar's x position
+//   *
+//   * @param x new x position
+//   */
+//  @Override
+//  public void setAvatarX(double x) {
+//    checkCurrentOperationConfigured();
+//    workspace.put(formatLookupString(AVATAR_X_CODE), x + "");
+//    viewPayload.addCommand(new ChangeLog(AVATAR_X_CODE, x));
+//  }
+//
+//  /**
+//   * Sets the current avatar's y position
+//   *
+//   * @param y new y position
+//   */
+//  @Override
+//  public void setAvatarY(double y) {
+//    checkCurrentOperationConfigured();
+//    workspace.put(formatLookupString(AVATAR_Y_CODE), y + "");
+//    viewPayload.addCommand(new ChangeLog(AVATAR_X_CODE, y));
+//  }
 
   /**
    * Simultaneously update the current Avatar's x and y position
