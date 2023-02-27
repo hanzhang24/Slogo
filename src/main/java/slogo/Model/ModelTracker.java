@@ -31,7 +31,7 @@ public class ModelTracker implements Model {
   private int currentAvatarID;
   private final OperationSignatureGenerator operationSignatureGenerator;
   private int operationSignature;
-  private Map<String, String> userVariables;
+  private Map<String, Double> userVariables;
   private Map<String, String> workspace;
   private ViewPayload viewPayload;
 
@@ -90,7 +90,7 @@ public class ModelTracker implements Model {
       if (key.contains(operationSignature + "")) { // belongs to an avatar
         updateAvatar(key);
       } else {
-        userVariables.put(key, workspace.get(key));
+        userVariables.put(key, Double.parseDouble(workspace.get(key)));
       }
     }
   }
@@ -268,12 +268,23 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(key)) {
         return Double.parseDouble(workspace.get(key));
       } else {
-        return Double.parseDouble(userVariables.get(key));
+        return userVariables.get(key);
       }
     } else {
-      return Double.parseDouble(userVariables.get(key));
+      return userVariables.get(key);
     }
   }
+
+  /**
+   * Gets all user variables in the Model. Should not be called while there is an active operation
+   *
+   * @return copy of all user variables
+   */
+  @Override
+  public Map<String, Double> getAllUserVariables() {
+    return new HashMap<>(userVariables);
+  }
+
 
   /**
    * Sets the current avatar's x position

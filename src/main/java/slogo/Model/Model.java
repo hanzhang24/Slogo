@@ -1,5 +1,6 @@
 package slogo.Model;
 
+import java.util.Map;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
 /**
@@ -72,6 +73,12 @@ public interface Model {
    */
 
   double getUserVariable(String key);
+
+  /**
+   * Gets all user variables in the Model. Should not be called while there is an active operation
+   * @return copy of all user variables
+   */
+  Map<String, Double> getAllUserVariables();
 
   /**
    * Sets the current avatar's x position
