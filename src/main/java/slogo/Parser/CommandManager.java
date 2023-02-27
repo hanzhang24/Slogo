@@ -8,7 +8,11 @@ public class CommandManager {
 
     private static final String commandResourcePath = "resources/Parser/Commands";
     private static final String basePackage = "slogo.Node.Commands";
-    private String language = "English";
+    private static String language = "English";
+
+    public CommandManager() throws ClassNotFoundException {
+        this.loadSystemCommands();
+    }
     Map<String, Class<?>> systemCommands = new HashMap<String, Class<?>>();
     public Command getSystemCommand(String alias) {
         if (!isSystemCommand(alias.toLowerCase())) {
@@ -49,7 +53,7 @@ public class CommandManager {
         }
     };
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public static void setLanguage(String language) {
+        CommandManager.language = language;
     };
 }
