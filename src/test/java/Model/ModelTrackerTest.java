@@ -35,6 +35,11 @@ public class ModelTrackerTest {
     }
 
     @Test
+    void testDefaultConstructor(){
+      modelTracker = new ModelTracker();
+      checkDefaultParameters();
+    }
+    @Test
     void testOpenAndClose(){
       modelTracker.startOp();
       modelTracker.endOp();
