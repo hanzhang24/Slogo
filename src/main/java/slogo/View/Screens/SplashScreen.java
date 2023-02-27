@@ -15,7 +15,7 @@ public class SplashScreen extends Screen {
 
     public static final String SPLASHSCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "SplashScreen.css");
 
-    private String chosenLanguage;
+    private String chosenLanguage = "blah";
     private Color chosenColor;
 
     private Screen nextScreen;
@@ -70,6 +70,7 @@ public class SplashScreen extends Screen {
 
         slogoInitializer.setGameScreen((GameScreen) nextScreen);
     }
+
     public String getChosenLanguage(){
         return chosenLanguage;
     }

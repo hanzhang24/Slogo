@@ -15,11 +15,8 @@ public class GameScreen extends Screen {
   public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
 
   private static Color color;
+  private AvatarView avatar;
   private CommandBoxView commandBoxView;
-
-  public GameScreen(Stage stage, String language) {
-    super(stage, language);
-  }
 
   public GameScreen(Stage stage, String language, Color color) {
     super(stage, language);
@@ -44,14 +41,20 @@ public class GameScreen extends Screen {
     this.scene = new Scene(all, width, height);
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
     return scene;
+  }
 
-//    Node label = makeLabel("Group");
-//    DrawBoardView canvas = new DrawBoardView();
-//    this.root.getChildren().add(canvas.getCanvas());
-//    Group Root = new Group();
-//    Scene primaryScene = new Scene(Root, Double.parseDouble(this.resources.getString("Width")), Double.parseDouble(this.resources.getString("Height")));
-//    primaryScene.getStylesheets().add(GAMESCREEN_STYLESHEET);
-//    return primaryScene;
+  public void updateAvatarIsPenDown(boolean penStatus) {
+    avatar.updatePen(penStatus);
+  }
+  public void updatePenColor(Color newcolor) {
+  }
+
+  public void updateAvatarPosXY(double newX, double newY) {
+    avatar.updatePosXY(newX, newY);
+  }
+
+  public void updateAvatarRot(double newRot) {
+    avatar.updateRot(newRot);
   }
 
   public CommandBoxView getCommandBoxView(){

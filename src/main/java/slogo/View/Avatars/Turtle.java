@@ -8,6 +8,7 @@ public class Turtle extends AvatarView {
 
   public static final int TURTLE_SIZE = 50;
   private static final String TURTLE_URL = IMAGE_PATH + "turtle.png";
+
   public Turtle(){
     image = new ImageView(new Image(getClass().getResourceAsStream(TURTLE_URL)));
     image.setFitWidth(TURTLE_SIZE);

@@ -32,9 +32,7 @@ public abstract class Screen {
     resources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
   }
 
-  public Scene makeScene(int width, int height) {
-    return null;
-  };
+  public abstract Scene makeScene(int width, int height);
 
   protected Label makeLabel (String property) {
     Label label = new Label(resources.getString(property));
