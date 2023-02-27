@@ -23,10 +23,12 @@ public abstract class AvatarView {
   public void updatePen(boolean penActive) { this.penActive = penActive;}
   public void updateColor(Color color) { this.color = color; }
   public void updatePosXY(double newX, double newY) {
-    this.XCor = newX;
-    this.YCor = newY;
+    this.XCor = newX + 275;
+    this.YCor = newY + 275;
+    image.setX(newX + 275);
+    image.setY(newY + 275);
   }
-  public void updateRot(double newRot) { image.setRotate(image.getRotate() + newRot); }
+  public void updateRot(double newRot) { image.setRotate(newRot); }
 
 
 }

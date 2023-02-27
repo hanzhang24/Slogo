@@ -51,9 +51,9 @@ public class SlogoInitializer {
    */
   public void setGameScreen(GameScreen gameScreen) throws ClassNotFoundException {
     this.gameScreen = gameScreen;
-    // this.modelController = new Controller();
+    this.modelController = new Controller();
     this.viewController = new ViewController(gameScreen);
-    // Controller.setViewController(viewController);
-    //gameScreen.getCommandBoxView().setController(modelController);
+    modelController.setViewController(viewController);
+    gameScreen.getCommandBoxView().setController(modelController);
   }
 }
