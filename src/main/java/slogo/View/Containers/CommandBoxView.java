@@ -4,9 +4,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import slogo.Controller.Controller;
 
 public class CommandBoxView extends ContainerView {
-
+  private Controller controller;
   public CommandBoxView(){
     container = new HBox();
     container.setId("Command-HBox");
@@ -33,6 +34,10 @@ public class CommandBoxView extends ContainerView {
   private void sendText(TextArea textBox){
     String input = textBox.getText();
     //send to the control/parser
-    //parser.parseInput(input)
+    //controller.parseInput(input);
+  }
+
+  public void setController(Controller controller){
+    this.controller = controller;
   }
 }
