@@ -1,5 +1,6 @@
 package slogo.Parser;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Tokenizer {
@@ -8,7 +9,9 @@ public class Tokenizer {
     public Tokenizer(String input) {
         try {
             String noComments = removeComments(input);
-            tokens = noComments.split("\\s+");
+            tokens = Arrays.stream(noComments.split("\\s+"))
+                    .filter(s -> !s.isEmpty())
+                    .toArray(String[]::new);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

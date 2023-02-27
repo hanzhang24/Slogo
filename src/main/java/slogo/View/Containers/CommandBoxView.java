@@ -24,7 +24,7 @@ public class CommandBoxView extends ContainerView {
     run.setId("Run");
     run.setOnAction(e -> sendText(textBox));
     Button clear = new Button("Clear");
-    run.setId("Clear");
+    clear.setId("Clear");
     clear.setOnAction(e -> textBox.clear());
     buttons.getChildren().add(run);
     buttons.getChildren().add(clear);
