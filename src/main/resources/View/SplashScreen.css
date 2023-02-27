@@ -1,0 +1,70 @@
+.root {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background: cornsilk;
+    -fx-font-size: 18pt;
+    /* define variables to avoid duplicating values */
+    text_color: darkviolet;
+    ball_color: cyan;
+}
+
+.grid-pane {
+    -fx-alignment: baseline-center;
+    -fx-hgap: 20px;
+    -fx-vgap: 10px;
+    -fx-padding: 0 0 0 10px;
+}
+
+.choice-box {
+    -fx-border-style: solid;
+    -fx-padding: 5px;
+    -fx-spacing: 2px;
+}
+
+.list-cell, /* items in combo-box */
+.check-box,
+.toggle-button,
+.radio-button {
+    -fx-text-fill: text_color;
+}
+
+.button-box {
+    -fx-alignment: center;
+    -fx-spacing: 8px;
+}
+
+.button {
+    -fx-text-fill: text_color;
+    -fx-background-color: lightgray;
+    -fx-padding: 10px;
+}
+#Go-Button{
+
+}
+
+.label {
+    -fx-text-fill: text_color;
+    -fx-alignment: center;
+    -fx-min-width: 200px;
+    -fx-padding: 10px;
+}
+
+.text-field {
+    -fx-text-fill: text_color;
+    -fx-background-color: aquamarine;
+    -fx-min-width: 200px;
+}
+
+.canvas {
+    -fx-background-color: floralwhite;
+    -fx-border-style: solid;
+}
+
+.ball {
+    -fx-fill: ball_color;
+}
+
+/* set background to provide highlight */
+.highlight {
+    -fx-background-color: #CCFF99;
+}
+

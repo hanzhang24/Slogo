@@ -1,0 +1,34 @@
+public interface ExternalModel {
+  // creates a backup of the Model map to run the payload on
+  public void createBackup();
+
+  // pushes through changes from the current payload into the map
+  public void pushThroughChanges();
+
+  // gets the most recent payload of commands as a List of Strings
+  public History getNewHistory();
+
+  // get the Avatar's X position
+  public double getAvatarX();
+
+  // get the Avatar's Y position
+  public double getAvatarY();
+
+  // get the Avatar's rotation
+  public double getAvatarRotation();
+
+  // get the value of a user-defined variable
+  public double getUserVariable(String key);
+
+   // set the Avatar's X position
+   public void setAvatarX(double x);
+
+   // set the Avatar's Y position
+   public void setAvatarY(double y);
+
+   // set the Avatar's rotation
+   public void setAvatarRotation(double rotation);
+
+   // set the value of a user-defined variable
+   public void setUserVariable(String key, double value);
+}

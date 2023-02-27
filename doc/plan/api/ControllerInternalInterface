@@ -1,0 +1,8 @@
+public interface InternalController {
+
+  // runs the viewCommand on the model
+  private void runCommand(Node root) throws RuntimeError
+
+  // adds a successful payload to the InstructionHistory
+  public void addPayloadToHistory(ControllerPayload payload);
+}

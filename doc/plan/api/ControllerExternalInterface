@@ -1,0 +1,9 @@
+public interface ExternalController {
+    // Given a payload, it will execute the viewCommand and update the model accordingly
+    public void executePayload(ControllerPayload payload);
+
+    // Allow the View to get the History in packages of Strings to decode
+    public History getHistory throws NoHistoryException();
+    // Allow the View to tell the Controller to update the language
+    public void updateLanguage(String Language);
+}
