@@ -57,6 +57,7 @@ public class GameScreen extends Screen {
 
   public void updateAvatarPosXY(double newX, double newY) {
     // animations.makeTranslation(newX, newY);
+
     avatar.updatePosXY(newX, newY);
   }
 
