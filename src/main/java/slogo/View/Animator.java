@@ -18,14 +18,12 @@ public class Animator {
   }
   // create sequence of animations
   public Animation makeTranslation (double endX, double endY) {
-    // create something to follow
     Path path = new Path();
-    path.getElements().addAll(new MoveTo(avatar.getView().getBoundsInParent().getMinX(), avatar.getView().getBoundsInParent().getMinY()),
-        new LineTo(endX, endY));
-    // create an animation where the shape follows a path
-    PathTransition pt = new PathTransition(Duration.seconds(2), path, avatar.getView());
-    // put them together in order
-    return new SequentialTransition(avatar.getView(), pt);
+    path.getElements().addAll(new MoveTo(avatar.getXCor() + 25, avatar.getYCor() + 25),
+        new LineTo(endX + 300, endY + 300));
+    avatar.updatePosXY(endX, endY);
+    PathTransition pt = new PathTransition(Duration.seconds(2), path, avatar.getImage());
+    return new SequentialTransition(avatar.getImage(), pt);
   }
 
 }

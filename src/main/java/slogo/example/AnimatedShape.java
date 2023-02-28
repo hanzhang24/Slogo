@@ -98,10 +98,8 @@ public class AnimatedShape extends Application {
         // create an animation where the shape follows a path
         PathTransition pt = new PathTransition(Duration.seconds(2), path, agent);
         // create an animation that rotates the shape
-        RotateTransition rt = new RotateTransition(Duration.seconds(1));
-        rt.setByAngle(rotateDegrees);
         // put them together in order
-        return new SequentialTransition(agent, pt, rt);
+        return new SequentialTransition(agent, pt);
     }
 
     // helper methods that error check resource value
