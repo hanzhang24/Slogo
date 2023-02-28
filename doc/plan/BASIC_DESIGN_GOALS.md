@@ -9,7 +9,7 @@ Target Finish Date: 3-4-23
 * Write documentation... a lot of it
     * JavaDoc for every public method at least, preferably every method
 
-## MODEL:
+## MODEL: Alec
 
 * Write through history and return values on successful operation
     * Implement history in the MVC track
