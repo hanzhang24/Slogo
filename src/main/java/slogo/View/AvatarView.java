@@ -45,12 +45,16 @@ public abstract class AvatarView {
 //    line.setEndY(newY + 300);
     this.XCor = newX + 275;
     this.YCor = -1 * newY + 275;
-    image.setX(newX + 275);
-    image.setY(-1 * newY + 275);
+//    image.setX(newX + 275);
+//    image.setY(-1 * newY + 275);
   }
   public void updateRot(double newRot) { image.setRotate(-1 * newRot + 90); } // to keep the orientation consistent - Alec :))))
   public double getXCor(){return XCor;}
   public double getYCor(){return YCor;}
   public boolean getPenActive(){return penActive;}
   public Color getColor(){return color;}
+
+  public ImageView getImage() {
+    return image;
+  }
 }

@@ -60,13 +60,15 @@ public class GameScreen extends Screen {
   }
 
   public void updateAvatarPosXY(double newX, double newY) {
-    // animations.makeTranslation(newX, newY);
+    Animation action = animations.makeTranslation(newX, newY);
+    action.play();
     double xCor = avatar.getXCor();
     double yCor = avatar.getYCor();
-    avatar.updatePosXY(newX, newY);
+//    avatar.updatePosXY(newX, newY);
     if(avatar.getPenActive()){
       all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300, -1 * newY + 300));
     }
+    System.out.println(newX);
   }
 
   public void updateAvatarRot(double newRot) {
