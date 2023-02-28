@@ -3,6 +3,7 @@ package slogo.View;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 
 public abstract class AvatarView {
@@ -37,10 +38,6 @@ public abstract class AvatarView {
 
   public void updateColor(Color color) {
     this.color = color;
-  }
-
-  public boolean getPenActive(){
-    return penActive;
   }
 
   public void updatePosXY(double newX, double newY) {
