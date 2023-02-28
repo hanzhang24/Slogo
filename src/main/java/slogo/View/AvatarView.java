@@ -44,7 +44,7 @@ public abstract class AvatarView {
 //    line.setEndX(newX + 300);
 //    line.setEndY(newY + 300);
     this.XCor = newX + 275;
-    this.YCor = -1 * newY + 275;
+    this.YCor = newY + 275;
 //    image.setX(newX + 275);
 //    image.setY(-1 * newY + 275);
   }

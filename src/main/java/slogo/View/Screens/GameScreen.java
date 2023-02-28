@@ -64,7 +64,7 @@ public class GameScreen extends Screen {
     action.play();
     double xCor = avatar.getXCor();
     double yCor = avatar.getYCor();
-//    avatar.updatePosXY(newX, newY);
+    avatar.updatePosXY(newX, newY);
     if(avatar.getPenActive()){
       all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300, -1 * newY + 300));
     }
