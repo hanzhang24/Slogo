@@ -49,10 +49,16 @@ public class SplashScreen extends Screen {
                     } catch (ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
                     }
+                    catch (NullPointerException ex) {
+                        throw ex;
+                    }
                 })
         );
+        buttons.setId("Go-Button");
         colorPicker = makeColorPicker("Picker");
+        colorPicker.setId("Color-Selector");
         languagePicker = makeLanguagePicker(languageOptions);
+        languagePicker.setId("Language-Box");
 
 
         root.add(buttons, 0, 30);
@@ -67,7 +73,11 @@ public class SplashScreen extends Screen {
 
 
     private void startClicked() throws ClassNotFoundException {
-        chosenLanguage = languagePicker.getValue().toString();
+        try {
+            chosenLanguage = languagePicker.getValue().toString();
+        } catch (NullPointerException e) {
+            throw new NullPointerException("You have not selected an Language");
+        }
         chosenColor = colorPicker.getValue();
         nextScreen = new GameScreen(this.stage, chosenLanguage, chosenColor);
         stage.setScene(nextScreen.makeScene(750, 750));

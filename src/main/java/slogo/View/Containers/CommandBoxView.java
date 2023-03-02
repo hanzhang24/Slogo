@@ -3,13 +3,15 @@ package slogo.View.Containers;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import slogo.Controller.Controller;
 
 public class CommandBoxView extends ContainerView {
   private Controller controller;
   public CommandBoxView(){
-    container = new HBox();
+    Pane container = new HBox();
+    this.setContainer(container);
     container.setId("Command-HBox");
     TextArea textBox = new TextArea();
     textBox.setId("Text-Box");
@@ -28,7 +30,7 @@ public class CommandBoxView extends ContainerView {
     clear.setOnAction(e -> textBox.clear());
     buttons.getChildren().add(run);
     buttons.getChildren().add(clear);
-    container.getChildren().add(buttons);
+    this.getContainer().getChildren().add(buttons);
   }
 
   private void sendText(TextArea textBox){
@@ -36,8 +38,11 @@ public class CommandBoxView extends ContainerView {
     //send to the control/parser
     controller.runInput(input);
   }
-
   public void setController(Controller controller){
     this.controller = controller;
+  }
+
+  public Pane getContainer(){
+    return this.getContainer();
   }
 }
