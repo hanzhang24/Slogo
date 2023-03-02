@@ -28,7 +28,7 @@ public class ViewController {
   public void runPayload(ViewPayload viewPayload) {
     for (ViewCommand viewCommand : viewPayload) {
       viewCommand.setGameScreen(gameScreen);
-      viewCommand.execute();
+      viewCommand.run();
     }
   }
 }

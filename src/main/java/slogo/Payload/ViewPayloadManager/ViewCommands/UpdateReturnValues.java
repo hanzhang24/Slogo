@@ -9,7 +9,7 @@ public class UpdateReturnValues extends ViewCommand {
   }
 
   @Override
-  public void execute() {
+  public void executeSpecificCommand() {
     // gameScreen.displayReturnValues(parameters); // will just be strings already, no need to translate
   }
 
