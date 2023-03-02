@@ -3,11 +3,11 @@
 ## NAMES
 
 
-This project implements a cellular automata simulator.
+This project implements a simplified version of Logo, an educational coding app for new programmers.
 
 ### Timeline
 
- * Start Date: 
+ * Start Date: 2-14-23
 
  * Finish Date: 
 
