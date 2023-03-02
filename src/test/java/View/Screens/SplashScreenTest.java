@@ -13,8 +13,10 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 import slogo.SlogoInitializer;
+import slogo.View.Screens.GameScreen;
 import slogo.View.Screens.SplashScreen;
 import util.DukeApplicationTest;
 
@@ -47,25 +49,36 @@ class SplashScreenTest extends DukeApplicationTest {
   }
 
   @Test
-  void testValidLanguage() {
-    ComboBox<String> options = lookup("#Language-Box").query();
+  void testLanguageBox() {
     String expected = "English";
-    select(options, expected);
+    select(languages, expected);
     // THEN, check label text has been updated to match input
-    assertEquals(expected, options.getValue());
+    assertEquals(expected, languages.getValue());
   }
 
   @Test
-  void testValidColor() {
-    ColorPicker picker = lookup("#Color-Selector").query();
+  void testColorPicker() {
     Color expected = Color.RED;
     // GIVEN, app first starts up
     // WHEN, color picker is used
-    setValue(picker, expected);
+    setValue(color, expected);
     // THEN, check label text has been updated to match input
-    assertEquals(expected, picker.getValue());
+    assertEquals(expected, color.getValue());
   }
 
-
-
+//  @Test
+//  void testValuesPassedToGameScreen() {
+//    String expectedLanguage = "English";
+//    select(languages, expectedLanguage);
+//    Color expectedColor = Color.RED;
+//    setValue(color, expectedColor);
+//    clickOn(button);
+////    assertEquals(expectedLanguage, GameScreen.);
+//  }
+//  @Test
+//  void testThrowsRuntimeError(){
+//    Exception noLanguage = assertThrows(NullPointerException.class, () -> clickOn(button));
+//    String ErrorMessage = "You have not selected an Language";
+//    assertEquals(noLanguage.getMessage(), ErrorMessage);
+//  }
 }

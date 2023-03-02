@@ -19,9 +19,10 @@ public class GameScreen extends Screen {
 
   public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
 
-  private static Color color;
+  private  Color color;
   private AvatarView avatar;
 
+  private int speed;
   private Animator animations;
   private CommandBoxView commandBoxView;
   private Group all;
@@ -30,26 +31,42 @@ public class GameScreen extends Screen {
     super(stage, language);
     this.root = new GridPane();
     this.color = color;
+    all = new Group();
+  }
+
+  public int getAnimationSpeed() {
+    return speed;
   }
 
   @Override
   public Scene makeScene(int width, int height) {
-    root = new GridPane();
-    root.getStyleClass().add("grid-pane");
-    root.setId("Pane");
+    setUpGridPane();
+
     DrawBoardView canvas = new DrawBoardView();
     root.getChildren().add(canvas.getContainer());
+
     commandBoxView = new CommandBoxView();
     root.getChildren().add(commandBoxView.getContainer());
     GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
-    avatar = new Turtle();
-    animations = new Animator(avatar);
-    all = new Group();
-    all.getChildren().add(root);
-    all.getChildren().add(avatar.getView());
+
+    extracted();
+
     this.scene = new Scene(all, width, height);
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
     return scene;
+  }
+
+  private void extracted() {
+    avatar = new Turtle();
+    all.getChildren().add(avatar.getView());
+    animations = new Animator(avatar);
+  }
+
+  private void setUpGridPane() {
+    root = new GridPane();
+    root.getStyleClass().add("grid-pane");
+    root.setId("Pane");
+    all.getChildren().add(root);
   }
 
   public void updateAvatarIsPenDown(boolean penStatus) {
@@ -60,13 +77,15 @@ public class GameScreen extends Screen {
   }
 
   public void updateAvatarPosXY(double newX, double newY) {
-    // animations.makeTranslation(newX, newY);
+    Animation action = animations.makeTranslation(newX, newY);
+    action.play();
     double xCor = avatar.getXCor();
     double yCor = avatar.getYCor();
     avatar.updatePosXY(newX, newY);
     if(avatar.getPenActive()){
       all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300, -1 * newY + 300));
     }
+    System.out.println(newX);
   }
 
   public void updateAvatarRot(double newRot) {
