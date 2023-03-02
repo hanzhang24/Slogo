@@ -4,9 +4,12 @@ import java.util.ResourceBundle;
 import javafx.scene.layout.Pane;
 
 public abstract class ContainerView {
-  protected Pane container;
+  private Pane container;
 
-  public Pane getContainer() {
+  protected Pane getContainer() {
     return container;
+  }
+  protected void setContainer(Pane cont) {
+    container = cont;
   }
 }
