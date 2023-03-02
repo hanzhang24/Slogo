@@ -22,6 +22,7 @@ public class GameScreen extends Screen {
   private  Color color;
   private AvatarView avatar;
 
+  private int speed;
   private Animator animations;
   private CommandBoxView commandBoxView;
   private Group all;
@@ -31,6 +32,10 @@ public class GameScreen extends Screen {
     this.root = new GridPane();
     this.color = color;
     all = new Group();
+  }
+
+  public int getAnimationSpeed() {
+    return speed;
   }
 
   @Override
