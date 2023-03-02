@@ -46,8 +46,8 @@ public class GameScreen extends Screen {
     root.getChildren().add(canvas.getContainer());
 
     commandBoxView = new CommandBoxView();
-    root.getChildren().add(commandBoxView.getContainer());
-    GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
+    root.getChildren().add(commandBoxView.getCommandContainer());
+    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 1);
 
     extracted();
 

@@ -42,7 +42,7 @@ public class CommandBoxView extends ContainerView {
     this.controller = controller;
   }
 
-  public Pane getContainer(){
+  public Pane getCommandContainer(){
     return this.getContainer();
   }
 }
