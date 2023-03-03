@@ -1,12 +1,10 @@
 package slogo.View.Avatars;
 
-import slogo.View.AvatarView;
+import slogo.View.PenView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import javax.sound.sampled.Line;
-
-public class Turtle extends AvatarView {
+public class Turtle extends PenView {
 
   public static final int TURTLE_SIZE = 50;
   private static final String TURTLE_URL = IMAGE_PATH + "turtle.png";

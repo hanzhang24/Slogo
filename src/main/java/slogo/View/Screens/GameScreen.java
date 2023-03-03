@@ -1,10 +1,8 @@
 package slogo.View.Screens;
 
 import javafx.animation.Animation;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import slogo.View.Animator;
-import slogo.View.AvatarView;
+import slogo.View.PenView;
 import slogo.View.Avatars.Turtle;
 import slogo.View.Containers.CommandBoxView;
 import slogo.View.DrawBoardView;
@@ -20,7 +18,7 @@ public class GameScreen extends Screen {
   public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
 
   private  Color color;
-  private AvatarView avatar;
+  private PenView avatar;
 
   private int speed;
   private Animator animations;
@@ -96,7 +94,7 @@ public class GameScreen extends Screen {
     return commandBoxView;
   }
 
-  public AvatarView getAvatar(){
+  public PenView getAvatar(){
     return avatar;
   }
 }
