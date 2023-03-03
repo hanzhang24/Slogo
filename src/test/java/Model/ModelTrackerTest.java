@@ -18,11 +18,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Alec Liu Test class for ModelTracker. Verifies functionality.
+ */
 public class ModelTrackerTest {
 
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
-  private final Random randomNumberGenerator = new Random();
+  private final Random randomGenerator = new Random();
   private ModelTracker modelTracker;
 
   @Nested
@@ -70,7 +73,8 @@ public class ModelTrackerTest {
     @Test
     void testForgotToStartOp() {
       Exception exception = assertThrows(RuntimeException.class,
-          () -> modelTracker.setAvatarPosition(randomNumberGenerator.nextDouble(), randomNumberGenerator.nextDouble()));
+          () -> modelTracker.setAvatarPosition(randomGenerator.nextDouble(),
+              randomGenerator.nextDouble()));
       String expected = EXCEPTIONS.getString("StartOpNotCalledError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
@@ -125,7 +129,7 @@ public class ModelTrackerTest {
       modelTracker.startOp();
 
       double r = modelTracker.getAvatarRotation();
-      r += randomNumberGenerator.nextDouble();
+      r += randomGenerator.nextDouble();
       modelTracker.setAvatarRotation(r);
 
       String penColor = modelTracker.getAvatarPenColor();
@@ -134,19 +138,19 @@ public class ModelTrackerTest {
 
       double x = modelTracker.getAvatarX();
       double y = modelTracker.getAvatarY();
-      x += randomNumberGenerator.nextDouble();
-      y += randomNumberGenerator.nextDouble();
+      x += randomGenerator.nextDouble();
+      y += randomGenerator.nextDouble();
       modelTracker.setAvatarPosition(x, y);
 
       double x2 = modelTracker.getAvatarX();
       double y2 = modelTracker.getAvatarY();
-      x2 += randomNumberGenerator.nextDouble();
-      y2 += randomNumberGenerator.nextDouble();
+      x2 += randomGenerator.nextDouble();
+      y2 += randomGenerator.nextDouble();
       modelTracker.setAvatarPosition(x2, y2);
 
-      double a = randomNumberGenerator.nextDouble();
+      double a = randomGenerator.nextDouble();
       modelTracker.setUserVariable("a", a);
-      boolean b = randomNumberGenerator.nextBoolean();
+      boolean b = randomGenerator.nextBoolean();
       modelTracker.setAvatarPenDown(b);
 
       ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
@@ -163,10 +167,10 @@ public class ModelTrackerTest {
     void testSetUserVariables() {
       modelTracker.startOp();
 
-      double a = randomNumberGenerator.nextDouble();
+      double a = randomGenerator.nextDouble();
       modelTracker.setUserVariable("a", a);
       a = modelTracker.getUserVariable("a");
-      a += randomNumberGenerator.nextDouble();
+      a += randomGenerator.nextDouble();
       modelTracker.setUserVariable("a", a);
       modelTracker.endOp("", new ArrayList<>());
 
@@ -176,13 +180,13 @@ public class ModelTrackerTest {
     @Test
     void testGetAllUserVariables() {
       Map<String, Double> userVars = new HashMap<>();
-      double a = randomNumberGenerator.nextDouble();
+      double a = randomGenerator.nextDouble();
       userVars.put("a", a);
 
-      double b = randomNumberGenerator.nextDouble();
+      double b = randomGenerator.nextDouble();
       userVars.put("b", b);
 
-      double c = randomNumberGenerator.nextDouble();
+      double c = randomGenerator.nextDouble();
       userVars.put("c", c);
 
       modelTracker.startOp();
@@ -233,7 +237,7 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void testSetVisibility(){
+    void testSetVisibility() {
       modelTracker.startOp();
       modelTracker.setAvatarVisible(false);
       ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
@@ -242,10 +246,10 @@ public class ModelTrackerTest {
     }
 
     @Test
-    void testClearScreen(){
+    void testClearScreen() {
       modelTracker.startOp();
-      modelTracker.setAvatarPosition(randomNumberGenerator.nextDouble(),randomNumberGenerator.nextDouble());
-      modelTracker.setAvatarRotation(randomNumberGenerator.nextDouble());
+      modelTracker.setAvatarPosition(randomGenerator.nextDouble(), randomGenerator.nextDouble());
+      modelTracker.setAvatarRotation(randomGenerator.nextDouble());
       modelTracker.endOp("", new ArrayList<>());
 
       modelTracker.startOp();
