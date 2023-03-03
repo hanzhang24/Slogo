@@ -2,9 +2,7 @@ package slogo.View;
 
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
-import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
-import javafx.scene.Node;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -12,8 +10,8 @@ import javafx.util.Duration;
 
 public class Animator {
   private Animation action;
-  private AvatarView avatar;
-  public Animator(AvatarView gameAvatar){
+  private PenView avatar;
+  public Animator(PenView gameAvatar){
     avatar = gameAvatar;
   }
   // create sequence of animations
