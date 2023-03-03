@@ -78,7 +78,7 @@ public class ViewPayload implements Payload, Iterable<ViewCommand> {
   public String toString() {
     StringBuilder payloadDescription = new StringBuilder("ViewPayload{\n");
     for (ViewCommand viewCommand : commandsList) {
-      payloadDescription.append(viewCommand.getName() + ":" + viewCommand.getParameters() + "\n");
+      payloadDescription.append(viewCommand.getDescription() + ":" + viewCommand.getParameters() + "\n");
     }
     payloadDescription.append("}\n");
     return payloadDescription.toString();

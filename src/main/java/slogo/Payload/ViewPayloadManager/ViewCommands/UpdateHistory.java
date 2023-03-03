@@ -13,7 +13,7 @@ public class UpdateHistory extends ViewCommand {
   }
 
   @Override
-  public String getName() {
+  public String getDescription() {
     return "Update Displayed History";
   }
 }

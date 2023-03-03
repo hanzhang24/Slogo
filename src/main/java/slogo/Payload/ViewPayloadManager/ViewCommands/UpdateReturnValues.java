@@ -14,7 +14,7 @@ public class UpdateReturnValues extends ViewCommand {
   }
 
   @Override
-  public String getName() {
+  public String getDescription() {
     return "Update Displayed Return Values";
   }
 }

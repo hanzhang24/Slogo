@@ -14,7 +14,7 @@ public class UpdateAvatarVisible extends ViewCommand {
   }
 
   @Override
-  public String getName() {
+  public String getDescription() {
     return "Update Avatar Visibility";
   }
 

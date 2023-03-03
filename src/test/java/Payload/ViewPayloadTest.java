@@ -8,15 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.Payload.ViewPayloadManager.ChangeLog;
 import slogo.Payload.ViewPayloadManager.ViewCommands.ViewCommand;
 import slogo.Payload.ViewPayloadManager.ViewCommands.ViewCommandFactory;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
-import slogo.View.Screens.GameScreen;
 
 /**
  * @author Alec Liu Test class for the ViewPayload and ChangeLog translation mechanics. Sits around
@@ -54,7 +51,7 @@ public class ViewPayloadTest {
     List<Double> vals = new ArrayList<>();
     vals.add(randomGenerator.nextDouble());
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("X"), vals));
-    assertPayloadContains(viewPayload, getCommand("X").getName());
+    assertPayloadContains(viewPayload, getCommand("X").getDescription());
   }
 
   @Test
@@ -64,7 +61,7 @@ public class ViewPayloadTest {
     }
 
     for (String key : KEY_CODES.keySet()) {
-      assertPayloadContains(viewPayload, getCommand(key).getName());
+      assertPayloadContains(viewPayload, getCommand(key).getDescription());
     }
   }
 

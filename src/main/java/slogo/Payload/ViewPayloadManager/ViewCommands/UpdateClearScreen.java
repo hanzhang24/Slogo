@@ -14,7 +14,7 @@ public class UpdateClearScreen extends ViewCommand {
   }
 
   @Override
-  public String getName() {
+  public String getDescription() {
     return "Clear Screen";
   }
 }

@@ -18,7 +18,7 @@ public class UpdateAvatarX extends ViewCommand {
   }
 
   @Override
-  public String getName() {
+  public String getDescription() {
     return "Update Avatar X";
   }
 }
