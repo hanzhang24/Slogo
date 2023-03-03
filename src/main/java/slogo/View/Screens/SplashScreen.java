@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class SplashScreen {
+public class SplashScreen extends Screen {
 
     private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
     private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
@@ -36,20 +36,20 @@ public class SplashScreen {
 
     private String chosenLanguage;
     private Color chosenColor;
+    private ColorPicker colorPicker;
+    private ComboBox languagePicker;
 
     private Screen nextScreen;
 
-    private ColorPicker colorPicker;
-    private ComboBox languagePicker;
     ObservableList<String> languageOptions;
     private ScreenController screenController;
-    private Stage stage;
+
     private Scene scene;
 
 
 
     public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions, ScreenController screenController) {
-        this.stage = stage;
+        super(stage, language);
         this.languageOptions = languageOptions;
         this.screenController = screenController;
 
@@ -63,14 +63,14 @@ public class SplashScreen {
         root.getStyleClass().add("grid-pane");
         root.setId("Pane");
 
-        Label title = makeLabel("Group");
-        Node inputPanel = makeInputPanel(getPanelButtons("NavigationPanel"));
+        Label title = makeLabel("Group", LabelResources);
+        Node inputPanel = makeInputPanel(getPanelButtons("NavigationPanel", PanelResources), this, LabelResources, ReflectionResources);
 
-        colorPicker = makeColorPicker("Picker");
+        colorPicker = new ColorPicker();
         colorPicker.setId("Color-Selector");
-        languagePicker = makeLanguagePicker(languageOptions);
-        languagePicker.setId("Language-Box");
 
+        languagePicker = new ComboBox(languageOptions);
+        languagePicker.setId("Language-Box");
 
         root.add(inputPanel, 0, 30);
         root.add(title, 0, 25);
@@ -83,7 +83,7 @@ public class SplashScreen {
     }
 
 
-    private void nextPage() throws ClassNotFoundException {
+    public void nextPage() throws ClassNotFoundException {
         try {
             chosenLanguage = languagePicker.getValue().toString();
         } catch (NullPointerException e) {
@@ -94,63 +94,6 @@ public class SplashScreen {
         stage.setScene(nextScreen.makeScene(750, 750));
 
         screenController.setGameScreen((GameScreen) nextScreen);
-    }
-
-    public String getChosenLanguage(){
-        return chosenLanguage;
-    }
-    public Color getChosenColor(){
-        return chosenColor;
-    }
-
-    protected Label makeLabel (String property) {
-        Label label = new Label(LabelResources.getString(property));
-        return label;
-    }
-
-
-    protected ColorPicker makeColorPicker (String id) {
-        ColorPicker picker = new ColorPicker();
-        return picker;
-    }
-
-    protected ComboBox makeLanguagePicker (ObservableList<String> options) {
-        ComboBox languageComboBox = new ComboBox(options);
-        return languageComboBox;
-    }
-
-    // get button actions for each panel from resource file
-    private List<String> getPanelButtons (String property) {
-        return Arrays.asList(PanelResources.getString(property).split(","));
-    }
-
-    private Node makeInputPanel (List<String> actions) {
-        HBox result = new HBox();
-        // create buttons, with their associated actions
-        for (String a : actions) {
-            result.getChildren().add(makeButton(a));
-        }
-        return result;
-    }
-
-    // makes a button using either an image or a label
-    private Button makeButton (String property) {
-        // represent all supported image suffixes
-        Button result = new Button();
-        String label = LabelResources.getString(property);
-        result.setText(label);
-        // turn given string into method call
-        result.setOnAction(handler -> {
-                    try {
-                        String methodName = ReflectionResources.getString(property);
-                        Method m = SplashScreen.this.getClass().getDeclaredMethod(methodName);
-                        m.invoke(SplashScreen.this);
-                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-        result.setId(property);
-        return result;
     }
 
 }
