@@ -21,19 +21,16 @@ import slogo.Payload.ViewPayloadManager.ViewPayload;
  * behavior.
  */
 public class ModelTracker implements Model {
-  private static final String AVATAR_X_CODE = "AvatarX";
-  private static final String AVATAR_Y_CODE = "AvatarY";
-  private static final String POSITION_CODE = "AvatarPosition";
-  private static final String AVATAR_ROTATION_CODE = "AvatarRotation";
-  private static final String AVATAR_PEN_COLOR_CODE = "AvatarPenColor";
-  private static final String AVATAR_IS_PEN_DOWN_CODE = "AvatarIsPenDown";
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
+  private static final String KEY_CODES_PATH = "Model.KeyCodes";
+  private static final ResourceBundle KEY_CODES = ResourceBundle.getBundle(KEY_CODES_PATH);
   private List<Avatar> avatarList;
   private int currentAvatarID;
-  private final OperationSignatureGenerator operationSignatureGenerator;
+  private OperationSignatureGenerator operationSignatureGenerator;
   private int operationSignature;
   private Map<String, Double> userVariables;
+  private History history;
   private Map<String, String> workspace;
   private ViewPayload viewPayload;
 
@@ -42,10 +39,7 @@ public class ModelTracker implements Model {
    */
   public ModelTracker() {
     initializeAvatars("DefaultParameters");
-    userVariables = new HashMap<>();
-    workspace = null;
-    operationSignatureGenerator = new OperationSignatureGenerator();
-    operationSignature = -1;
+    initializePeripheralStructures();
   }
 
   /**
@@ -53,10 +47,7 @@ public class ModelTracker implements Model {
    */
   public ModelTracker(String defaultParametersFilename) {
     initializeAvatars(defaultParametersFilename);
-    userVariables = new HashMap<>();
-    workspace = null;
-    operationSignatureGenerator = new OperationSignatureGenerator();
-    operationSignature = -1;
+    initializePeripheralStructures();
   }
 
   /**
@@ -69,6 +60,16 @@ public class ModelTracker implements Model {
     currentAvatarID = 0;
   }
 
+  /**
+   * Initializes peripheral items used for bookkeeping
+   */
+  private void initializePeripheralStructures() {
+    userVariables = new HashMap<>();
+    history = new History();
+    workspace = null;
+    operationSignatureGenerator = new OperationSignatureGenerator();
+    operationSignature = -1;
+  }
   /**
    * Initializes the proper workspace for a new Controller operation, generating a new associated
    * operation signature
@@ -84,11 +85,10 @@ public class ModelTracker implements Model {
    * End a Controller operation, signifying a success batch of work has been finished. All updates
    * are committed to the original data.
    */
-  public ViewPayload endOp() {
+  public ViewPayload endOp(String userInput, List<Double> returnValues) {
     checkCurrentOperationConfigured();
-
     pushWorkspaceUpdates();
-    workspace = null;
+    logSupplementalInformation(userInput, returnValues);
 
     return viewPayload;
   }
@@ -104,6 +104,7 @@ public class ModelTracker implements Model {
         userVariables.put(key, Double.parseDouble(workspace.get(key)));
       }
     }
+    workspace = null;
   }
 
   /**
@@ -116,6 +117,18 @@ public class ModelTracker implements Model {
     int id = Integer.parseInt(splitKey[1].substring(3));
     String parameter = splitKey[2];
     avatarList.get(id).setValue(parameter, workspace.get(key));
+  }
+
+  /**
+   * Logs history and return value information into the Model and ViewPayload
+   * @param userInput user typed command
+   * @param returnValues controller generated return values
+   */
+  private void logSupplementalInformation(String userInput, List<Double> returnValues) {
+    history.addEntry(userInput);
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("History"), userInput));
+
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("ReturnValues"), returnValues));
   }
 
   /**
@@ -205,7 +218,7 @@ public class ModelTracker implements Model {
    */
   @Override
   public double getAvatarX() {
-    return getAvatarParameter(AVATAR_X_CODE);
+    return getAvatarParameter(KEY_CODES.getString("X"));
   }
 
   /**
@@ -215,7 +228,7 @@ public class ModelTracker implements Model {
    */
   @Override
   public double getAvatarY() {
-    return getAvatarParameter(AVATAR_Y_CODE);
+    return getAvatarParameter(KEY_CODES.getString("Y"));
   }
 
   /**
@@ -225,7 +238,7 @@ public class ModelTracker implements Model {
    */
   @Override
   public double getAvatarRotation() {
-    return getAvatarParameter(AVATAR_ROTATION_CODE);
+    return getAvatarParameter(KEY_CODES.getString("Rotation"));
   }
 
   /**
@@ -236,14 +249,14 @@ public class ModelTracker implements Model {
   @Override
   public String getAvatarPenColor() {
     if (activeOpRunning()) {
-      String formattedKey = formatLookupString(AVATAR_PEN_COLOR_CODE);
+      String formattedKey = formatLookupString(KEY_CODES.getString("PenColor"));
       if (workspace.containsKey(formattedKey)) {
         return workspace.get(formattedKey);
       } else {
-        return avatarList.get(currentAvatarID).getString(AVATAR_PEN_COLOR_CODE);
+        return avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor"));
       }
     } else {
-      return avatarList.get(currentAvatarID).getString(AVATAR_PEN_COLOR_CODE);
+      return avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor"));
     }
   }
 
@@ -255,14 +268,14 @@ public class ModelTracker implements Model {
   @Override
   public boolean getAvatarIsPenDown() {
     if (activeOpRunning()) {
-      String formattedKey = formatLookupString(AVATAR_IS_PEN_DOWN_CODE);
+      String formattedKey = formatLookupString(KEY_CODES.getString("IsPenDown"));
       if (workspace.containsKey(formattedKey)) {
         return Boolean.parseBoolean(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentAvatarID).getBoolean(AVATAR_IS_PEN_DOWN_CODE);
+        return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("IsPenDown"));
       }
     } else {
-      return avatarList.get(currentAvatarID).getBoolean(AVATAR_IS_PEN_DOWN_CODE);
+      return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("IsPenDown"));
     }
   }
 
@@ -297,6 +310,16 @@ public class ModelTracker implements Model {
   }
 
   /**
+   * Fetches all successful user typed commands in the current instance of the application
+   *
+   * @return copy of all successful commands
+   */
+  @Override
+  public List<String> getAllHistory() {
+    return new ArrayList<>(history.getAllHistory());
+  }
+
+  /**
    * Simultaneously update the current Avatar's x and y position
    *
    * @param x new x position
@@ -305,9 +328,9 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarPosition(double x, double y) {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(AVATAR_X_CODE), x + "");
-    workspace.put(formatLookupString(AVATAR_Y_CODE), y + "");
-    viewPayload.addCommand(new ChangeLog(POSITION_CODE, x, y));
+    workspace.put(formatLookupString(KEY_CODES.getString("X")), x + "");
+    workspace.put(formatLookupString(KEY_CODES.getString("Y")), y + "");
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Position"), x, y));
   }
 
   /**
@@ -318,8 +341,8 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarRotation(double rotation) {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(AVATAR_ROTATION_CODE), rotation + "");
-    viewPayload.addCommand(new ChangeLog(AVATAR_ROTATION_CODE, rotation));
+    workspace.put(formatLookupString(KEY_CODES.getString("Rotation")), rotation + "");
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Rotation"), rotation));
   }
 
   /**
@@ -330,8 +353,8 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarPenColor(String color) {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(AVATAR_PEN_COLOR_CODE), color);
-    viewPayload.addCommand(new ChangeLog(AVATAR_PEN_COLOR_CODE, color));
+    workspace.put(formatLookupString(KEY_CODES.getString("PenColor")), color);
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), color));
   }
 
   /**
@@ -342,8 +365,8 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarPenDown(boolean isPenDown) {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(AVATAR_IS_PEN_DOWN_CODE), isPenDown + "");
-    viewPayload.addCommand(new ChangeLog(AVATAR_IS_PEN_DOWN_CODE, isPenDown + ""));
+    workspace.put(formatLookupString(KEY_CODES.getString("IsPenDown")), isPenDown + "");
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("IsPenDown"), isPenDown + ""));
   }
 
   /**

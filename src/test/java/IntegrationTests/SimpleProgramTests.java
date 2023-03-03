@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import slogo.SlogoInitializer;
 
 public class SimpleProgramTests {
-  private static final String TEST_SCRIPT_PATH = "/TestScripts/";
+  public static final String TEST_SCRIPT_PATH = "/TestScripts/";
   private SlogoInitializer slogoInitializer;
 
   /**
@@ -17,7 +17,7 @@ public class SimpleProgramTests {
    * @param filename test script file name
    * @return list of command strings
    */
-  private List<String> loadInputLinesFromFile(String filename){
+  public static List<String> loadInputLinesFromFile(String filename){
     Scanner input = new Scanner(
         SimpleProgramTests.class.getResourceAsStream(TEST_SCRIPT_PATH + filename));
     List<String> elementList = new ArrayList<>();
