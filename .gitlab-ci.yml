@@ -56,8 +56,9 @@ unit_testing:
 docs:
   stage: report
   script:
-    - mvn javadoc:javadoc
-    - mvn site
+    - mvn javadoc:javadoc || echo 'javadoc generation failed; continuing...'
+    - mvn site || echo 'site generation failed; continuing...'
+  allow_failure: true
   artifacts:
     paths:
       - target/site

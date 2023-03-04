@@ -9,7 +9,7 @@ public abstract class ContainerView {
   protected Pane getContainer() {
     return container;
   }
-  protected void setContainer(Pane cont) {
+  public void setContainer(Pane cont) {
     container = cont;
   }
 }

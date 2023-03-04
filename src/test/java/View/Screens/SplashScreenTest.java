@@ -8,15 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
-import slogo.SlogoInitializer;
-import slogo.View.Screens.GameScreen;
+import slogo.ScreenController;
 import slogo.View.Screens.SplashScreen;
 import util.DukeApplicationTest;
 
@@ -38,7 +34,7 @@ class SplashScreenTest extends DukeApplicationTest {
 
   @Override
   public void start (Stage stage) {
-    thisScreen = new SplashScreen(stage, DEFAULT_LANGUAGE, LANGUAGE_OPTIONS, new SlogoInitializer(stage));
+    thisScreen = new SplashScreen(stage, DEFAULT_LANGUAGE, LANGUAGE_OPTIONS, new ScreenController(stage));
     stage.setScene(thisScreen.makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
     stage.setTitle(TITLE);
     stage.show();

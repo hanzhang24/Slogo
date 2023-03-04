@@ -23,8 +23,8 @@ public class Controller {
             root.initContext(model);
             model.startOp();
             NodeValue result = root.execute();
-            ViewPayload viewPayload = model.endOp();
-            viewController.runPayload(viewPayload);
+            // ViewPayload viewPayload = model.endOp();
+            // viewController.runPayload(viewPayload);
             return result;
         } catch (Exception e) {
             model.bail();

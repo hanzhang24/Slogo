@@ -11,7 +11,7 @@ public class UpdateAvatarRotation extends ViewCommand {
   }
 
   @Override
-  public void execute() {
+  public void executeSpecificCommand() {
     double newXRotation = Double.parseDouble(parameters.get(0));
     gameScreen.updateAvatarRot(newXRotation);
   }
