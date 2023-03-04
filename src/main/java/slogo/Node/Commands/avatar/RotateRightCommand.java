@@ -5,8 +5,9 @@ import slogo.Node.NodeValue;
 
 public class RotateRightCommand extends Command {
 
-    public int getNumParameters() {return 1;}
-
+    public RotateRightCommand() {
+        this.setNumParameters(1);
+    }
     public NodeValue execute() {
         checkContext();
         try {
