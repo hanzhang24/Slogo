@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 
-public abstract class AvatarView {
+public abstract class PenView {
   protected ImageView image;
 
   protected double XCor;
@@ -19,7 +19,7 @@ public abstract class AvatarView {
   //TODO checkout what kind of variable this should be
   public static final String IMAGE_PATH = "/View/Images/";
 
-  public AvatarView() {
+  public PenView() {
     line = new Line(XCor + 300, YCor + 300, XCor + 300, YCor + 300);
     line.setFill(Color.BLACK);
     penActive = true;

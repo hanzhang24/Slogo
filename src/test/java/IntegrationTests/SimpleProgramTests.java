@@ -6,11 +6,11 @@ import java.util.Scanner;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import slogo.SlogoInitializer;
+import slogo.ScreenController;
 
 public class SimpleProgramTests {
   public static final String TEST_SCRIPT_PATH = "/TestScripts/";
-  private SlogoInitializer slogoInitializer;
+  private ScreenController screenController;
 
   /**
    * Load commands into List of Strings
@@ -43,7 +43,7 @@ public class SimpleProgramTests {
   }
   @BeforeEach
   void setup(){
-    SlogoInitializer slogoInitializer = new SlogoInitializer(new Stage()); // needs completion from someone in view
+    ScreenController screenController = new ScreenController(new Stage()); // needs completion from someone in view
   }
 
   @Test

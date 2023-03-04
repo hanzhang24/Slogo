@@ -1,10 +1,8 @@
 package slogo.View.Screens;
 
 import javafx.animation.Animation;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import slogo.View.Animator;
-import slogo.View.AvatarView;
+import slogo.View.PenView;
 import slogo.View.Avatars.Turtle;
 import slogo.View.Containers.CommandBoxView;
 import slogo.View.DrawBoardView;
@@ -46,8 +44,8 @@ public class GameScreen extends Screen {
     root.getChildren().add(canvas.getContainer());
 
     commandBoxView = new CommandBoxView();
-    root.getChildren().add(commandBoxView.getContainer());
-    GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
+    root.getChildren().add(commandBoxView.getCommandContainer());
+    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 1);
 
     extracted();
 
@@ -96,7 +94,7 @@ public class GameScreen extends Screen {
     return commandBoxView;
   }
 
-  public AvatarView getAvatar(){
+  public PenView getAvatar(){
     return avatar;
   }
 }

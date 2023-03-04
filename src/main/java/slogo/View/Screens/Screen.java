@@ -4,6 +4,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.Node;
@@ -34,33 +38,44 @@ public abstract class Screen {
 
   public abstract Scene makeScene(int width, int height);
 
-  protected Label makeLabel (String property) {
-    Label label = new Label(resources.getString(property));
+  protected Label makeLabel (String property, ResourceBundle LabelResources) {
+    Label label = new Label(LabelResources.getString(property));
     return label;
   }
 
-  protected Button makeButton(String property, EventHandler<ActionEvent> response) {
-    Button result = new Button();
-    result.setText(resources.getString(property));
-    result.setOnAction(response);
+
+  // get button actions for each panel from resource file
+  protected List<String> getPanelButtons (String property, ResourceBundle PanelResources) {
+    return Arrays.asList(PanelResources.getString(property).split(","));
+  }
+
+  protected Node makeInputPanel (List<String> actions, Screen screen, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
+    HBox result = new HBox();
+    // create buttons, with their associated actions
+    for (String a : actions) {
+      result.getChildren().add(makeButton(screen, a, LabelResources, ReflectionResources));
+    }
     return result;
   }
 
-  protected Node makeActions (Node ... buttons) {
-    HBox panel = new HBox();
-    panel.getStyleClass().add("button-box");
-    panel.getChildren().addAll(buttons);
-    return panel;
-  }
-
-  protected ColorPicker makeColorPicker (String id) {
-    ColorPicker picker = new ColorPicker();
-    return picker;
-  }
-
-  protected ComboBox makeLanguagePicker (ObservableList<String> options) {
-    ComboBox languageComboBox = new ComboBox(options);
-    return languageComboBox;
+  // makes a button using either an image or a label
+  private Button makeButton (Screen screen, String property, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
+    // represent all supported image suffixes
+    Button result = new Button();
+    String label = LabelResources.getString(property);
+    result.setText(label);
+    // turn given string into method call
+    result.setOnAction(handler -> {
+      try {
+        String methodName = ReflectionResources.getString(property);
+        Method m = screen.getClass().getDeclaredMethod(methodName);
+        m.invoke(screen);
+      } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+        throw new RuntimeException(e);
+      }
+    });
+    result.setId(property);
+    return result;
   }
 
 }
