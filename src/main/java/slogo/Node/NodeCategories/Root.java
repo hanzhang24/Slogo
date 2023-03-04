@@ -7,17 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Root extends Node {
-    private List<NodeValue> returnValues = new ArrayList<NodeValue>();
+    private List<Double> returnValues = new ArrayList<Double>();
     public NodeValue execute() {
         NodeValue result = new NodeValue();
         for (Node child: getChildren()) {
             result = child.execute();
-            returnValues.add(result);
+            returnValues.add(result.getNumeric());
         }
         return result;
     }
-
-    public List<NodeValue> getReturnValues(){
+    public List<Double> getReturnValues(){
         return returnValues;
     }
 }
