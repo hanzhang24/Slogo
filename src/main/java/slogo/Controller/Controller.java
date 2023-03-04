@@ -8,6 +8,9 @@ import slogo.Payload.ViewPayloadManager.ViewPayload;
 import slogo.Model.*;
 import slogo.Parser.Parser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Controller {
     private Model model;
     private ViewController viewController;
@@ -19,12 +22,13 @@ public class Controller {
     public NodeValue runInput(String input) {
         try {
             Parser parser = new Parser(commandManager);
-            Node root = parser.parseInput(input);
+            Root root = (Root) parser.parseInput(input);
             root.initContext(model);
             model.startOp();
             NodeValue result = root.execute();
-            // ViewPayload viewPayload = model.endOp();
-            // viewController.runPayload(viewPayload);
+            List<Double> returnValues = root.getReturnValues();
+            ViewPayload viewPayload = model.endOp(input, returnValues);
+            viewController.runPayload(viewPayload);
             return result;
         } catch (Exception e) {
             model.bail();

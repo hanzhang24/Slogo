@@ -5,7 +5,10 @@ import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
 public class AddCommand extends Command {
-    public int getNumParameters() {return 2;}
+    public AddCommand() {
+        this.setNumParameters(2);
+    }
+
     public NodeValue execute() {
         checkContext();
         try {
