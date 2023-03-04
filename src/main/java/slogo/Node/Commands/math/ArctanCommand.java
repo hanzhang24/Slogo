@@ -12,7 +12,7 @@ public class ArctanCommand extends Command {
         checkContext();
         try {
             double arg = getChild(0).execute().getNumeric();
-            return new NodeValue(Math.atan(arg));
+            return new NodeValue(Math.toDegrees(Math.atan(arg)));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
