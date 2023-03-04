@@ -23,7 +23,7 @@ public class ParserTest {
         root.initContext(model);
         model.startOp();
         NodeValue result = root.execute();
-        model.endOp();
+        // model.endOp();
 
         assertEquals(result.getNumeric(), 50);
         assertEquals(model.getAvatarX(), 50);

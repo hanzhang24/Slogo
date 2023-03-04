@@ -53,6 +53,20 @@ public class ChangeLog {
   }
 
   /**
+   * Class constructor
+   *
+   * @param name       name of the variable it references
+   * @param parameters values of parameters
+   */
+  public ChangeLog(String name, List<Double> parameters) {
+    this.name = name;
+    this.parametersList = new ArrayList<>();
+    for (double num : parameters) {
+      parametersList.add(num + "");
+    }
+  }
+
+  /**
    * Getter method
    *
    * @return name of the instruction

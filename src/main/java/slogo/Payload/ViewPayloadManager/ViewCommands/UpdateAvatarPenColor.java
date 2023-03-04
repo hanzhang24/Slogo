@@ -11,7 +11,7 @@ public class UpdateAvatarPenColor extends ViewCommand {
   }
 
   @Override
-  public void execute() {
+  public void executeSpecificCommand() {
     //gameScreen.updateAvatarPenColor(parameter.get(0));
   }
 

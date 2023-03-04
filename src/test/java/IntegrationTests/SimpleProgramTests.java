@@ -6,18 +6,18 @@ import java.util.Scanner;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import slogo.SlogoInitializer;
+import slogo.ScreenController;
 
 public class SimpleProgramTests {
-  private static final String TEST_SCRIPT_PATH = "/TestScripts/";
-  private SlogoInitializer slogoInitializer;
+  public static final String TEST_SCRIPT_PATH = "/TestScripts/";
+  private ScreenController screenController;
 
   /**
    * Load commands into List of Strings
    * @param filename test script file name
    * @return list of command strings
    */
-  private List<String> loadInputLinesFromFile(String filename){
+  public static List<String> loadInputLinesFromFile(String filename){
     Scanner input = new Scanner(
         SimpleProgramTests.class.getResourceAsStream(TEST_SCRIPT_PATH + filename));
     List<String> elementList = new ArrayList<>();
@@ -43,7 +43,7 @@ public class SimpleProgramTests {
   }
   @BeforeEach
   void setup(){
-    SlogoInitializer slogoInitializer = new SlogoInitializer(new Stage()); // needs completion from someone in view
+    ScreenController screenController = new ScreenController(new Stage()); // needs completion from someone in view
   }
 
   @Test

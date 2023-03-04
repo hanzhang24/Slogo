@@ -4,7 +4,9 @@ import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
 public class PenDownCommand extends Command {
-    public int getNumParameters() {return 0;}
+    public PenDownCommand() {
+        this.setNumParameters(0);
+    }
     public NodeValue execute() {
         checkContext();
         try {

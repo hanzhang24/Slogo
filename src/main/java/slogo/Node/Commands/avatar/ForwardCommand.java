@@ -5,8 +5,9 @@ import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
 public class ForwardCommand extends Command {
-    public int getNumParameters() {return 1;}
-
+    public ForwardCommand() {
+        this.setNumParameters(1);
+    }
     public NodeValue execute() {
         checkContext();
         try {

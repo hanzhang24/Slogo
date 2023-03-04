@@ -1,5 +1,6 @@
 package slogo.Model;
 
+import java.util.List;
 import java.util.Map;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
@@ -18,7 +19,7 @@ public interface Model {
    * End a Controller operation, signifying a successful batch of work has been finished. All
    * updates are committed to the original data.
    */
-  ViewPayload endOp();
+  ViewPayload endOp(String userInput, List<Double> returnValues);
 
   /**
    * End a Controller operation abruptly, signifying an unsuccessful batch of work. All updates are
@@ -80,6 +81,11 @@ public interface Model {
    */
   Map<String, Double> getAllUserVariables();
 
+  /**
+   * Fetches all successful user typed commands in the current instance of the application
+   * @return copy of all successful commands
+   */
+  List<String> getAllHistory();
 //  /**
 //   * Sets the current avatar's x position
 //   * @param x new x position

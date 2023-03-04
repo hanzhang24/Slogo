@@ -5,7 +5,9 @@ import slogo.Node.NodeValue;
 import java.util.Random;
 
 public class RandomCommand extends Command {
-    public int getNumParameters() {return 1;}
+    public RandomCommand() {
+        this.setNumParameters(1);
+    }
     public NodeValue execute() {
         checkContext();
         try {

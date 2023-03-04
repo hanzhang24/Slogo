@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import slogo.SlogoInitializer;
+import slogo.ScreenController;
 import slogo.View.Screens.GameScreen;
 import util.DukeApplicationTest;
 
@@ -39,12 +39,12 @@ class GameScreenTest extends DukeApplicationTest {
 
   @Override
   public void start(Stage stage) throws ClassNotFoundException {
-    SlogoInitializer slogoInitializer = new SlogoInitializer(stage);
+    ScreenController screenController = new ScreenController(stage);
     thisScreen = new GameScreen(stage, DEFAULT_LANGUAGE, Color.BLACK);
     stage.setScene(thisScreen.makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
     stage.setTitle(TITLE);
     stage.show();
-    slogoInitializer.setGameScreen(thisScreen);
+    screenController.setGameScreen(thisScreen);
 
     run = lookup("#Run").query();
     area = lookup("#Text-Box").query();

@@ -8,7 +8,7 @@ public class UpdateAvatarIsPenDown extends ViewCommand {
   }
 
   @Override
-  public void execute() {
+  public void executeSpecificCommand() {
     gameScreen.updateAvatarIsPenDown(Boolean.parseBoolean(parameters.get(0)));
   }
 
