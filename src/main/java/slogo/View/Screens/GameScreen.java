@@ -18,7 +18,7 @@ public class GameScreen extends Screen {
   public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
 
   private  Color color;
-  private PenView avatar;
+  private AvatarView avatar;
 
   private int speed;
   private Animator animations;
@@ -44,8 +44,8 @@ public class GameScreen extends Screen {
     root.getChildren().add(canvas.getContainer());
 
     commandBoxView = new CommandBoxView();
-    root.getChildren().add(commandBoxView.getContainer());
-    GridPane.setConstraints(commandBoxView.getContainer(), 0, 1);
+    root.getChildren().add(commandBoxView.getCommandContainer());
+    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 1);
 
     extracted();
 

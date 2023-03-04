@@ -10,6 +10,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 import slogo.ScreenController;
 import slogo.View.Screens.SplashScreen;

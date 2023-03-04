@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 public abstract class ContainerView {
   private Pane container;
 
-  public Pane getContainer() {
+  protected Pane getContainer() {
     return container;
   }
   public void setContainer(Pane cont) {
