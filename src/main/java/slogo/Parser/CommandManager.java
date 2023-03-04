@@ -6,7 +6,7 @@ import java.util.*;
 
 public class CommandManager {
 
-    private static final String commandResourcePath = "Parser.Commands.";
+    private static final String commandResourcePath = "Parser.Commands";
     private static final String basePackage = "slogo.Node.Commands";
     private static String language = "English";
 
@@ -36,12 +36,11 @@ public class CommandManager {
     public boolean isCustomCommand(String name) {
         throw new RuntimeException("Not implemented");
     }
-
     public void createUserCommand() {
         throw new RuntimeException("Not implemented");
     }
     public void loadSystemCommands() throws ClassNotFoundException {
-        ResourceBundle resources = ResourceBundle.getBundle(commandResourcePath+language);
+        ResourceBundle resources = ResourceBundle.getBundle(commandResourcePath+"."+language);
         Enumeration<String> iter = resources.getKeys();
         while(iter.hasMoreElements()) {
             String classPackageAndName = iter.nextElement();
