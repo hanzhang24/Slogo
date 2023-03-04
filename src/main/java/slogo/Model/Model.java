@@ -58,18 +58,28 @@ public interface Model {
 
   /**
    * Gets the pen color of the current avatar
+   *
    * @return pen color
    */
   String getAvatarPenColor();
 
   /**
    * Gets the state of the pen
+   *
    * @return if the pen is down
    */
   boolean getAvatarIsPenDown();
 
   /**
+   * Gets whether the avatar is currently visible
+   *
+   * @return if the avatar is visible
+   */
+  boolean getAvatarVisible();
+
+  /**
    * Gets the value of the variable with the specified key
+   *
    * @return the variable's value
    */
 
@@ -77,12 +87,14 @@ public interface Model {
 
   /**
    * Gets all user variables in the Model. Should not be called while there is an active operation
+   *
    * @return copy of all user variables
    */
   Map<String, Double> getAllUserVariables();
 
   /**
    * Fetches all successful user typed commands in the current instance of the application
+   *
    * @return copy of all successful commands
    */
   List<String> getAllHistory();
@@ -108,26 +120,42 @@ public interface Model {
 
   /**
    * Sets the current avatar's rotation
+   *
    * @param rotation new rotation
    */
   void setAvatarRotation(double rotation);
 
   /**
    * Sets the current avatar's pen color
+   *
    * @param color new color
    */
   void setAvatarPenColor(String color);
 
   /**
    * Sets the current avatar's pen enable setting
+   *
    * @param isPenDown new pen setting
    */
   void setAvatarPenDown(boolean isPenDown);
 
   /**
+   * Sets the current avatar's visibility setting
+   *
+   * @param visible whether the current avatar is visible
+   */
+  void setAvatarVisible(boolean visible);
+
+  /**
    * Sets the value of a user variable
-   * @param key variable name
+   *
+   * @param key   variable name
    * @param value variable value
    */
   void setUserVariable(String key, double value);
+
+  /**
+   * Sets all avatars to the default position and rotation values
+   */
+  void resetOrientation();
 }
