@@ -19,6 +19,14 @@ public class Precision {
         else return 0;
     }
 
+    public static int floor(double val) {
+        return (int) Math.floor(val + precision);
+    }
+
+    public static int ceil(double val) {
+        return (int) Math.ceil(val - precision);
+    }
+
     public static boolean asBoolean(double value) {
         if (!Precision.initialized) {Precision.init();}
         return Math.abs(value) <= precision;
