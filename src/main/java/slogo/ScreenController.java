@@ -1,6 +1,7 @@
 package slogo;
 
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.Controller.Controller;
 import slogo.Controller.ViewController;
@@ -24,21 +25,24 @@ public class ScreenController {
   private ObservableList<Screen> screens;
   private ResourceBundle screenResources;
 
+  private Stage stage;
+
   /**
    * Class constructor
    *
    * @param stage current stage
    */
   public ScreenController(Stage stage) {
+    this.stage = stage;
     screenResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SCREEN_RESOURCES);
   }
 
   /**
    * Called by handler function in splash screen to continue setup
-   * @param gameScreen initialized game screen
    */
-  public void setGameScreen(GameScreen gameScreen) throws ClassNotFoundException {
-    this.gameScreen = gameScreen;
+  public void launchGame(Color color, String language) throws ClassNotFoundException {
+    GameScreen gameScreen = new GameScreen(stage, language, color);
+    stage.setScene(gameScreen.makeScene(750, 750));
     this.modelController = new Controller();
     this.viewController = new ViewController(gameScreen);
     modelController.setViewController(viewController);

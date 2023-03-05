@@ -90,10 +90,7 @@ public class SplashScreen extends Screen {
             throw new NullPointerException("You have not selected an Language");
         }
         chosenColor = colorPicker.getValue();
-        nextScreen = new GameScreen(this.stage, chosenLanguage, chosenColor);
-        stage.setScene(nextScreen.makeScene(750, 750));
-
-        screenController.setGameScreen((GameScreen) nextScreen);
+        screenController.launchGame(chosenColor, chosenLanguage);
     }
 
 }

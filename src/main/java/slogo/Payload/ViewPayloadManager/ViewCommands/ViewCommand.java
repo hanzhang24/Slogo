@@ -60,7 +60,7 @@ public abstract class ViewCommand {
    *
    * @return command name
    */
-  public abstract String getName();
+  public abstract String getDescription();
 
   /**
    * Return the parameters in the command

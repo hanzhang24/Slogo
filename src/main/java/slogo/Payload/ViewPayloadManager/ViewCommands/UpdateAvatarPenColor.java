@@ -16,7 +16,7 @@ public class UpdateAvatarPenColor extends ViewCommand {
   }
 
   @Override
-  public String getName() {
+  public String getDescription() {
     return "Update Avatar Pen Color";
   }
 }
