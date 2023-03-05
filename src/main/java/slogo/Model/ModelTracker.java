@@ -85,7 +85,7 @@ public class ModelTracker implements Model {
    * End a Controller operation, signifying a success batch of work has been finished. All updates
    * are committed to the original data.
    */
-  public ViewPayload endOp(String userInput, List<Double> returnValues) {
+  public ViewPayload endOp(String userInput, List<Double> returnValues) throws RuntimeException {
     checkCurrentOperationConfigured();
     pushWorkspaceUpdates();
     logSupplementalInformation(userInput, returnValues);
@@ -185,7 +185,8 @@ public class ModelTracker implements Model {
    * @param id new avatar ID
    */
   @Override
-  public void setCurrentAvatar(int id) {
+  public void setCurrentAvatar(int id) throws RuntimeException {
+    checkCurrentOperationConfigured();
     if(id >= 0 && id < avatarList.size()){
       currentAvatarID = id;
     } else {
@@ -345,7 +346,7 @@ public class ModelTracker implements Model {
    * @param y new y position
    */
   @Override
-  public void setAvatarPosition(double x, double y) {
+  public void setAvatarPosition(double x, double y) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("X")), x + "");
     workspace.put(formatLookupString(KEY_CODES.getString("Y")), y + "");
@@ -358,7 +359,7 @@ public class ModelTracker implements Model {
    * @param rotation new rotation
    */
   @Override
-  public void setAvatarRotation(double rotation) {
+  public void setAvatarRotation(double rotation) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("Rotation")), rotation + "");
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Rotation"), rotation));
@@ -370,7 +371,7 @@ public class ModelTracker implements Model {
    * @param color new color
    */
   @Override
-  public void setAvatarPenColor(String color) {
+  public void setAvatarPenColor(String color) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("PenColor")), color);
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), color));
@@ -382,7 +383,7 @@ public class ModelTracker implements Model {
    * @param isPenDown new pen setting
    */
   @Override
-  public void setAvatarPenDown(boolean isPenDown) {
+  public void setAvatarPenDown(boolean isPenDown) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("IsPenDown")), isPenDown + "");
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("IsPenDown"), isPenDown + ""));
@@ -394,7 +395,7 @@ public class ModelTracker implements Model {
    * @param visible whether avatar is visible
    */
   @Override
-  public void setAvatarVisible(boolean visible) {
+  public void setAvatarVisible(boolean visible) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("Visible")), visible + "");
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Visible"), visible + ""));
@@ -407,7 +408,7 @@ public class ModelTracker implements Model {
    * @param value variable value
    */
   @Override
-  public void setUserVariable(String key, double value) {
+  public void setUserVariable(String key, double value) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(key, value + "");
   }
@@ -416,7 +417,8 @@ public class ModelTracker implements Model {
    * Sets all avatars to the default position and rotation values
    */
   @Override
-  public void resetOrientation() {
+  public void resetOrientation() throws RuntimeException {
+    checkCurrentOperationConfigured();
     for (int i = 0; i < avatarList.size(); i++) {
       setCurrentAvatar(i);
       setAvatarPosition(0, 0); // Remove magic numbers, using XML interpreter
