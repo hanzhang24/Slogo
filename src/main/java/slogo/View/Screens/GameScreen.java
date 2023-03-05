@@ -33,7 +33,7 @@ public class GameScreen extends Screen {
   }
 
   public double getAnimationSpeed() {
-    return this.animations.getAnimationSpeed();
+    return animations.getAnimationSpeed();
   }
 
   @Override
