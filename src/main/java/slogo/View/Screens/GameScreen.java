@@ -2,6 +2,7 @@ package slogo.View.Screens;
 
 import javafx.animation.Animation;
 import slogo.View.Animator;
+import slogo.View.Containers.SliderView;
 import slogo.View.PenView;
 import slogo.View.Avatars.Turtle;
 import slogo.View.Containers.CommandBoxView;
@@ -18,8 +19,7 @@ public class GameScreen extends Screen {
   public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
 
   private  Color color;
-  private AvatarView avatar;
-
+  private PenView avatar;
   private int speed;
   private Animator animations;
   private CommandBoxView commandBoxView;
@@ -32,8 +32,8 @@ public class GameScreen extends Screen {
     all = new Group();
   }
 
-  public int getAnimationSpeed() {
-    return speed;
+  public double getAnimationSpeed() {
+    return animations.getAnimationSpeed();
   }
 
   @Override
@@ -45,16 +45,20 @@ public class GameScreen extends Screen {
 
     commandBoxView = new CommandBoxView();
     root.getChildren().add(commandBoxView.getCommandContainer());
-    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 1);
+    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 2);
 
-    extracted();
+    MakeTurtle();
+
+    SliderView animationInputs  = new SliderView(animations);
+    root.getChildren().add(animationInputs.getSliderContainer());
+    GridPane.setConstraints(animationInputs.getSliderContainer(), 0, 1);
 
     this.scene = new Scene(all, width, height);
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
     return scene;
   }
 
-  private void extracted() {
+  private void MakeTurtle() {
     avatar = new Turtle();
     all.getChildren().add(avatar.getView());
     animations = new Animator(avatar);
