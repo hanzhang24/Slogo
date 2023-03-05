@@ -1,7 +1,9 @@
 package slogo.View.Screens;
 
 import javafx.animation.Animation;
+import javafx.collections.ObservableList;
 import slogo.View.Animator;
+import slogo.View.Containers.HistoryView;
 import slogo.View.Containers.SliderView;
 import slogo.View.PenView;
 import slogo.View.Avatars.Turtle;
@@ -55,6 +57,12 @@ public class GameScreen extends Screen {
 
     this.scene = new Scene(all, width, height);
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
+
+    HistoryView historyView = new HistoryView();
+    root.getChildren().add(historyView.getHistoryContainer());
+    GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
+
+
     return scene;
   }
 
@@ -63,7 +71,6 @@ public class GameScreen extends Screen {
     all.getChildren().add(avatar.getView());
     animations = new Animator(avatar);
   }
-
   private void setUpGridPane() {
     root = new GridPane();
     root.getStyleClass().add("grid-pane");
@@ -77,7 +84,6 @@ public class GameScreen extends Screen {
   public void updatePenColor(Color newcolor) {
     avatar.updateColor(newcolor);
   }
-
   public void updateAvatarPosXY(double newX, double newY) {
     Animation action = animations.makeTranslation(newX, newY);
     action.play();

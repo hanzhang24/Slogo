@@ -36,10 +36,12 @@ public class SliderView extends ContainerView {
     container.getChildren().add(area);
     area.setOnKeyPressed(event -> {
       if (event.getCode() == KeyCode.ENTER){
-       setAnimationSpeed(animations, Double.parseDouble(area.getText()));
+        Double newSpeed = Double.parseDouble(area.getText());
+        setAnimationSpeed(animations, newSpeed);
+        area.clear();
+        slider.setValue(newSpeed);
       }
     });
-    area.clear();
   }
 
   private void setUpSlider(Animator animations, HBox container) {
