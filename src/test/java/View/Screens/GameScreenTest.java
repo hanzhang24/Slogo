@@ -9,6 +9,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Slider;
@@ -113,21 +116,33 @@ class GameScreenTest extends DukeApplicationTest {
   @DisplayName("AnimationSpeed")
   class AnimationSpeed {
 
-    Slider animationSlider;
-    TextArea animationInput;
+    private Slider animationSlider;
+    private TextArea animationInput;
+
+    private Pane animationContainer;
+
     @BeforeEach
     void setUp() {
-      animationSlider = lookup("Animation-Slider").query();
-      animationInput = lookup("Animation-Input").query();
+      animationContainer = lookup("#Animation-Box").query();
+      animationSlider = lookup("#Animation-Slider").query();
+      animationInput = lookup("#Animation-Input").query();
     }
+
     @Test
     void testAnimationSlider(){
+      //This line is required for a click to register as an event, otherwise javafx will just set
+      //the value of the animation Slider but not increase
+      moveTo(animationSlider);
+
       setValue(animationSlider, 10);
+      press(MouseButton.PRIMARY);
+      release(MouseButton.PRIMARY);
       assertEquals(10, thisScreen.getAnimationSpeed());
     }
     @Test
     void testAnimationTextBox(){
       writeInputTo(animationInput, "20");
+      press(KeyCode.ENTER);
       assertEquals(20, thisScreen.getAnimationSpeed());
     }
   }

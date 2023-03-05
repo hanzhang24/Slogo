@@ -1,0 +1,7 @@
+#Animation-Box{
+  -fx-spacing: 20;
+}
+#Animation-Input{
+  -fx-pref-height: 20;
+  -fx-pref-width: 50;
+}

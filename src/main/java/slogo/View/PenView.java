@@ -7,14 +7,14 @@ import javafx.scene.shape.Line;
 
 
 public abstract class PenView {
-  protected ImageView image;
+  private ImageView image;
 
-  protected double XCor;
-  protected double YCor;
-  protected boolean penActive;
+  private double XCor;
+  private double YCor;
+  private boolean penActive;
 
-  protected Color color;
-  protected Line line;
+  private Color color;
+  private Line line;
 
   //TODO checkout what kind of variable this should be
   public static final String IMAGE_PATH = "/View/Images/";
@@ -56,5 +56,12 @@ public abstract class PenView {
 
   public ImageView getImage() {
     return image;
+  }
+  protected void setImage(ImageView newImage) {image = newImage;}
+  protected void setCoordinates(int X, int Y) {
+    XCor = X;
+    YCor = Y;
+    image.setX(X);
+    image.setY(Y);
   }
 }
