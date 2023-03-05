@@ -7,6 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import slogo.View.Animator;
+import slogo.View.PopUp;
 
 public class SliderView extends ContainerView {
 
@@ -26,7 +27,6 @@ public class SliderView extends ContainerView {
     container.setId("Animation-Box");
     setUpSlider(animations, container);
     container.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
-
     setUpTextArea(container, animations);
   }
 
@@ -36,7 +36,16 @@ public class SliderView extends ContainerView {
     container.getChildren().add(area);
     area.setOnKeyPressed(event -> {
       if (event.getCode() == KeyCode.ENTER){
-        Double newSpeed = Double.parseDouble(area.getText());
+        double newSpeed = Double.parseDouble(sliderBundle.getString("Default"));
+        try {
+          newSpeed = Double.parseDouble(area.getText());
+        }
+        catch (Exception e){
+          new PopUp(sliderBundle.getString("ErrorMessage"));
+        }
+        if(newSpeed<0 || newSpeed>100){
+          new PopUp(sliderBundle.getString("ErrorRange"));
+        }
         setAnimationSpeed(animations, newSpeed);
         area.clear();
         slider.setValue(newSpeed);
