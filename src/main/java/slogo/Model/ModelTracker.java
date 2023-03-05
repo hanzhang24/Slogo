@@ -421,8 +421,9 @@ public class ModelTracker implements Model {
     checkCurrentOperationConfigured();
     for (int i = 0; i < avatarList.size(); i++) {
       setCurrentAvatar(i);
-      setAvatarPosition(0, 0); // Remove magic numbers, using XML interpreter
-      setAvatarRotation(0); // Remove magic numbers
+      double numericDefault = avatarList.get(i).getNumericDefault();
+      setAvatarPosition(numericDefault, numericDefault); // Remove magic numbers, using XML interpreter
+      setAvatarRotation(numericDefault); // Remove magic numbers
     }
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("ClearScreen")));
   }
