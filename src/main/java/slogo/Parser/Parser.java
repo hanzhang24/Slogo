@@ -9,7 +9,6 @@ import slogo.Node.NodeCategories.Variable;
 public class Parser {
     private Tokenizer tokenizer;
     private CommandManager commandManager;
-
     public Parser(){};
     public Parser(CommandManager commandManager) {this.commandManager = commandManager;}
     public Node parseInput(String input) {
@@ -38,40 +37,28 @@ public class Parser {
     private Node parseExpression(){
         try {
             String curToken = tokenizer.getCurToken();
-            switch (TypeChecker.getType(curToken)) {
-                case CONSTANT:
-                    return parseConstant();
-                case VARIABLE:
-                    return parseVariable();
-                case GROUP_START:
-                    throw new RuntimeException("Not yet implemented");
-                case POSSIBLY_COMMAND:
-                    return parseCommand();
-                default:
-                    // TODO: Paramerize the error message
-                    throw new IllegalArgumentException("Invalid token " + curToken);
-            }
+            TokenType type = TypeChecker.getType(curToken);
+            return type.parse(this);
         } catch (Exception e) {
             // TODO: Handle exceptions
             throw new RuntimeException("Not implemented");
         }
     };
 
-    private Node parseGroup(){
+    public Node parseGroup(){
         throw new RuntimeException("Not implemented");
     };
 
-    private Node parseCommand() throws NoSuchMethodException {
+    public Node parseCommand() throws NoSuchMethodException {
         if (commandManager.isSystemCommand(tokenizer.getCurToken())) {
             return parseSystemCommand();
         } else if (commandManager.isCustomCommand(tokenizer.getCurToken())) {
             throw new RuntimeException("Not implemented");
         } else {
             //TODO make this language specific
-            throw new NoSuchMethodException("Not such command" + tokenizer.getCurToken());
+            throw new NoSuchMethodException("No such command" + tokenizer.getCurToken());
         }
     };
-
     private Node parseSystemCommand(){
         Command command = commandManager.getSystemCommand(tokenizer.getCurToken());
         int numParameters = command.getNumParameters();
@@ -83,17 +70,17 @@ public class Parser {
         return command;
     }
 
-    private Node parseCustomCommand(){
+    public Node parseCustomCommand(){
         throw new RuntimeException("Not implemented");
     }
 
-    private Node parseConstant(){
+    public Node parseConstant(){
         Node constant = new Constant(tokenizer.getCurToken());
         tokenizer.toNextToken();
         return constant;
     };
 
-    private Node parseVariable(){
+    public Node parseVariable(){
         Node variable = new Variable(tokenizer.getCurToken());
         tokenizer.toNextToken();
         return variable;

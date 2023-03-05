@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import slogo.Model.ModelTracker;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 import java.util.ResourceBundle;
@@ -17,10 +18,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Alec Liu Test class for ModelTracker. Verifies functionality.
+ */
 public class ModelTrackerTest {
 
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
+  private final Random randomGenerator = new Random();
   private ModelTracker modelTracker;
 
   @Nested
@@ -68,7 +73,8 @@ public class ModelTrackerTest {
     @Test
     void testForgotToStartOp() {
       Exception exception = assertThrows(RuntimeException.class,
-          () -> modelTracker.setAvatarPosition(13.2, 3.2));
+          () -> modelTracker.setAvatarPosition(randomGenerator.nextDouble(),
+              randomGenerator.nextDouble()));
       String expected = EXCEPTIONS.getString("StartOpNotCalledError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
@@ -123,7 +129,7 @@ public class ModelTrackerTest {
       modelTracker.startOp();
 
       double r = modelTracker.getAvatarRotation();
-      r += 90;
+      r += randomGenerator.nextDouble();
       modelTracker.setAvatarRotation(r);
 
       String penColor = modelTracker.getAvatarPenColor();
@@ -132,46 +138,56 @@ public class ModelTrackerTest {
 
       double x = modelTracker.getAvatarX();
       double y = modelTracker.getAvatarY();
-      x += 3;
-      y += 6;
+      x += randomGenerator.nextDouble();
+      y += randomGenerator.nextDouble();
       modelTracker.setAvatarPosition(x, y);
 
       double x2 = modelTracker.getAvatarX();
       double y2 = modelTracker.getAvatarY();
-      x2 += 3;
-      y2 += 6;
+      x2 += randomGenerator.nextDouble();
+      y2 += randomGenerator.nextDouble();
       modelTracker.setAvatarPosition(x2, y2);
 
-      modelTracker.setUserVariable("a", 112);
-      modelTracker.setAvatarPenDown(false);
+      double a = randomGenerator.nextDouble();
+      modelTracker.setUserVariable("a", a);
+      boolean b = randomGenerator.nextBoolean();
+      modelTracker.setAvatarPenDown(b);
 
       ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
       System.out.println(viewPayload);
 
-      assertEquals(112.0, modelTracker.getUserVariable("a"));
+      assertEquals(r, modelTracker.getAvatarRotation());
+      assertEquals(a, modelTracker.getUserVariable("a"));
       assertEquals("blue", modelTracker.getAvatarPenColor());
-      assertEquals(6.0, modelTracker.getAvatarX());
-      assertEquals(12.0, modelTracker.getAvatarY());
+      assertEquals(x2, modelTracker.getAvatarX());
+      assertEquals(y2, modelTracker.getAvatarY());
     }
 
     @Test
     void testSetUserVariables() {
       modelTracker.startOp();
-      modelTracker.setUserVariable("a", 5);
-      double a = modelTracker.getUserVariable("a");
-      a += 20;
+
+      double a = randomGenerator.nextDouble();
+      modelTracker.setUserVariable("a", a);
+      a = modelTracker.getUserVariable("a");
+      a += randomGenerator.nextDouble();
       modelTracker.setUserVariable("a", a);
       modelTracker.endOp("", new ArrayList<>());
 
-      assertEquals(25.0, modelTracker.getUserVariable("a"));
+      assertEquals(a, modelTracker.getUserVariable("a"));
     }
 
     @Test
     void testGetAllUserVariables() {
       Map<String, Double> userVars = new HashMap<>();
-      userVars.put("a", 5.0);
-      userVars.put("b", 6.0);
-      userVars.put("c", 7.0);
+      double a = randomGenerator.nextDouble();
+      userVars.put("a", a);
+
+      double b = randomGenerator.nextDouble();
+      userVars.put("b", b);
+
+      double c = randomGenerator.nextDouble();
+      userVars.put("c", c);
 
       modelTracker.startOp();
       for (String key : userVars.keySet()) {
@@ -186,7 +202,7 @@ public class ModelTrackerTest {
     void testSetNonexistentAvatarID() {
       modelTracker.startOp();
       Exception exception = assertThrows(RuntimeException.class,
-          () -> modelTracker.setCurrentAvatar(12));
+          () -> modelTracker.setCurrentAvatar(2));
       String expected = EXCEPTIONS.getString("NonexistentAvatarError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
@@ -218,6 +234,31 @@ public class ModelTrackerTest {
         modelTracker.endOp(input, new ArrayList<>());
       }
       assertEquals(inputs, modelTracker.getAllHistory());
+    }
+
+    @Test
+    void testSetVisibility() {
+      modelTracker.startOp();
+      modelTracker.setAvatarVisible(false);
+      ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
+
+      assertEquals(false, modelTracker.getAvatarVisible());
+    }
+
+    @Test
+    void testClearScreen() {
+      modelTracker.startOp();
+      modelTracker.setAvatarPosition(randomGenerator.nextDouble(), randomGenerator.nextDouble());
+      modelTracker.setAvatarRotation(randomGenerator.nextDouble());
+      modelTracker.endOp("", new ArrayList<>());
+
+      modelTracker.startOp();
+      modelTracker.resetOrientation();
+      modelTracker.endOp("", new ArrayList<>());
+
+      assertEquals(0.0, modelTracker.getAvatarX());
+      assertEquals(0.0, modelTracker.getAvatarY());
+      assertEquals(0.0, modelTracker.getAvatarRotation());
     }
   }
 }

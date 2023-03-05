@@ -279,6 +279,25 @@ public class ModelTracker implements Model {
     }
   }
 
+  /**
+   * Gets whether the avatar is currently visible
+   *
+   * @return if the avatar is visible
+   */
+  @Override
+  public boolean getAvatarVisible() {
+    if (activeOpRunning()) {
+      String formattedKey = formatLookupString(KEY_CODES.getString("Visible"));
+      if (workspace.containsKey(formattedKey)) {
+        return Boolean.parseBoolean(workspace.get(formattedKey));
+      } else {
+        return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("Visible"));
+      }
+    } else {
+      return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("Visible"));
+    }
+  }
+
 
   /**
    * Gets the value of the user variable with the specified key
@@ -370,6 +389,18 @@ public class ModelTracker implements Model {
   }
 
   /**
+   * Sets the current avatar's visibility setting
+   *
+   * @param visible whether avatar is visible
+   */
+  @Override
+  public void setAvatarVisible(boolean visible) {
+    checkCurrentOperationConfigured();
+    workspace.put(formatLookupString(KEY_CODES.getString("Visible")), visible + "");
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Visible"), visible + ""));
+  }
+
+  /**
    * Sets the value of a user variable
    *
    * @param key   variable name
@@ -379,5 +410,18 @@ public class ModelTracker implements Model {
   public void setUserVariable(String key, double value) {
     checkCurrentOperationConfigured();
     workspace.put(key, value + "");
+  }
+
+  /**
+   * Sets all avatars to the default position and rotation values
+   */
+  @Override
+  public void resetOrientation() {
+    for (int i = 0; i < avatarList.size(); i++) {
+      setCurrentAvatar(i);
+      setAvatarPosition(0, 0); // Remove magic numbers, using XML interpreter
+      setAvatarRotation(0); // Remove magic numbers
+    }
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("ClearScreen")));
   }
 }
