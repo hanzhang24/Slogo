@@ -1,7 +1,10 @@
 package slogo.View.Screens;
 
 import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
+import javafx.util.Duration;
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
 import slogo.View.Containers.SliderView;
@@ -67,6 +70,7 @@ public class GameScreen extends Screen {
 
   private void MakeTurtle() {
     avatar = new Turtle();
+    avatar.getImage().toBack();
     all.getChildren().add(avatar.getView());
     animations = new Animator(avatar);
   }
@@ -84,13 +88,13 @@ public class GameScreen extends Screen {
     avatar.updateColor(newcolor);
   }
   public void updateAvatarPosXY(double newX, double newY) {
-    Animation action = animations.makeTranslation(newX, newY);
-    action.playFromStart();
+    animations.makeTranslation(newX, newY);
+    animations.runAnimation();
     double xCor = avatar.getXCor();
     double yCor = avatar.getYCor();
     avatar.updatePosXY(newX, newY);
     if(avatar.getPenActive()){
-      all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300, -1 * newY + 300));
+      all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300,  newY + 300));
     }
   }
 
@@ -102,7 +106,6 @@ public class GameScreen extends Screen {
   public CommandBoxView getCommandBoxView(){
     return commandBoxView;
   }
-
   public PenView getAvatar(){
     return avatar;
   }

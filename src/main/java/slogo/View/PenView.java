@@ -58,10 +58,10 @@ public abstract class PenView {
     return image;
   }
   protected void setImage(ImageView newImage) {image = newImage;}
-  protected void setCoordinates(int X, int Y) {
+  public void setCoordinates(double X, double Y) {
     XCor = X;
     YCor = Y;
-    image.setX(X);
+    image.setX(X + 25);
     image.setY(Y);
   }
 }

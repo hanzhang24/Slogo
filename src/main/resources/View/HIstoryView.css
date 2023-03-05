@@ -4,6 +4,7 @@
   -fx-padding: 20;
   -fx-alignment: CENTER;
   -fx-border-color: BLACK;
+  -fx-background-color: BLACK;
 }
 #History-Display{
   -fx-border-color: transparent;
