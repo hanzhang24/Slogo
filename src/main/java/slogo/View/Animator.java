@@ -2,6 +2,7 @@ package slogo.View;
 
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -9,7 +10,7 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 public class Animator {
-  private Animation action;
+  private SequentialTransition action;
   private PenView avatar;
   private double animationSpeed;
 
@@ -18,6 +19,7 @@ public class Animator {
   public Animator(PenView gameAvatar){
     animationSpeed = DEFAULT_SPEED;
     avatar = gameAvatar;
+    action = new SequentialTransition();
   }
   // create sequence of animations
   public Animation makeTranslation (double endX, double endY) {
@@ -26,7 +28,17 @@ public class Animator {
         new LineTo(endX + 300, endY + 300));
     avatar.updatePosXY(endX, endY);
     PathTransition pt = new PathTransition(Duration.seconds(FRAMES_PER_SECOND/animationSpeed), path, avatar.getImage());
-    return new SequentialTransition(avatar.getImage(), pt);
+    action.getChildren().add(pt);
+    return action;
+  }
+  public Animation makeRotation (Double newRot){
+    RotateTransition rt = new RotateTransition(Duration.seconds(FRAMES_PER_SECOND/animationSpeed));
+    rt.setByAngle(newRot);
+    action.getChildren().add(rt);
+    return action;
+  }
+  public void resetAnimations(){
+    action.getChildren().clear();
   }
   public double getAnimationSpeed() {
     return animationSpeed;

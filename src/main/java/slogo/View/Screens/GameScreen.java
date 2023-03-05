@@ -45,11 +45,11 @@ public class GameScreen extends Screen {
     DrawBoardView canvas = new DrawBoardView();
     root.getChildren().add(canvas.getContainer());
 
-    commandBoxView = new CommandBoxView();
+    MakeTurtle();
+
+    commandBoxView = new CommandBoxView(animations);
     root.getChildren().add(commandBoxView.getCommandContainer());
     GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 2);
-
-    MakeTurtle();
 
     SliderView animationInputs  = new SliderView(animations);
     root.getChildren().add(animationInputs.getSliderContainer());
@@ -61,7 +61,6 @@ public class GameScreen extends Screen {
     HistoryView historyView = new HistoryView();
     root.getChildren().add(historyView.getHistoryContainer());
     GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
-
 
     return scene;
   }
@@ -86,20 +85,20 @@ public class GameScreen extends Screen {
   }
   public void updateAvatarPosXY(double newX, double newY) {
     Animation action = animations.makeTranslation(newX, newY);
-    action.play();
+    action.playFromStart();
     double xCor = avatar.getXCor();
     double yCor = avatar.getYCor();
     avatar.updatePosXY(newX, newY);
     if(avatar.getPenActive()){
       all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300, -1 * newY + 300));
     }
-    System.out.println(newX);
   }
 
   public void updateAvatarRot(double newRot) {
+    Animation action = animations.makeRotation(newRot);
+    action.play();
     avatar.updateRot(newRot);
   }
-
   public CommandBoxView getCommandBoxView(){
     return commandBoxView;
   }
