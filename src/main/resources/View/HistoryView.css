@@ -1,0 +1,12 @@
+
+#History-Container {
+  -fx-spacing: 30;
+  -fx-alignment: CENTER;
+  -fx-border-color: BLACK;
+  -fx-background-color: BLACK;
+}
+#History-Display{
+  -fx-border-color: transparent;
+  -fx-pref-width: 75;
+  -fx-pref-height: 400;
+}

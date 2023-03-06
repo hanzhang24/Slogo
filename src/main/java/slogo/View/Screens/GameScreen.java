@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-public class GameScreen extends Screen {
+public class GameScreen extends Screen implements ModelView{
 
   public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
 
@@ -33,6 +33,8 @@ public class GameScreen extends Screen {
   private int speed;
   private Animator animations;
   private CommandBoxView commandBoxView;
+
+  private DrawBoardView canvas;
   private Group all;
 
   private ResourceBundle LabelResources;
@@ -60,7 +62,7 @@ public class GameScreen extends Screen {
   public Scene makeScene(int width, int height) {
     setUpGridPane();
 
-    DrawBoardView canvas = new DrawBoardView();
+    canvas = new DrawBoardView();
     root.getChildren().add(canvas.getContainer());
     GridPane.setConstraints(canvas.getContainer(), 0, 0);
 
@@ -96,7 +98,7 @@ public class GameScreen extends Screen {
   private void MakeTurtle() {
     avatar = new Turtle();
     avatar.getImage().toBack();
-    all.getChildren().add(avatar.getView());
+    all.getChildren().add(avatar.getImage());
     animations = new Animator(avatar);
   }
   private void setUpGridPane() {
@@ -109,23 +111,60 @@ public class GameScreen extends Screen {
   public void updateAvatarIsPenDown(boolean penStatus) {
     avatar.updatePen(penStatus);
   }
+
+  @Override
+  public void updateAvatarPenColor(String color) {
+
+  }
   public void updatePenColor(Color newcolor) {
     avatar.updateColor(newcolor);
   }
   public void updateAvatarPosXY(double newX, double newY) {
+    newX = newX + 250;
+    newY = -1*newY + 250; // converts to View coordinates
+    double OldXCor = avatar.getXCor();
+    double OldYCor = avatar.getYCor();
     animations.makeTranslation(newX, newY);
     animations.runAnimation();
-    double xCor = avatar.getXCor();
-    double yCor = avatar.getYCor();
-    avatar.updatePosXY(newX, newY);
+    avatar.setCoordinates(newX, newY);
     if(avatar.getPenActive()){
 //      all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300,  newY + 300));
+        canvas.draw(OldXCor, OldYCor, avatar.getXCor(), avatar.getYCor());
     }
   }
   public void updateAvatarRot(double newRot) {
-    Animation action = animations.makeRotation(newRot);
-    action.play();
-    avatar.updateRot(newRot);
+    double oldRot = avatar.getRot();
+    double saved = newRot;
+    newRot = -1*newRot + 90;
+    newRot = (newRot-oldRot);
+    animations.makeRotation(newRot);
+    animations.runAnimation();
+    avatar.updateRot(saved);
+  }
+
+  @Override
+  public void updateAvatarVisible(boolean state) {
+    avatar.changeVisible();
+  }
+
+  @Override
+  public void clearScreen() {
+    canvas.clear();
+  }
+
+  @Override
+  public void updateDisplayedHistory(String userInput) {
+
+  }
+
+  @Override
+  public void displayReturnValues(List<String> returnValues) {
+
+  }
+
+  @Override
+  public void addToUserLibrary(String functionDescription) {
+
   }
   public CommandBoxView getCommandBoxView(){
     return commandBoxView;
@@ -135,7 +174,7 @@ public class GameScreen extends Screen {
   }
 
   public void reset(){
-
+    clearScreen();
   }
   public void pause(){
     animations.pause();

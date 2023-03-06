@@ -178,7 +178,6 @@ class GameScreenTest extends DukeApplicationTest {
       historyOptions = lookup("#History-Selector").query();
       display = lookup("#History-Display").query();
     }
-
     @Test
     void testChangeHistoryValue(){
       String expected = "Command History";
