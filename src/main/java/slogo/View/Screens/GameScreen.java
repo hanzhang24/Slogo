@@ -33,10 +33,9 @@ public class GameScreen extends Screen implements ModelView{
   private int speed;
   private Animator animations;
   private CommandBoxView commandBoxView;
-
+  private HistoryView historyView;
   private DrawBoardView canvas;
   private Group all;
-
   private ResourceBundle LabelResources;
   private ResourceBundle ReflectionResources;
   private ResourceBundle PanelResources;
@@ -88,7 +87,7 @@ public class GameScreen extends Screen implements ModelView{
     this.scene = new Scene(all, width, height);
     scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
 
-    HistoryView historyView = new HistoryView();
+    historyView = new HistoryView();
     root.getChildren().add(historyView.getHistoryContainer());
     GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
 
@@ -114,7 +113,6 @@ public class GameScreen extends Screen implements ModelView{
 
   @Override
   public void updateAvatarPenColor(String color) {
-
   }
   public void updatePenColor(Color newcolor) {
     avatar.updateColor(newcolor);
@@ -154,17 +152,15 @@ public class GameScreen extends Screen implements ModelView{
 
   @Override
   public void updateDisplayedHistory(String userInput) {
-
+    historyView.updateCommandHistory(userInput);
   }
-
   @Override
   public void displayReturnValues(List<String> returnValues) {
-
   }
 
   @Override
   public void addToUserLibrary(String functionDescription) {
-
+    historyView.updateLibraryHistory(functionDescription);
   }
   public CommandBoxView getCommandBoxView(){
     return commandBoxView;

@@ -160,7 +160,7 @@ class GameScreenTest extends DukeApplicationTest {
       press(KeyCode.ENTER);
       writeInputTo(animationInput, "Hi");
       press(KeyCode.ENTER);
-      Node dialogPane = lookup(".dialog-pane").query();
+
       FxAssert.verifyThat("#OK-Button", isEnabled());
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
