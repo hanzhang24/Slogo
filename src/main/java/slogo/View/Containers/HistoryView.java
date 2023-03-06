@@ -1,5 +1,8 @@
 package slogo.View.Containers;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -11,20 +14,24 @@ public class HistoryView extends ContainerView {
 
   private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
   private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
+
+  private static final String HISTORY_REFLECTION = "ReflectionActions";
   private static final String STYLESHEET = "HistoryView.css";
   private ComboBox<String> Options;
 
+  private ResourceBundle ReflectionResources;
   private static final ObservableList<String> DROP_DOWN_OPTIONS =
       FXCollections.observableArrayList(
-          "Command History",
+          "Commands",
           "Library",
           "Help"
       );
-
-
-  private String Commands;
-  private String Functions;
+  private String storedHistory;
+  private String storedLibrary;
+  private String help;
   private TextArea historyDisplay;
+
+
   public HistoryView(){
     VBox container = new VBox();
     container.setId("History-Container");
@@ -34,6 +41,10 @@ public class HistoryView extends ContainerView {
     historyDisplay = new TextArea();
     historyDisplay.setId("History-Display");
     container.getChildren().add(historyDisplay);
+    ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + HISTORY_REFLECTION);
+    storedHistory = "";
+    storedLibrary = "";
+    help = "";
   }
 
   private void setUpComboBox(ObservableList<String> options, VBox container) {
@@ -44,11 +55,34 @@ public class HistoryView extends ContainerView {
   }
 
   private void updateHistoryDisplay(String selected){
-    //TODO work with Package to Decode History and add Text
-    historyDisplay.setText(selected);
+      try {
+        String methodName = ReflectionResources.getString(selected);
+        Method m = this.getClass().getDeclaredMethod(methodName);
+        m.invoke(this);
+      } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+  public void displayCommands(){
+    historyDisplay.setText(storedHistory);
+  }
+
+  public void displayLibrary(){
+    historyDisplay.setText(storedLibrary);
+  }
+  public void displayHelp(){
+    historyDisplay.setText(help);
   }
 
   public Pane getHistoryContainer(){
     return this.getContainer();
+  }
+
+  public void updateCommandHistory(String userInput) {
+    storedHistory = storedHistory + userInput;
+  }
+  public void updateLibraryHistory(String userInput) {
+    storedLibrary = storedLibrary + userInput;
   }
 }
