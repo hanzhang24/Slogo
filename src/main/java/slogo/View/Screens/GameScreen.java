@@ -62,6 +62,7 @@ public class GameScreen extends Screen implements ModelView{
     setUpGridPane();
 
     canvas = new DrawBoardView();
+    canvas.setColor(this.color);
     root.getChildren().add(canvas.getContainer());
     GridPane.setConstraints(canvas.getContainer(), 0, 0);
 
@@ -112,8 +113,13 @@ public class GameScreen extends Screen implements ModelView{
   }
 
   @Override
-  public void updateAvatarPenColor(String color) {
+  public void updateAvatarPenColor(int red, int green, int blue) {
+
   }
+
+  //  @Override
+//  public void updateAvatarPenColor(String color) {
+//  }
   public void updatePenColor(Color newcolor) {
     avatar.updateColor(newcolor);
   }

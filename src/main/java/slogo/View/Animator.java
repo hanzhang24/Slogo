@@ -34,7 +34,6 @@ public class Animator {
     checkBounds(pt, endX, endY);
     action.getChildren().add(checked);
   }
-
   private PathTransition createNewPathTransition(double endX, double endY) {
     double XStart = avatar.getXCor();
     double YStart = avatar.getYCor();
