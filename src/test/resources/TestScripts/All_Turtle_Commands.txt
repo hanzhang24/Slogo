@@ -29,6 +29,7 @@ PU
 GOTO -50 -50
 PD
 HOME
+SETH 0
 CS
 
 
