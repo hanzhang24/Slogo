@@ -1,0 +1,13 @@
+# Setup
+PU
+HIDETURTLE
+SETXY 50 60
+SETH 30
+
+# Queries
+XCOR
+YCOR
+HEADING
+PENDOWN?
+SHOWING?
+# Should return 50, 60, 30, 0, 0
