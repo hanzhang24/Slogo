@@ -14,9 +14,11 @@ public interface ModelView {
   /**
    * Update the pen color
    *
-   * @param color new color
+   * @param red red color value
+   * @param green green color value
+   * @param blue blue color value
    */
-  void updateAvatarPenColor(String color);
+  void updateAvatarPenColor(int red, int green, int blue);
 
   /**
    * Update the avatar position

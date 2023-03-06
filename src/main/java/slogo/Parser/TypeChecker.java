@@ -23,6 +23,7 @@ public abstract class TypeChecker {
             if (pattern.matcher(token).matches())
                 return tokenType;
         }
+
         return TokenType.POSSIBLY_COMMAND;
     }
     private static void initPatternMap() {

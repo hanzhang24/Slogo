@@ -1,10 +1,7 @@
 package slogo.Parser;
 import slogo.Node.*;
 import slogo.Controller.*;
-import slogo.Node.NodeCategories.Command;
-import slogo.Node.NodeCategories.Constant;
-import slogo.Node.NodeCategories.Root;
-import slogo.Node.NodeCategories.Variable;
+import slogo.Node.NodeCategories.*;
 
 public class Parser {
     private Tokenizer tokenizer;
@@ -45,8 +42,31 @@ public class Parser {
         }
     };
 
-    public Node parseGroup(){
-        throw new RuntimeException("Not implemented");
+    public Node parseGroup() throws Exception {
+        try {
+            Group group = new Group();
+            String curToken = tokenizer.getCurToken();
+            assert(TypeChecker.getType(curToken) == TokenType.GROUP_START);
+
+            tokenizer.toNextToken();
+
+            while(!tokenizer.isEndOfInput() &&
+                  TypeChecker.getType(tokenizer.getCurToken()) != TokenType.GROUP_END) {
+                Node child = parseExpression();
+                group.addChild(child);
+            }
+
+            assert(!tokenizer.isEndOfInput());
+
+            assert(TypeChecker.getType(tokenizer.getCurToken()) == TokenType.GROUP_END);
+
+            tokenizer.toNextToken();
+
+            return group;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+
     };
 
     public Node parseCommand() throws NoSuchMethodException {

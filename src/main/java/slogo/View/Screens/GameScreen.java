@@ -162,7 +162,6 @@ public class GameScreen extends Screen implements ModelView{
   public void addToUserLibrary(String functionDescription) {
     historyView.updateLibraryHistory(functionDescription);
   }
-
   public CommandBoxView getCommandBoxView(){
     return commandBoxView;
   }
