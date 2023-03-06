@@ -324,12 +324,12 @@ public class ModelTracker implements Model {
   public double getUserVariable(String key) {
     if (activeOpRunning()) {
       if (workspace.containsKey(key)) {
-        return Double.parseDouble(workspace.get(key));
+        return Double.parseDouble(workspace.getOrDefault(key, "0"));
       } else {
-        return userVariables.get(key);
+        return userVariables.getOrDefault(key, 0.0);
       }
     } else {
-      return userVariables.get(key);
+      return userVariables.getOrDefault(key, 0.0);
     }
   }
 
