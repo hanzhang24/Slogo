@@ -59,9 +59,9 @@ public interface Model {
   /**
    * Gets the pen color of the current avatar
    *
-   * @return pen color
+   * @return pen color as [red, green, blue]
    */
-  String getAvatarPenColor();
+  int[] getAvatarPenColor();
 
   /**
    * Gets the state of the pen
@@ -128,9 +128,11 @@ public interface Model {
   /**
    * Sets the current avatar's pen color
    *
-   * @param color new color
+   * @param red red value 0-255
+   * @param green green value 0-255
+   * @param blue blue value 0-255
    */
-  void setAvatarPenColor(String color) throws RuntimeException;
+  void setAvatarPenColor(double red, double green, double blue) throws RuntimeException;
 
   /**
    * Sets the current avatar's pen enable setting

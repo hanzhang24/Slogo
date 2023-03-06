@@ -8,10 +8,17 @@ public class Variable extends Node {
     private String name;
 
     public Variable(String name) {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
-    public NodeValue execute() {
+
+    public String getName() {
+        return name;
+    }
+    public NodeValue getValue() {
         checkContext();
         return new NodeValue(model.getUserVariable(this.name));
+    }
+    public NodeValue execute() {
+        return getValue();
     }
 }

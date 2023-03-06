@@ -32,7 +32,7 @@ public abstract class Node {
     public void addChild(Node node) {
         this.children.add(node);
     }
-    public abstract NodeValue execute();
+    public abstract NodeValue execute() throws Exception;
     public static void setLanguage(Document languageDoc) {
 
     };
