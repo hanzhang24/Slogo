@@ -26,9 +26,11 @@ public class ViewController {
    * @param viewPayload model-generated payload after one complete operation
    */
   public void runPayload(ViewPayload viewPayload) {
+    // gameScreen.initializeSequentialTransition();
     for (ViewCommand viewCommand : viewPayload) {
       viewCommand.setGameScreen(gameScreen);
       viewCommand.run();
     }
+    // gameScreen.playSequentialTransition();
   }
 }

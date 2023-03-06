@@ -20,7 +20,7 @@ public class UpdateAvatarPenColor extends ViewCommand {
     for(int i = 0; i < parsedColor.length; i++){
       parsedColor[i] = Integer.parseInt(parsedString[i]);
     }
-    //gameScreen.updateAvatarPenColor(parsedColor[RED_INDEX], parsedColor[GREEN_INDEX], parsedColor[BLUE_INDEX]);
+    gameScreen.updateAvatarPenColor(parsedColor[RED_INDEX], parsedColor[GREEN_INDEX], parsedColor[BLUE_INDEX]);
   }
 
   @Override
