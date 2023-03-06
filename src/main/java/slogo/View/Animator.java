@@ -103,4 +103,10 @@ public class Animator {
   public void setAnimationSpeed(double speed){
     animationSpeed = speed;
   }
+
+  public void pause() {
+  }
+
+  public void step() {
+  }
 }

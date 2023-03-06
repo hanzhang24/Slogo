@@ -1,6 +1,7 @@
 package View.Screens;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 
 import java.awt.*;
 
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.testfx.api.FxAssert;
 import slogo.Controller.Controller;
 import slogo.Controller.ViewController;
 import slogo.ScreenController;
@@ -158,8 +160,9 @@ class GameScreenTest extends DukeApplicationTest {
       press(KeyCode.ENTER);
       writeInputTo(animationInput, "Hi");
       press(KeyCode.ENTER);
-      assertEquals(20, thisScreen.getAnimationSpeed());
-
+      Node dialogPane = lookup(".dialog-pane").query();
+      FxAssert.verifyThat("#OK-Button", isEnabled());
+      assertEquals(60, thisScreen.getAnimationSpeed());
     }
     void testInvalidNegativeInput(){
 
@@ -172,7 +175,7 @@ class GameScreenTest extends DukeApplicationTest {
     private TextArea display;
     @BeforeEach
     void setUp(){
-      historyOptions = lookup("#History-DropDown").query();
+      historyOptions = lookup("#History-Selector").query();
       display = lookup("#History-Display").query();
     }
 

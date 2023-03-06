@@ -62,6 +62,6 @@ public abstract class PenView {
     XCor = X;
     YCor = Y;
     image.setX(X + 25);
-    image.setY(Y);
+    image.setY(Y + 25);
   }
 }

@@ -1,5 +1,6 @@
 package slogo.View.Containers;
 
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
@@ -26,10 +27,10 @@ public class SliderView extends ContainerView {
     this.setContainer(container);
     container.setId("Animation-Box");
     setUpSlider(animations, container);
-    container.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+    container.getStylesheets().add(
+        Objects.requireNonNull(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET)).toExternalForm());
     setUpTextArea(container, animations);
   }
-
   private void setUpTextArea(HBox container, Animator animations) {
     area = new TextArea();
     area.setId("Animation-Input");
@@ -43,7 +44,7 @@ public class SliderView extends ContainerView {
         catch (Exception e){
           new PopUp(sliderBundle.getString("ErrorMessage"));
         }
-        if(newSpeed<0 || newSpeed>100){
+        if(newSpeed <= 0 || newSpeed > 100){
           new PopUp(sliderBundle.getString("ErrorRange"));
         }
         setAnimationSpeed(animations, newSpeed);
