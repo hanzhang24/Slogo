@@ -62,6 +62,7 @@ public class GameScreen extends Screen implements ModelView{
     setUpGridPane();
 
     canvas = new DrawBoardView();
+    canvas.setColor(this.color);
     root.getChildren().add(canvas.getContainer());
     GridPane.setConstraints(canvas.getContainer(), 0, 0);
 
