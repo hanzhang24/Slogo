@@ -6,6 +6,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -24,27 +25,24 @@ public class Animator {
   public Animator(PenView gameAvatar){
     animationSpeed = DEFAULT_SPEED;
     avatar = gameAvatar;
-    action = new SequentialTransition();
+    action = new SequentialTransition(avatar.getImage());
   }
 
   // create sequence of animations
   public void makeTranslation (double endX, double endY) {
     PathTransition pt = createNewPathTransition(endX, endY);
     checkBounds(pt, endX, endY);
-    action.getChildren().add(pt);
+    action.getChildren().add(checked);
   }
-
   private PathTransition createNewPathTransition(double endX, double endY) {
-    double XStart = avatar.getXCor() + 25;
-    double YStart = avatar.getYCor() + 25;
-    endX = endX + 300;
-    endY = endY + 300;
+    double XStart = avatar.getXCor();
+    double YStart = avatar.getYCor();
     double XLength = endX - XStart;
     double YLength = endY - YStart;
     double pathLength = Math.sqrt(Math.pow(XLength, 2) + Math.pow(YLength, 2));
     Path path = new Path();
     path.getElements().addAll(new MoveTo(XStart, YStart), new LineTo(endX, endY));
-    avatar.updatePosXY(endX, endY);
+    avatar.setCoordinates(endX, endY);
     PathTransition pt = new PathTransition(Duration.seconds((FRAMES_PER_SECOND/animationSpeed)*pathLength/500), path, avatar.getImage());
     return pt;
   }
@@ -66,10 +64,13 @@ public class Animator {
     if (avatar.getXCor() > 500) {
       System.out.println("reset to 0");
       System.out.println(avatar.getXCor());
+      System.out.println(avatar.getImage().getX());
       PathTransition firstHalf = createNewPathTransition(500, avatar.getYCor());
       avatar.setCoordinates(0, avatar.getYCor());
-      PathTransition secondHalf = createNewPathTransition(endX, endY);
+      PathTransition secondHalf = createNewPathTransition(endX%500, endY);
+      avatar.setCoordinates(endX%500, avatar.getYCor());
       checked = new SequentialTransition(firstHalf, secondHalf);
+      System.out.println(avatar.getXCor());
     }
     if (avatar.getYCor() > 500) {
       avatar.setCoordinates(avatar.getXCor(), 0);
@@ -80,7 +81,7 @@ public class Animator {
       pt.stop();
     }
     if(avatar.getYCor() < 0){
-      avatar.updatePosXY(avatar.getXCor(), 500);
+      avatar.setCoordinates(avatar.getXCor(), 500);
       pt.stop();
     }
     else{
@@ -89,7 +90,7 @@ public class Animator {
   }
 
   public Animation makeRotation (Double newRot){
-    RotateTransition rt = new RotateTransition(Duration.seconds(FRAMES_PER_SECOND/animationSpeed));
+    RotateTransition rt = new RotateTransition(Duration.seconds(1), avatar.getImage());
     rt.setByAngle(newRot);
     action.getChildren().add(rt);
     return action;

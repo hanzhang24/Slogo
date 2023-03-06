@@ -160,12 +160,17 @@ class GameScreenTest extends DukeApplicationTest {
       press(KeyCode.ENTER);
       writeInputTo(animationInput, "Hi");
       press(KeyCode.ENTER);
-      Node dialogPane = lookup(".dialog-pane").query();
+
       FxAssert.verifyThat("#OK-Button", isEnabled());
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
+    @Test
     void testInvalidNegativeInput(){
-
+      writeInputTo(animationInput, "20");
+      press(KeyCode.ENTER);
+      writeInputTo(animationInput, "-10");
+      press(KeyCode.ENTER);
+      assertEquals(60, thisScreen.getAnimationSpeed());
     }
   }
   @Nested
@@ -178,7 +183,6 @@ class GameScreenTest extends DukeApplicationTest {
       historyOptions = lookup("#History-Selector").query();
       display = lookup("#History-Display").query();
     }
-
     @Test
     void testChangeHistoryValue(){
       String expected = "Command History";

@@ -54,6 +54,8 @@ public class AnimatedShape extends Application {
         // create and start animation, could be used in separate contexts
         Animation animation = makeAnimation(myActor, getResourceNumber("EndX"), getResourceNumber("EndY"),
                                             getResourceNumber("RotateDegrees"));
+
+
         animation.play();
     }
 
@@ -93,13 +95,18 @@ public class AnimatedShape extends Application {
     Animation makeAnimation (Node agent, int endX, int endY, int rotateDegrees) {
         // create something to follow
         Path path = new Path();
+
         path.getElements().addAll(new MoveTo(agent.getBoundsInParent().getMinX(), agent.getBoundsInParent().getMinY()),
                                   new LineTo(endX, endY));
         // create an animation where the shape follows a path
         PathTransition pt = new PathTransition(Duration.seconds(2), path, agent);
         // create an animation that rotates the shape
+        RotateTransition rt = new RotateTransition(Duration.seconds(1));
+        rt.setByAngle(90);
         // put them together in order
-        return new SequentialTransition(agent, pt);
+        RotateTransition rt2 = new RotateTransition(Duration.seconds(1));
+        rt2.setByAngle(5);
+        return new SequentialTransition(agent, pt, rt, rt2);
     }
 
     // helper methods that error check resource value

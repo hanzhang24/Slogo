@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewCommand>
+    <type>single_step</type>
+    <name>subtract</name>
+    <function-class>Sum</function-class>
+    <numparameters>2</numparameters>
+    <params>a,b</params>
+    <returns>Number</returns>
+    <description>Subtracts two numbers</description>
+    <documentation></documentation>
+</viewCommand>
