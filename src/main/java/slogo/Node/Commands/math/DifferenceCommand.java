@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 public class DifferenceCommand extends Command {
 
     public DifferenceCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
 
     public NodeValue execute() {

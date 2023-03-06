@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 
 public class IfElseCommand extends Command {
     public IfElseCommand() {
-        this.setNumParameters(3);
+        this.setNumArguments(3);
     }
 
     public NodeValue execute() throws Exception {

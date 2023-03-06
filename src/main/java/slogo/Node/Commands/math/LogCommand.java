@@ -1,13 +1,12 @@
 package slogo.Node.Commands.math;
 
-import slogo.Node.Node;
 import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
 public class LogCommand extends Command {
 
     public LogCommand() {
-        this.setNumParameters(1);
+        this.setNumArguments(1);
     }
     public NodeValue execute() {
         checkContext();

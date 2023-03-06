@@ -5,7 +5,7 @@ import slogo.Node.NodeValue;
 
 public class HideTurtleCommand extends Command {
     public HideTurtleCommand() {
-        this.setNumParameters(0);
+        this.setNumArguments(0);
     }
     public NodeValue execute() {
         checkContext();

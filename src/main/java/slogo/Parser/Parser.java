@@ -1,6 +1,5 @@
 package slogo.Parser;
 import slogo.Node.*;
-import slogo.Controller.*;
 import slogo.Node.NodeCategories.*;
 
 public class Parser {
@@ -31,14 +30,14 @@ public class Parser {
             throw new RuntimeException("parseAll has not implemented error handling");
         }
     }
-    private Node parseExpression(){
+    private Node parseExpression() throws Exception {
         try {
             String curToken = tokenizer.getCurToken();
             TokenType type = TypeChecker.getType(curToken);
             return type.parse(this);
         } catch (Exception e) {
             // TODO: Handle exceptions
-            throw new RuntimeException("Not implemented");
+            throw e;
         }
     };
 
@@ -69,19 +68,19 @@ public class Parser {
 
     };
 
-    public Node parseCommand() throws NoSuchMethodException {
-        if (commandManager.isSystemCommand(tokenizer.getCurToken())) {
-            return parseSystemCommand();
-        } else if (commandManager.isCustomCommand(tokenizer.getCurToken())) {
-            throw new RuntimeException("Not implemented");
+    public Node parseCommand() throws Exception {
+        String curToken = tokenizer.getCurToken();
+        if (commandManager.isSimpleDefinedCommand(curToken)) {
+            return parseSimpleDefinedCommand();
+        } else if (commandManager.isCreateFunctionCommand(curToken)) {
+            return parseCreateCommand();
         } else {
-            //TODO make this language specific
             throw new NoSuchMethodException("No such command" + tokenizer.getCurToken());
         }
     };
-    private Node parseSystemCommand(){
-        Command command = commandManager.getSystemCommand(tokenizer.getCurToken());
-        int numParameters = command.getNumParameters();
+    private Node parseSimpleDefinedCommand() throws Exception {
+        Command command = commandManager.getSimpleDefinedCommand(tokenizer.getCurToken());
+        int numParameters = command.getNumArguments();
         tokenizer.toNextToken();
         for (int i = 0; i < numParameters; i++) {
             Node child = parseExpression();
@@ -90,12 +89,39 @@ public class Parser {
         return command;
     }
 
-    public Node parseCustomCommand(){
-        throw new RuntimeException("Not implemented");
+    private Node parseCreateCommand() throws Exception {
+
+        String curToken = tokenizer.getCurToken();
+        assert(commandManager.isCreateFunctionCommand(curToken));
+
+        // parse the name of the function, and make sure it makes sense
+        tokenizer.toNextToken();
+        String functionName = tokenizer.getCurToken();
+
+        if (TypeChecker.getType(functionName) != TokenType.POSSIBLY_COMMAND)
+            throw new Exception("Invalid create command format for name " + functionName);
+
+        if (commandManager.isSystemCommand(functionName) || commandManager.isCreateFunctionCommand(functionName)) {
+            throw new Exception("Cannot define command " + functionName + " because this command name is reserved for system commands");
+        }
+
+        // parse the variables of the function
+        tokenizer.toNextToken();
+        Group arguments = (Group) parseGroup();
+
+        // parse the body of the function
+        Group body = (Group) parseGroup();
+
+        // now create the function template
+        UserFunctionTemplate uft = new UserFunctionTemplate(functionName, arguments, body);
+
+        commandManager.createUserCommand(uft);
+
+        return new Constant(1);
     }
 
     public Node parseConstant(){
-        Node constant = new Constant(tokenizer.getCurToken());
+        Node constant = new Constant(Double.parseDouble(tokenizer.getCurToken()));
         tokenizer.toNextToken();
         return constant;
     };

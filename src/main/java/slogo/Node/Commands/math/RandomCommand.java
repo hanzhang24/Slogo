@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class RandomCommand extends Command {
     public RandomCommand() {
-        this.setNumParameters(1);
+        this.setNumArguments(1);
     }
     public NodeValue execute() {
         checkContext();

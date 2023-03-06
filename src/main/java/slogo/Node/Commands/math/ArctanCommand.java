@@ -5,7 +5,7 @@ import slogo.Node.NodeValue;
 
 public class ArctanCommand extends Command {
     public ArctanCommand() {
-        this.setNumParameters(1);
+        this.setNumArguments(1);
     }
 
     public NodeValue execute() {

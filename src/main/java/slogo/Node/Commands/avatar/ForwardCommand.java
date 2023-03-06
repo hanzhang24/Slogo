@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 
 public class ForwardCommand extends Command {
     public ForwardCommand() {
-        this.setNumParameters(1);
+        this.setNumArguments(1);
     }
     public NodeValue execute() {
         checkContext();

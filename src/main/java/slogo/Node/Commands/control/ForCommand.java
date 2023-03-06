@@ -7,7 +7,7 @@ import slogo.Node.NodeCategories.Group;
 
 public class ForCommand extends Command {
     public ForCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
 
     public NodeValue execute() throws Exception {

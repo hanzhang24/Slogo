@@ -19,8 +19,10 @@ public class Controller {
         this.model = new ModelTracker();
         this.commandManager = new CommandManager();
     }
-    public NodeValue runInput(String input) {
+    public NodeValue runInput(String input) throws Exception {
         try {
+            if (input.strip() == "")
+                return new NodeValue(0);
             Parser parser = new Parser(commandManager);
             Root root = (Root) parser.parseInput(input);
             root.initContext(model);
@@ -32,7 +34,7 @@ public class Controller {
             return result;
         } catch (Exception e) {
             model.bail();
-            throw new RuntimeException("Not implemented");
+            throw e;
         }
     };
 

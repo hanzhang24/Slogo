@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 public class SquareRootCommand extends Command {
 
     public SquareRootCommand() {
-        this.setNumParameters(1);
+        this.setNumArguments(1);
     }
     public NodeValue execute() {
         checkContext();

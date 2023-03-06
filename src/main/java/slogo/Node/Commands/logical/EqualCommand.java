@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 
 public class EqualCommand extends Command {
     public EqualCommand(){
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
     public NodeValue execute() {
         checkContext();

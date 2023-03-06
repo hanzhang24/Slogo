@@ -4,11 +4,11 @@ import slogo.Node.Node;
 
 public abstract class Command extends Node {
 
-    private int numParameters = 0;
-    public int getNumParameters() {
-        return numParameters;
+    private int numArguments = 0;
+    public int getNumArguments() {
+        return numArguments;
     }
-    protected void setNumParameters(int numParameters){
-        this.numParameters = numParameters;
+    protected void setNumArguments(int numArguments){
+        this.numArguments = numArguments;
     }
 }

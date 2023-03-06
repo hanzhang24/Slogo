@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 
 public class DoTimesCommand extends Command {
     public DoTimesCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
     public NodeValue execute() throws Exception {
         checkContext();

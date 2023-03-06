@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 public class QuotientCommand extends Command {
 
     public QuotientCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
     public NodeValue execute() {
         checkContext();

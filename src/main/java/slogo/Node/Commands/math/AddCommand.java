@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 
 public class AddCommand extends Command {
     public AddCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
 
     public NodeValue execute() {

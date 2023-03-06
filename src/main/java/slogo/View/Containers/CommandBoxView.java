@@ -35,8 +35,13 @@ public class CommandBoxView extends ContainerView {
 
   private void sendText(TextArea textBox, Animator animations){
     String input = textBox.getText();
-    controller.runInput(input);
-    animations.resetAnimations();
+    //send to the control/parser
+    try {
+      controller.runInput(input);
+      animations.resetAnimations();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
   }
   public void setController(Controller controller){
     this.controller = controller;
