@@ -9,13 +9,19 @@ public class Tokenizer {
     public Tokenizer(String input) {
         try {
             String noComments = removeComments(input);
-            tokens = Arrays.stream(noComments.split("\\s+"))
+            String processed = separateListDelimiters(noComments);
+            tokens = Arrays.stream(processed.split("\\s+"))
                     .filter(s -> !s.isEmpty())
                     .toArray(String[]::new);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    public String separateListDelimiters(String input) {
+        return input.replaceAll("[\\[\\]]", " $0 ");
+    }
+
     public void toNextToken() {
         if (curIndex < tokens.length) {
             curIndex += 1;

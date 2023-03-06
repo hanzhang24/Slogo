@@ -6,25 +6,25 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import slogo.Controller.Controller;
+import slogo.View.Animator;
 
 public class CommandBoxView extends ContainerView {
   private Controller controller;
-  public CommandBoxView(){
+  public CommandBoxView(Animator animations){
     Pane container = new HBox();
     this.setContainer(container);
     container.setId("Command-HBox");
     TextArea textBox = new TextArea();
     textBox.setId("Text-Box");
     container.getChildren().add(textBox);
-    createButtons(textBox);
+    createButtons(textBox, animations);
   }
-
-  private void createButtons(TextArea textBox) {
+  private void createButtons(TextArea textBox, Animator animations) {
     VBox buttons = new VBox();
     buttons.setId("Command-VBox");
     Button run = new Button("Run");
     run.setId("Run");
-    run.setOnAction(e -> sendText(textBox));
+    run.setOnAction(e -> sendText(textBox, animations));
     Button clear = new Button("Clear");
     clear.setId("Clear");
     clear.setOnAction(e -> textBox.clear());
@@ -33,10 +33,10 @@ public class CommandBoxView extends ContainerView {
     this.getContainer().getChildren().add(buttons);
   }
 
-  private void sendText(TextArea textBox){
+  private void sendText(TextArea textBox, Animator animations){
     String input = textBox.getText();
-    //send to the control/parser
     controller.runInput(input);
+    animations.resetAnimations();
   }
   public void setController(Controller controller){
     this.controller = controller;

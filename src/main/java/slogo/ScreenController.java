@@ -41,11 +41,17 @@ public class ScreenController {
    * Called by handler function in splash screen to continue setup
    */
   public void launchGame(Color color, String language) throws ClassNotFoundException {
-    GameScreen gameScreen = new GameScreen(stage, language, color);
-    stage.setScene(gameScreen.makeScene(750, 750));
+    gameScreen = new GameScreen(stage, language, color);
+    stage.setScene(gameScreen.makeScene(1000, 750));
     this.modelController = new Controller();
     this.viewController = new ViewController(gameScreen);
     modelController.setViewController(viewController);
     gameScreen.getCommandBoxView().setController(modelController);
+  }
+  public GameScreen getGameScreen() {
+    return gameScreen;
+  }
+  public void setGameScreen(GameScreen screen){
+    gameScreen = screen;
   }
 }

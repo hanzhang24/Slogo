@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Root extends Node {
     private List<Double> returnValues = new ArrayList<Double>();
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         NodeValue result = new NodeValue();
         for (Node child: getChildren()) {
             result = child.execute();
