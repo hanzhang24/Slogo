@@ -63,12 +63,13 @@ public class HistoryView extends ContainerView {
         throw new RuntimeException(e);
       }
     }
-
   public void displayCommands(){
+    historyDisplay.clear();
     historyDisplay.setText(storedHistory);
   }
 
   public void displayLibrary(){
+    historyDisplay.clear();
     historyDisplay.setText(storedLibrary);
   }
   public void displayHelp(){

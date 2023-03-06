@@ -183,4 +183,8 @@ public class GameScreen extends Screen implements ModelView{
   public void playSequentialTransition(){
     animations.runAnimation();
   }
+
+  public void updatePenColor(Color penTest) {
+    this.color = penTest;
+  }
 }
