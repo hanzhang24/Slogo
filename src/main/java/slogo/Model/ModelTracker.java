@@ -248,17 +248,31 @@ public class ModelTracker implements Model {
    * @return pen color
    */
   @Override
-  public String getAvatarPenColor() {
+  public int[] getAvatarPenColor() {
     if (activeOpRunning()) {
       String formattedKey = formatLookupString(KEY_CODES.getString("PenColor"));
       if (workspace.containsKey(formattedKey)) {
-        return workspace.get(formattedKey);
+        return parseColors(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor"));
+        return parseColors(avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor")));
       }
     } else {
-      return avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor"));
+      return parseColors(avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor")));
     }
+  }
+
+  /**
+   * Parses colors from String representation into RGB values
+   * @param color String representation of color
+   * @return RGB values
+   */
+  private int[] parseColors(String color){
+    String[] parsedString = color.split(" ");
+    int[] parsedColors = new int[parsedString.length];
+    for(int i = 0; i < parsedColors.length; i++){
+      parsedColors[i] = Integer.parseInt(parsedString[i]);
+    }
+    return parsedColors;
   }
 
   /**
@@ -368,13 +382,19 @@ public class ModelTracker implements Model {
   /**
    * Sets the current avatar's pen color
    *
-   * @param color new color
+   * @param red red value 0-255
+   * @param green green value 0-255
+   * @param blue blue value 0-255
    */
   @Override
-  public void setAvatarPenColor(String color) throws RuntimeException {
+  public void setAvatarPenColor(double red, double green, double blue) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(KEY_CODES.getString("PenColor")), color);
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), color));
+    int castedRed = (int) red;
+    int castedGreen = (int) green;
+    int castedBlue = (int) blue;
+    String convertedColor = castedRed + " " + castedGreen + " " + castedBlue;
+    workspace.put(formatLookupString(KEY_CODES.getString("PenColor")), convertedColor);
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), convertedColor));
   }
 
   /**
