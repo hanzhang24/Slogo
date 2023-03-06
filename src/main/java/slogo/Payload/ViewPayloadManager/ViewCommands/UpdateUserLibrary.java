@@ -18,7 +18,7 @@ public class UpdateUserLibrary extends ViewCommand {
    */
   @Override
   void executeSpecificCommand() {
-    // gameScreen.addToUserLibrary(parameters.get(0));
+    gameScreen.addToUserLibrary(parameters.get(0));
   }
 
   /**

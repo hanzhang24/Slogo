@@ -112,10 +112,9 @@ public class GameScreen extends Screen implements ModelView{
   }
 
   @Override
-  public void updateAvatarPenColor(String color) {
-  }
-  public void updatePenColor(Color newcolor) {
-    avatar.updateColor(newcolor);
+  public void updateAvatarPenColor(int red, int green, int blue) {
+    Color newColor = Color.rgb(red, green, blue);
+    avatar.updateColor(newColor);
   }
   public void updateAvatarPosXY(double newX, double newY) {
     newX = newX + 250;
