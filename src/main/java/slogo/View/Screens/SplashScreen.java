@@ -1,5 +1,6 @@
 package slogo.View.Screens;
 
+import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -82,7 +83,6 @@ public class SplashScreen extends Screen {
         return scene;
     }
 
-
     public void nextPage() throws ClassNotFoundException {
         try {
             chosenLanguage = languagePicker.getValue().toString();
@@ -92,5 +92,4 @@ public class SplashScreen extends Screen {
         chosenColor = colorPicker.getValue();
         screenController.launchGame(chosenColor, chosenLanguage);
     }
-
 }

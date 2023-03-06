@@ -32,10 +32,8 @@ Target Finish Date: 3-4-23
     * Implement animations in line drawing and turtle movements
       * Utilize Canvas for commands
     * Implement functionality to change pen color and simulation speed
-    * Fix Animation to actually display
       * Keep animation in bounds of canvas
     * Create Containers for History and Animation Slider
-    * Implement View Queue to update with Animation Slider Speed
     * Implement PopUp to connect with Parser
     * Allow for languages to change
     * Fix CSS color Layouts
