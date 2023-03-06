@@ -5,7 +5,7 @@ import slogo.Node.NodeValue;
 
 public class XCorCommand extends Command {
     public XCorCommand() {
-        this.setNumParameters(0);
+        this.setNumArguments(0);
     }
 
     public NodeValue execute() throws Exception {

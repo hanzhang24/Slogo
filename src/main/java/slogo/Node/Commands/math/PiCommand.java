@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 public class PiCommand extends Command {
 
     public PiCommand() {
-        this.setNumParameters(0);
+        this.setNumArguments(0);
     }
     public NodeValue execute() {
         checkContext();

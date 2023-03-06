@@ -1,13 +1,12 @@
 package slogo.Node.Commands.avatar;
 
 import slogo.Geometry.Geometry;
-import slogo.Geometry.Vector;
 import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
 public class SetHeadingCommand extends Command {
     public SetHeadingCommand() {
-        this.setNumParameters(1);
+        this.setNumArguments(1);
     }
     public NodeValue execute() {
         checkContext();

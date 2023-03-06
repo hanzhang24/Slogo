@@ -6,14 +6,14 @@ import slogo.Node.NodeValue;
 
 public class AndCommand extends Command {
     public AndCommand(){
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
     public NodeValue execute() {
         checkContext();
         try {
             boolean result = true;
 
-            for (int i = 0; i < this.getNumParameters(); i++) {
+            for (int i = 0; i < this.getNumArguments(); i++) {
                 double arg = getChild(i).execute().getNumeric();
                 boolean arg_bool = Precision.asBoolean(arg);
                 result &= arg_bool;

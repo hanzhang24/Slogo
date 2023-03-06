@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 
 public class BackCommand extends Command {
     public BackCommand() {
-        this.setNumParameters(1);
+        this.setNumArguments(1);
     }
 
     public NodeValue execute() {

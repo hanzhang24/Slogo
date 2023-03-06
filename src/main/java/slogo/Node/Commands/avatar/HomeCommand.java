@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 
 public class HomeCommand extends Command {
     public HomeCommand() {
-        this.setNumParameters(0);
+        this.setNumArguments(0);
     }
     public NodeValue execute() {
         checkContext();

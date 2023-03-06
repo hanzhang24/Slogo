@@ -7,12 +7,16 @@ public class Variable extends Node {
 
     private String name;
 
-    public Variable(String name) {
-        this.name = name.toLowerCase();
+    @Override
+    public Node deepClone() {
+        return this;
     }
-
+    public Variable() {};
+    public Variable(String name) {
+        this.name = name;
+    }
     public String getName() {
-        return name;
+        return this.name;
     }
     public NodeValue getValue() {
         checkContext();
