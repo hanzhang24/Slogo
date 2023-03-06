@@ -14,7 +14,7 @@ public class SetPenColorCommand extends Command {
         double g = getChild(1).execute().getNumeric();
         double b = getChild(2).execute().getNumeric();
 
-        // DUMMY
+        model.setAvatarPenColor(r, g, b);
 
         return new NodeValue(1);
     }
