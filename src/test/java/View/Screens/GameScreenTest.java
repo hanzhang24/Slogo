@@ -164,8 +164,13 @@ class GameScreenTest extends DukeApplicationTest {
       FxAssert.verifyThat("#OK-Button", isEnabled());
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
+    @Test
     void testInvalidNegativeInput(){
-
+      writeInputTo(animationInput, "20");
+      press(KeyCode.ENTER);
+      writeInputTo(animationInput, "-10");
+      press(KeyCode.ENTER);
+      assertEquals(60, thisScreen.getAnimationSpeed());
     }
   }
   @Nested
