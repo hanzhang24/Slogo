@@ -53,6 +53,7 @@ public class Animator {
     checked = pt;
     Timeline animationLoop = new Timeline(new KeyFrame(Duration.millis(10), event -> {
       checkAnimation(pt, endX, endY);
+      System.out.println("running");
     }));
     animationLoop.setCycleCount(Timeline.INDEFINITE);
     pt.play();
