@@ -11,6 +11,7 @@ public abstract class PenView {
 
   private double XCor;
   private double YCor;
+  private double rot;
   private boolean penActive;
 
   private boolean visible;
@@ -47,9 +48,10 @@ public abstract class PenView {
 //    image.setX(newX + 275);
 //    image.setY(-1 * newY + 275);
   }
-  public void updateRot(double newRot) { image.setRotate(-1 * newRot + 90); } // to keep the orientation consistent - Alec :))))
+  public void updateRot(double newRot) { rot = (-1 * newRot + 90); } // to keep the orientation consistent - Alec :))))
   public double getXCor(){return XCor;}
   public double getYCor(){return YCor;}
+  public double getRot(){return rot;}
   public boolean getPenActive(){return penActive;}
   public Color getColor(){return color;}
 
