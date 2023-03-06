@@ -28,6 +28,15 @@ public class ModelTrackerTest {
   private final Random randomGenerator = new Random();
   private ModelTracker modelTracker;
 
+  /**
+   * Checks if two arrays are equal
+   */
+  void assertArrayEquals(int[] expected, int[] actual) {
+    for (int i = 0; i < expected.length; i++) {
+      assertEquals(expected[i], actual[i]);
+    }
+  }
+
   @Nested
   @DisplayName("Configuration Tests")
   class ConfigurationTests {
@@ -39,7 +48,7 @@ public class ModelTrackerTest {
       assertEquals(0.0, modelTracker.getAvatarX());
       assertEquals(0.0, modelTracker.getAvatarY());
       assertEquals(0.0, modelTracker.getAvatarRotation());
-      assertEquals("black", modelTracker.getAvatarPenColor());
+      assertArrayEquals(new int[]{0, 0, 0}, modelTracker.getAvatarPenColor());
       assertEquals(true, modelTracker.getAvatarIsPenDown());
     }
 
@@ -94,7 +103,11 @@ public class ModelTrackerTest {
     @Test
     void testBailedUpdatesNotPushed() {
       modelTracker.startOp();
-      modelTracker.setAvatarPenColor("blue");
+      int[] RGB = modelTracker.getAvatarPenColor();
+      double randRed = randomGenerator.nextInt(0, 255);
+      double randGreen = randomGenerator.nextInt(0, 255);
+      double randBlue = randomGenerator.nextInt(0, 255);
+      modelTracker.setAvatarPenColor(randRed, randGreen, randBlue);
       modelTracker.bail();
       checkDefaultParameters();
     }
@@ -132,9 +145,10 @@ public class ModelTrackerTest {
       r += randomGenerator.nextDouble();
       modelTracker.setAvatarRotation(r);
 
-      String penColor = modelTracker.getAvatarPenColor();
-      penColor = "blue";
-      modelTracker.setAvatarPenColor(penColor);
+      double randRed = randomGenerator.nextInt(0, 255);
+      double randGreen = randomGenerator.nextInt(0, 255);
+      double randBlue = randomGenerator.nextInt(0, 255);
+      modelTracker.setAvatarPenColor(randRed, randGreen, randBlue);
 
       double x = modelTracker.getAvatarX();
       double y = modelTracker.getAvatarY();
@@ -158,7 +172,8 @@ public class ModelTrackerTest {
 
       assertEquals(r, modelTracker.getAvatarRotation());
       assertEquals(a, modelTracker.getUserVariable("a"));
-      assertEquals("blue", modelTracker.getAvatarPenColor());
+      assertArrayEquals(new int[]{(int) randRed, (int) randGreen, (int) randBlue},
+          modelTracker.getAvatarPenColor());
       assertEquals(x2, modelTracker.getAvatarX());
       assertEquals(y2, modelTracker.getAvatarY());
     }
