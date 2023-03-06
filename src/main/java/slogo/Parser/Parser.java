@@ -7,16 +7,11 @@ public class Parser {
     private CommandManager commandManager;
     public Parser(){};
     public Parser(CommandManager commandManager) {this.commandManager = commandManager;}
-    public Node parseInput(String input) {
-        try {
-            this.tokenizer = new Tokenizer(input);
-            if (tokenizer.isEndOfInput()) return null;
-            Root root = parseAll();
-            return root;
-        } catch (Exception e) {
-            // TODO: Handle exceptions
-            throw new RuntimeException(e.getMessage());
-        }
+    public Node parseInput(String input) throws Exception {
+        this.tokenizer = new Tokenizer(input);
+        if (tokenizer.isEndOfInput()) return null;
+        Root root = parseAll();
+        return root;
     }
     private Root parseAll() throws Exception {
 
@@ -34,30 +29,25 @@ public class Parser {
     };
 
     public Node parseGroup() throws Exception {
-        try {
-            Group group = new Group();
-            String curToken = tokenizer.getCurToken();
-            assert(TypeChecker.getType(curToken) == TokenType.GROUP_START);
+        Group group = new Group();
+        String curToken = tokenizer.getCurToken();
+        assert(TypeChecker.getType(curToken) == TokenType.GROUP_START);
 
-            tokenizer.toNextToken();
+        tokenizer.toNextToken();
 
-            while(!tokenizer.isEndOfInput() &&
-                  TypeChecker.getType(tokenizer.getCurToken()) != TokenType.GROUP_END) {
-                Node child = parseExpression();
-                group.addChild(child);
-            }
-
-            assert(!tokenizer.isEndOfInput());
-
-            assert(TypeChecker.getType(tokenizer.getCurToken()) == TokenType.GROUP_END);
-
-            tokenizer.toNextToken();
-
-            return group;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
+        while(!tokenizer.isEndOfInput() &&
+              TypeChecker.getType(tokenizer.getCurToken()) != TokenType.GROUP_END) {
+            Node child = parseExpression();
+            group.addChild(child);
         }
 
+        assert(!tokenizer.isEndOfInput());
+
+        assert(TypeChecker.getType(tokenizer.getCurToken()) == TokenType.GROUP_END);
+
+        tokenizer.toNextToken();
+
+        return group;
     };
 
     public Node parseCommand() throws Exception {
