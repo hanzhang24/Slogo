@@ -1,5 +1,6 @@
 package slogo.Node.Commands.control;
 
+import slogo.Float.Precision;
 import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeCategories.Variable;
 import slogo.Node.NodeValue;
@@ -26,7 +27,7 @@ public class ForCommand extends Command {
             assert(end >= start);
             assert(increment > 0);
 
-            for (double loop = start; loop <= end; loop += increment) {
+            for (double loop = start; Precision.lessEqual(loop, end); loop += increment) {
                 model.setUserVariable(varName, loop);
                 result = commands.execute();
             }
