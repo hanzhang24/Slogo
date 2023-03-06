@@ -6,7 +6,6 @@ import slogo.Node.UserFunctionTemplate;
 import java.util.*;
 
 public class CommandManager {
-
     private static final String commandResourcePath = "Parser.Commands";
     private static final String basePackage = "slogo.Node.Commands";
 
