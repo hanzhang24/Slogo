@@ -49,7 +49,7 @@ public abstract class Screen {
     return Arrays.asList(PanelResources.getString(property).split(","));
   }
 
-  protected Node makeInputPanel (List<String> actions, Screen screen, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
+  protected HBox makeInputPanel (List<String> actions, Screen screen, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
     HBox result = new HBox();
     // create buttons, with their associated actions
     for (String a : actions) {
