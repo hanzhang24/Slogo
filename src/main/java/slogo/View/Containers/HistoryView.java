@@ -80,7 +80,8 @@ public class HistoryView extends ContainerView {
   }
 
   public void updateCommandHistory(String userInput) {
-    storedHistory = storedHistory + userInput;
+    storedHistory = storedHistory + "\n" + userInput;
+    historyDisplay.setText(storedLibrary);
   }
   public void updateLibraryHistory(String userInput) {
     storedLibrary = storedLibrary + userInput;
