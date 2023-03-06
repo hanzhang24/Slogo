@@ -21,10 +21,11 @@ public class Controller {
     }
     public NodeValue runInput(String input) throws Exception {
         try {
-            if (input.strip() == "")
-                return new NodeValue(0);
             Parser parser = new Parser(commandManager);
-            Root root = (Root) parser.parseInput(input);
+            Node uncasted = parser.parseInput(input);
+            if (uncasted == null)
+                throw new Exception("input had no runnable commands");
+            Root root = (Root) uncasted;
             root.initContext(model);
             model.startOp();
             NodeValue result = root.execute();

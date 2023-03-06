@@ -10,6 +10,7 @@ public class Parser {
     public Node parseInput(String input) {
         try {
             this.tokenizer = new Tokenizer(input);
+            if (tokenizer.isEndOfInput()) return null;
             Root root = parseAll();
             return root;
         } catch (Exception e) {
@@ -17,28 +18,19 @@ public class Parser {
             throw new RuntimeException(e.getMessage());
         }
     }
-    private Root parseAll() {
-        try {
-            Root root = new Root();
-            while(!tokenizer.isEndOfInput()) {
-                Node node = parseExpression();
-                root.addChild(node);
-            }
-            return root;
-        } catch (Exception e) {
-            // TODO: Handle exceptions
-            throw new RuntimeException("parseAll has not implemented error handling");
+    private Root parseAll() throws Exception {
+
+        Root root = new Root();
+        while(!tokenizer.isEndOfInput()) {
+            Node node = parseExpression();
+            root.addChild(node);
         }
+        return root;
     }
     private Node parseExpression() throws Exception {
-        try {
-            String curToken = tokenizer.getCurToken();
-            TokenType type = TypeChecker.getType(curToken);
-            return type.parse(this);
-        } catch (Exception e) {
-            // TODO: Handle exceptions
-            throw e;
-        }
+        String curToken = tokenizer.getCurToken();
+        TokenType type = TypeChecker.getType(curToken);
+        return type.parse(this);
     };
 
     public Node parseGroup() throws Exception {
