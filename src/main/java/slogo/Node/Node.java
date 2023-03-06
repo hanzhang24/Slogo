@@ -27,7 +27,7 @@ public abstract class Node {
         for (Node child: this.getChildren()) {
             selfNode.addChild(child.deepClone());
         }
-        return this.getClass().cast(selfNode);
+        return selfNode;
     }
     public Node getChild(int ith) {
         return this.children.get(ith);
