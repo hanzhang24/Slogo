@@ -7,7 +7,7 @@ import slogo.Node.NodeValue;
 public class GreaterEqualCommand extends Command {
 
     public GreaterEqualCommand(){
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
     public NodeValue execute() {
         checkContext();

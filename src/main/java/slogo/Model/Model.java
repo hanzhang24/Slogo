@@ -33,7 +33,7 @@ public interface Model {
    *
    * @param id new avatar ID
    */
-  void setCurrentAvatar(int id);
+  void setCurrentAvatar(int id) throws RuntimeException;
 
   /**
    * Gets the x position of the current avatar
@@ -59,9 +59,9 @@ public interface Model {
   /**
    * Gets the pen color of the current avatar
    *
-   * @return pen color
+   * @return pen color as [red, green, blue]
    */
-  String getAvatarPenColor();
+  int[] getAvatarPenColor();
 
   /**
    * Gets the state of the pen
@@ -116,35 +116,37 @@ public interface Model {
    * @param x new x position
    * @param y new y position
    */
-  void setAvatarPosition(double x, double y);
+  void setAvatarPosition(double x, double y) throws RuntimeException;
 
   /**
    * Sets the current avatar's rotation
    *
    * @param rotation new rotation
    */
-  void setAvatarRotation(double rotation);
+  void setAvatarRotation(double rotation) throws RuntimeException;
 
   /**
    * Sets the current avatar's pen color
    *
-   * @param color new color
+   * @param red red value 0-255
+   * @param green green value 0-255
+   * @param blue blue value 0-255
    */
-  void setAvatarPenColor(String color);
+  void setAvatarPenColor(double red, double green, double blue) throws RuntimeException;
 
   /**
    * Sets the current avatar's pen enable setting
    *
    * @param isPenDown new pen setting
    */
-  void setAvatarPenDown(boolean isPenDown);
+  void setAvatarPenDown(boolean isPenDown) throws RuntimeException;
 
   /**
    * Sets the current avatar's visibility setting
    *
    * @param visible whether the current avatar is visible
    */
-  void setAvatarVisible(boolean visible);
+  void setAvatarVisible(boolean visible) throws RuntimeException;
 
   /**
    * Sets the value of a user variable
@@ -152,10 +154,10 @@ public interface Model {
    * @param key   variable name
    * @param value variable value
    */
-  void setUserVariable(String key, double value);
+  void setUserVariable(String key, double value) throws RuntimeException;
 
   /**
    * Sets all avatars to the default position and rotation values
    */
-  void resetOrientation();
+  void resetOrientation() throws RuntimeException;
 }

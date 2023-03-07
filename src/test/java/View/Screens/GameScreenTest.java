@@ -1,6 +1,7 @@
 package View.Screens;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 
 import java.awt.*;
 
@@ -8,14 +9,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Slider;
+import javax.swing.text.View;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.testfx.api.FxAssert;
+import slogo.Controller.Controller;
+import slogo.Controller.ViewController;
 import slogo.ScreenController;
 import slogo.View.Screens.GameScreen;
 import util.DukeApplicationTest;
@@ -37,14 +46,19 @@ class GameScreenTest extends DukeApplicationTest {
   private TextArea area;
   private Button clear;
 
+  private Controller modelController;
+  private ViewController viewController;
+
   @Override
   public void start(Stage stage) throws ClassNotFoundException {
-    ScreenController screenController = new ScreenController(stage);
-    thisScreen = new GameScreen(stage, DEFAULT_LANGUAGE, Color.BLACK);
-    stage.setScene(thisScreen.makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
-    stage.setTitle(TITLE);
+    //TODO replace with the ScreenController
+    thisScreen = new GameScreen(stage, "English", Color.BLACK);
+    stage.setScene(thisScreen.makeScene(750, 750));
+    modelController = new Controller();
+    viewController = new ViewController(thisScreen);
+    modelController.setViewController(viewController);
+    thisScreen.getCommandBoxView().setController(modelController);
     stage.show();
-    screenController.setGameScreen(thisScreen);
 
     run = lookup("#Run").query();
     area = lookup("#Text-Box").query();
@@ -113,22 +127,74 @@ class GameScreenTest extends DukeApplicationTest {
   @DisplayName("AnimationSpeed")
   class AnimationSpeed {
 
-    Slider animationSlider;
-    TextArea animationInput;
+    private Slider animationSlider;
+    private TextArea animationInput;
+
+
     @BeforeEach
     void setUp() {
-      animationSlider = lookup("Animation-Slider").query();
-      animationInput = lookup("Animation-Input").query();
+      animationSlider = lookup("#Animation-Slider").query();
+      animationInput = lookup("#Animation-Input").query();
     }
+
     @Test
     void testAnimationSlider(){
+      //This line is required for a click to register as an event, otherwise javafx will just set
+      //the value of the animation Slider but not increase
+      //PLEASE DO NOT MOVE YOUR MOUSE DOING THIS TEST
+      moveTo(animationSlider);
       setValue(animationSlider, 10);
+      press(MouseButton.PRIMARY);
+      release(MouseButton.PRIMARY);
       assertEquals(10, thisScreen.getAnimationSpeed());
     }
     @Test
     void testAnimationTextBox(){
       writeInputTo(animationInput, "20");
+      press(KeyCode.ENTER);
       assertEquals(20, thisScreen.getAnimationSpeed());
+    }
+    @Test
+    void testInvalidAnimationStringInput(){
+      writeInputTo(animationInput, "20");
+      press(KeyCode.ENTER);
+      writeInputTo(animationInput, "Hi");
+      press(KeyCode.ENTER);
+
+      FxAssert.verifyThat("#OK-Button", isEnabled());
+      assertEquals(60, thisScreen.getAnimationSpeed());
+    }
+    @Test
+    void testInvalidNegativeInput(){
+      writeInputTo(animationInput, "20");
+      press(KeyCode.ENTER);
+      writeInputTo(animationInput, "-10");
+      press(KeyCode.ENTER);
+      assertEquals(60, thisScreen.getAnimationSpeed());
+    }
+  }
+  @Nested
+  @DisplayName("History Tests")
+  class HistoryContainer{
+    private ComboBox<String> historyOptions;
+    private TextArea display;
+    @BeforeEach
+    void setUp(){
+      historyOptions = lookup("#History-Selector").query();
+      display = lookup("#History-Display").query();
+    }
+    @Test
+    void testChangeHistoryValue(){
+      String expected = "Command History";
+      select(historyOptions, expected);
+    }
+    @Test
+    void testDisplayProperlyUpdates(){
+      String expected = "Command History";
+      select(historyOptions, expected);
+      String input = "fd 50 \nhome";
+      writeInputTo(area, input);
+      assertEquals(display.getText(), input);
     }
   }
 }

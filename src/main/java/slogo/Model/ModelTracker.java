@@ -85,7 +85,7 @@ public class ModelTracker implements Model {
    * End a Controller operation, signifying a success batch of work has been finished. All updates
    * are committed to the original data.
    */
-  public ViewPayload endOp(String userInput, List<Double> returnValues) {
+  public ViewPayload endOp(String userInput, List<Double> returnValues) throws RuntimeException {
     checkCurrentOperationConfigured();
     pushWorkspaceUpdates();
     logSupplementalInformation(userInput, returnValues);
@@ -185,7 +185,8 @@ public class ModelTracker implements Model {
    * @param id new avatar ID
    */
   @Override
-  public void setCurrentAvatar(int id) {
+  public void setCurrentAvatar(int id) throws RuntimeException {
+    checkCurrentOperationConfigured();
     if(id >= 0 && id < avatarList.size()){
       currentAvatarID = id;
     } else {
@@ -247,17 +248,31 @@ public class ModelTracker implements Model {
    * @return pen color
    */
   @Override
-  public String getAvatarPenColor() {
+  public int[] getAvatarPenColor() {
     if (activeOpRunning()) {
       String formattedKey = formatLookupString(KEY_CODES.getString("PenColor"));
       if (workspace.containsKey(formattedKey)) {
-        return workspace.get(formattedKey);
+        return parseColors(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor"));
+        return parseColors(avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor")));
       }
     } else {
-      return avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor"));
+      return parseColors(avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor")));
     }
+  }
+
+  /**
+   * Parses colors from String representation into RGB values
+   * @param color String representation of color
+   * @return RGB values
+   */
+  private int[] parseColors(String color){
+    String[] parsedString = color.split(" ");
+    int[] parsedColors = new int[parsedString.length];
+    for(int i = 0; i < parsedColors.length; i++){
+      parsedColors[i] = Integer.parseInt(parsedString[i]);
+    }
+    return parsedColors;
   }
 
   /**
@@ -309,12 +324,12 @@ public class ModelTracker implements Model {
   public double getUserVariable(String key) {
     if (activeOpRunning()) {
       if (workspace.containsKey(key)) {
-        return Double.parseDouble(workspace.get(key));
+        return Double.parseDouble(workspace.getOrDefault(key, "0"));
       } else {
-        return userVariables.get(key);
+        return userVariables.getOrDefault(key, 0.0);
       }
     } else {
-      return userVariables.get(key);
+      return userVariables.getOrDefault(key, 0.0);
     }
   }
 
@@ -345,7 +360,7 @@ public class ModelTracker implements Model {
    * @param y new y position
    */
   @Override
-  public void setAvatarPosition(double x, double y) {
+  public void setAvatarPosition(double x, double y) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("X")), x + "");
     workspace.put(formatLookupString(KEY_CODES.getString("Y")), y + "");
@@ -358,7 +373,7 @@ public class ModelTracker implements Model {
    * @param rotation new rotation
    */
   @Override
-  public void setAvatarRotation(double rotation) {
+  public void setAvatarRotation(double rotation) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("Rotation")), rotation + "");
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Rotation"), rotation));
@@ -367,13 +382,19 @@ public class ModelTracker implements Model {
   /**
    * Sets the current avatar's pen color
    *
-   * @param color new color
+   * @param red red value 0-255
+   * @param green green value 0-255
+   * @param blue blue value 0-255
    */
   @Override
-  public void setAvatarPenColor(String color) {
+  public void setAvatarPenColor(double red, double green, double blue) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(KEY_CODES.getString("PenColor")), color);
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), color));
+    int castedRed = (int) red;
+    int castedGreen = (int) green;
+    int castedBlue = (int) blue;
+    String convertedColor = castedRed + " " + castedGreen + " " + castedBlue;
+    workspace.put(formatLookupString(KEY_CODES.getString("PenColor")), convertedColor);
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), convertedColor));
   }
 
   /**
@@ -382,7 +403,7 @@ public class ModelTracker implements Model {
    * @param isPenDown new pen setting
    */
   @Override
-  public void setAvatarPenDown(boolean isPenDown) {
+  public void setAvatarPenDown(boolean isPenDown) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("IsPenDown")), isPenDown + "");
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("IsPenDown"), isPenDown + ""));
@@ -394,7 +415,7 @@ public class ModelTracker implements Model {
    * @param visible whether avatar is visible
    */
   @Override
-  public void setAvatarVisible(boolean visible) {
+  public void setAvatarVisible(boolean visible) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("Visible")), visible + "");
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Visible"), visible + ""));
@@ -407,7 +428,7 @@ public class ModelTracker implements Model {
    * @param value variable value
    */
   @Override
-  public void setUserVariable(String key, double value) {
+  public void setUserVariable(String key, double value) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(key, value + "");
   }
@@ -416,11 +437,13 @@ public class ModelTracker implements Model {
    * Sets all avatars to the default position and rotation values
    */
   @Override
-  public void resetOrientation() {
+  public void resetOrientation() throws RuntimeException {
+    checkCurrentOperationConfigured();
     for (int i = 0; i < avatarList.size(); i++) {
       setCurrentAvatar(i);
-      setAvatarPosition(0, 0); // Remove magic numbers, using XML interpreter
-      setAvatarRotation(0); // Remove magic numbers
+      double numericDefault = avatarList.get(i).getNumericDefault();
+      setAvatarPosition(numericDefault, numericDefault); // Remove magic numbers, using XML interpreter
+      setAvatarRotation(numericDefault); // Remove magic numbers
     }
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("ClearScreen")));
   }

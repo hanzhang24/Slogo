@@ -49,49 +49,62 @@ public class Avatar {
       String type = parsedParameters[TYPE_INDEX];
       String value = parsedParameters[VALUE_INDEX];
 
-      if (type.equals(STRING_TYPE)) {
-        stringParameters.put(key, value);
-      } else if (type.equals(BOOLEAN_TYPE)){
-        booleanParameters.put(key, Boolean.parseBoolean(value)); // no supported exception
-      } else if (type.equals(DOUBLE_TYPE)) {
-        try {
-          numericParameters.put(key, Double.parseDouble(value));
-        } catch (NumberFormatException numberFormatException) {
-          throw new NumberFormatException(
-              String.format(exceptionResourceBundle.getString("ConfigurationParsingError"),
-                  key)
-          );
+      switch (type) {
+        case STRING_TYPE -> stringParameters.put(key, value);
+        case BOOLEAN_TYPE ->
+            booleanParameters.put(key, Boolean.parseBoolean(value)); // no supported exception
+        case DOUBLE_TYPE -> {
+          try {
+            numericParameters.put(key, Double.parseDouble(value));
+          } catch (NumberFormatException numberFormatException) {
+            throw new NumberFormatException(
+                String.format(exceptionResourceBundle.getString("ConfigurationParsingError"),
+                    key)
+            );
+          }
         }
-      } else {
-        throw new RuntimeException(exceptionResourceBundle.getString("UnsupportedDefaultTypeError"));
+        default -> throw new RuntimeException(
+            exceptionResourceBundle.getString("UnsupportedDefaultTypeError"));
       }
     }
   }
 
   /**
    * Gets the double associated with a given key
+   *
    * @param key given parameter
    * @return value of the given parameter
    */
-  public double getDouble(String key){
+  public double getDouble(String key) {
     return numericParameters.get(key);
   }
 
   /**
+   * Gets the default value for numeric parameters
+   *
+   * @return numeric default
+   */
+  public double getNumericDefault() {
+    return numericParameters.get("Default");
+  }
+
+  /**
    * Gets the String associated with a given key
+   *
    * @param key given parameter
    * @return value of the given parameter
    */
-  public String getString(String key){
+  public String getString(String key) {
     return stringParameters.get(key);
   }
 
   /**
    * Gets the boolean associated with a given key
+   *
    * @param key given parameter
    * @return value of the given parameter
    */
-  public boolean getBoolean(String key){
+  public boolean getBoolean(String key) {
     return booleanParameters.get(key);
   }
 
@@ -105,9 +118,9 @@ public class Avatar {
   public void setValue(String key, String value) {
     if (stringParameters.containsKey(key)) {
       stringParameters.put(key, value);
-    } else if(numericParameters.containsKey(key)){
+    } else if (numericParameters.containsKey(key)) {
       numericParameters.put(key, Double.parseDouble(value));
-    } else if(booleanParameters.containsKey(key)){
+    } else if (booleanParameters.containsKey(key)) {
       booleanParameters.put(key, Boolean.parseBoolean(value));
     } else {
       throw new RuntimeException(exceptionResourceBundle.getString("UnknownAvatarParameterError"));

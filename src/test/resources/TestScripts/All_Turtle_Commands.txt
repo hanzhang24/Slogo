@@ -1,0 +1,33 @@
+# draw L shape
+PD
+FORWARD 50
+LEFT 45
+lt 45
+PU
+fd 50
+PENDOWN
+BACK 50
+RIGHT 45
+rt 45
+bk 50
+PENUP
+# Travel out and back with Set Heading
+SETHEADING 45
+fd 200
+SETH -135
+fd 200
+# Travel out and back with Towards
+TOWARDS -1 -1
+fd 23
+TOWARDS 1 1
+fd 23
+# Hide turtle and travel to different place
+HIDETURTLE
+PD
+SETXY -50 50
+PU
+GOTO -50 -50
+PD
+HOME
+SETH 0
+CS

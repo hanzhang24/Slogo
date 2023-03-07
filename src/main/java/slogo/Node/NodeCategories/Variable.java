@@ -7,11 +7,22 @@ public class Variable extends Node {
 
     private String name;
 
+    @Override
+    public Node deepClone() {
+        return this;
+    }
+    public Variable() {};
     public Variable(String name) {
         this.name = name;
     }
-    public NodeValue execute() {
+    public String getName() {
+        return this.name;
+    }
+    public NodeValue getValue() {
         checkContext();
         return new NodeValue(model.getUserVariable(this.name));
+    }
+    public NodeValue execute() {
+        return getValue();
     }
 }

@@ -1,0 +1,10 @@
+LESS? 1 3
+LESSEQUAL? 1 1
+GREATER 5 1
+GREATEREQUAL? 4 4
+EQUAL? 4 5
+NOTEQUAL? 4 4
+AND 1 1
+OR 1 0
+NOT 1
+# Should return 0, 1, 1, 1, 0, 0, 1, 1, 0
