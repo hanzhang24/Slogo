@@ -1,9 +1,6 @@
 /**
- * TODO: expose setReturnValue, work on History class,
- *      talk about History and return value implementations
- *      talk about behavior once turtle is at edge
- *      talk about xml files
- *      talk about removing magic numbers
+ * TODO: implement strategy pattern for avatar initialization,
+ *       implement external and internal ID tracking
  */
 package slogo.Model;
 
@@ -12,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import slogo.Model.AvatarRepresentation.Avatar;
 import slogo.Payload.ViewPayloadManager.ChangeLog;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
