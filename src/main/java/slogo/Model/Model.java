@@ -28,12 +28,33 @@ public interface Model {
   void bail();
 
   /**
+   * Adds a new avatar with the desired external ID
+   *
+   * @param externalID externally-generated ID
+   */
+  void addAvatar(int externalID) throws RuntimeException;
+
+  /**
+   * Gets the current avatar's external ID
+   *
+   * @return external ID
+   */
+  int getCurrentAvatarID();
+
+  /**
    * Switches the avatar to the one with the specified ID. By default, the ID is set to zero for the
    * initial avatar.
    *
    * @param id new avatar ID
    */
-  void setCurrentAvatar(int id) throws RuntimeException;
+  void setCurrentAvatarID(int id) throws RuntimeException;
+
+  /**
+   * Gets the number of active avatars
+   *
+   * @return number of active avatars
+   */
+  int getNumberOfAvatars();
 
   /**
    * Gets the x position of the current avatar
@@ -128,9 +149,9 @@ public interface Model {
   /**
    * Sets the current avatar's pen color
    *
-   * @param red red value 0-255
+   * @param red   red value 0-255
    * @param green green value 0-255
-   * @param blue blue value 0-255
+   * @param blue  blue value 0-255
    */
   void setAvatarPenColor(double red, double green, double blue) throws RuntimeException;
 

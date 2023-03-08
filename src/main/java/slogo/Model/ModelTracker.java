@@ -1,6 +1,9 @@
 /**
  * TODO: implement strategy pattern for avatar initialization,
- *       implement external and internal ID tracking
+ *       implement external and internal ID tracking,
+ *       change setID to also create an Avatar if needed and add a corresponding command to payload
+ *       adopt new ID into ALL avatar payload objects
+ *       expose new API methods to get current ID and avatar list size (may need new exceptions too)
  */
 package slogo.Model;
 
@@ -24,7 +27,8 @@ public class ModelTracker implements Model {
   private static final String KEY_CODES_PATH = "Model.KeyCodes";
   private static final ResourceBundle KEY_CODES = ResourceBundle.getBundle(KEY_CODES_PATH);
   private List<Avatar> avatarList;
-  private int currentAvatarID;
+  private String avatarDefaultParametersFilename;
+  private int currentAvatarIndex; // tracks the list index for a specific ID
   private OperationSignatureGenerator operationSignatureGenerator;
   private int operationSignature;
   private Map<String, Double> userVariables;
@@ -52,10 +56,11 @@ public class ModelTracker implements Model {
    * Initialize avatar-related settings
    */
   private void initializeAvatars(String defaultParametersFilename) {
-    Avatar initialAvatar = new Avatar(defaultParametersFilename, EXCEPTIONS);
+    this.avatarDefaultParametersFilename = defaultParametersFilename;
+    Avatar initialAvatar = new Avatar(1, defaultParametersFilename, EXCEPTIONS);
     avatarList = new ArrayList<>();
     avatarList.add(initialAvatar);
-    currentAvatarID = 0;
+    currentAvatarIndex = 0;
   }
 
   /**
@@ -139,6 +144,45 @@ public class ModelTracker implements Model {
   }
 
   /**
+   * Adds a new avatar with the desired external ID
+   *
+   * @param externalID externally-generated ID
+   */
+  @Override
+  public void addAvatar(int externalID) throws RuntimeException{
+    int index = searchForAvatarID(externalID);
+    if(index != Integer.MIN_VALUE){
+      throw new RuntimeException(EXCEPTIONS.getString("OverlappingIDError"));
+    } else {
+      avatarList.add(new Avatar(externalID, avatarDefaultParametersFilename, EXCEPTIONS));
+    }
+  }
+
+  /**
+   * Searches for the internal index of an Avatar with a specified external ID. If not found, returns Integer.MIN_VALUE;
+   * @param externalID external given ID
+   * @return internal list index
+   */
+  private int searchForAvatarID(int externalID){
+    for(int i = 0; i < avatarList.size(); i++){
+      if(avatarList.get(i).getExternalID() == externalID){
+        return i;
+      }
+    }
+    return Integer.MIN_VALUE;
+  }
+
+  /**
+   * Gets the current avatar's external ID
+   *
+   * @return external ID
+   */
+  @Override
+  public int getCurrentAvatarID() {
+    return avatarList.get(currentAvatarIndex).getExternalID(); // TODO
+  }
+
+  /**
    * Gets if there is an active operation running
    *
    * @return if there is an active operation
@@ -173,23 +217,33 @@ public class ModelTracker implements Model {
    * @return formatted lookup String
    */
   private String formatLookupString(String key) {
-    return String.format("Signature:%d_ID:%d_%s", operationSignature, currentAvatarID, key);
+    return String.format("Signature:%d_ID:%d_%s", operationSignature, currentAvatarIndex, key);
   }
 
   /**
-   * Switches the avatar to the one with the specified ID. By default, the ID is set to zero for the
-   * initial avatar.
+   * Switches the avatar to the one with the specified ID.
    *
    * @param id new avatar ID
    */
   @Override
-  public void setCurrentAvatar(int id) throws RuntimeException {
+  public void setCurrentAvatarID(int id) throws RuntimeException {
     checkCurrentOperationConfigured();
-    if(id >= 0 && id < avatarList.size()){
-      currentAvatarID = id;
+    int index = searchForAvatarID(currentAvatarIndex);
+    if(index != Integer.MIN_VALUE){
+      currentAvatarIndex = index;
     } else {
       throw new RuntimeException(EXCEPTIONS.getString("NonexistentAvatarError"));
     }
+  }
+
+  /**
+   * Gets the number of active avatars
+   *
+   * @return number of active avatars
+   */
+  @Override
+  public int getNumberOfAvatars() {
+    return avatarList.size(); // TODO
   }
 
   /**
@@ -203,10 +257,10 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(formattedKey)) {
         return Double.parseDouble(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentAvatarID).getDouble(avatarKeyCode);
+        return avatarList.get(currentAvatarIndex).getDouble(avatarKeyCode);
       }
     } else {
-      return avatarList.get(currentAvatarID).getDouble(avatarKeyCode);
+      return avatarList.get(currentAvatarIndex).getDouble(avatarKeyCode);
     }
   }
 
@@ -252,10 +306,10 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(formattedKey)) {
         return parseColors(workspace.get(formattedKey));
       } else {
-        return parseColors(avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor")));
+        return parseColors(avatarList.get(currentAvatarIndex).getString(KEY_CODES.getString("PenColor")));
       }
     } else {
-      return parseColors(avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor")));
+      return parseColors(avatarList.get(currentAvatarIndex).getString(KEY_CODES.getString("PenColor")));
     }
   }
 
@@ -285,10 +339,10 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(formattedKey)) {
         return Boolean.parseBoolean(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("IsPenDown"));
+        return avatarList.get(currentAvatarIndex).getBoolean(KEY_CODES.getString("IsPenDown"));
       }
     } else {
-      return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("IsPenDown"));
+      return avatarList.get(currentAvatarIndex).getBoolean(KEY_CODES.getString("IsPenDown"));
     }
   }
 
@@ -304,10 +358,10 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(formattedKey)) {
         return Boolean.parseBoolean(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("Visible"));
+        return avatarList.get(currentAvatarIndex).getBoolean(KEY_CODES.getString("Visible"));
       }
     } else {
-      return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("Visible"));
+      return avatarList.get(currentAvatarIndex).getBoolean(KEY_CODES.getString("Visible"));
     }
   }
 
@@ -438,7 +492,7 @@ public class ModelTracker implements Model {
   public void resetOrientation() throws RuntimeException {
     checkCurrentOperationConfigured();
     for (int i = 0; i < avatarList.size(); i++) {
-      setCurrentAvatar(i);
+      setCurrentAvatarID(i);
       double numericDefault = avatarList.get(i).getNumericDefault();
       setAvatarPosition(numericDefault, numericDefault); // Remove magic numbers, using XML interpreter
       setAvatarRotation(numericDefault); // Remove magic numbers
