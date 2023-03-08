@@ -28,35 +28,6 @@ public interface Model {
   void bail();
 
   /**
-   * Adds a new avatar with the desired external ID
-   *
-   * @param externalID externally-generated ID
-   */
-  void addAvatar(int externalID) throws RuntimeException;
-
-  /**
-   * Gets the current avatar's external ID
-   *
-   * @return external ID
-   */
-  int getCurrentAvatarID();
-
-  /**
-   * Switches the avatar to the one with the specified ID. By default, the ID is set to zero for the
-   * initial avatar.
-   *
-   * @param id new avatar ID
-   */
-  void setCurrentAvatarID(int id) throws RuntimeException;
-
-  /**
-   * Gets the number of active avatars
-   *
-   * @return number of active avatars
-   */
-  int getNumberOfAvatars();
-
-  /**
    * Gets the x position of the current avatar
    *
    * @return avatar's x-position
@@ -181,4 +152,47 @@ public interface Model {
    * Sets all avatars to the default position and rotation values
    */
   void resetOrientation() throws RuntimeException;
+
+
+  /**
+   * Gets the list of active avatar external IDs
+   * @return list of active avatar external IDs
+   */
+  List<Integer> getActiveAvatars();
+
+  /**
+   * Sets the list of Avatar IDs to be active. Any previously active avatars are removed
+   * @param externalIDs list of new active avatarIDs
+   */
+  void setActiveAvatars(List<Integer> externalIDs);
+
+  /**
+   * Gets the current avatar's external ID
+   *
+   * @return external ID
+   */
+  int getCurrentAvatarID();
+
+  /**
+   * Switches the avatar to the one with the specified ID. By default, the ID is set to zero for the
+   * initial avatar.
+   *
+   * @param id new avatar ID
+   */
+  void setCurrentAvatarID(int id) throws RuntimeException;
+
+  /**
+   * Adds a new avatar with the desired external ID
+   *
+   * @param externalID externally-generated ID
+   */
+  void addAvatar(int externalID) throws RuntimeException;
+
+
+  /**
+   * Gets the number of active avatars
+   *
+   * @return number of active avatars
+   */
+  int getTotalNumberOfAvatars();
 }

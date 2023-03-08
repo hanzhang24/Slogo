@@ -217,7 +217,7 @@ public class ModelTrackerTest {
     void testSetNonexistentAvatarID() {
       modelTracker.startOp();
       Exception exception = assertThrows(RuntimeException.class,
-          () -> modelTracker.setCurrentAvatar(2));
+          () -> modelTracker.setCurrentAvatarID(2));
       String expected = EXCEPTIONS.getString("NonexistentAvatarError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);

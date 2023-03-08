@@ -4,6 +4,8 @@
  *       change setID to also create an Avatar if needed and add a corresponding command to payload
  *       adopt new ID into ALL avatar payload objects
  *       expose new API methods to get current ID and avatar list size (may need new exceptions too)
+ *       make sure that the ID's being generated are all external ID's for the payload
+ *       finishing unit testing
  */
 package slogo.Model;
 
@@ -242,7 +244,7 @@ public class ModelTracker implements Model {
    * @return number of active avatars
    */
   @Override
-  public int getNumberOfAvatars() {
+  public int getTotalNumberOfAvatars() {
     return avatarList.size(); // TODO
   }
 
