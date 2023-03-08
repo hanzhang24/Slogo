@@ -181,13 +181,6 @@ public interface Model {
    */
   void setCurrentAvatarID(int id) throws RuntimeException;
 
-  /**
-   * Adds a new avatar with the desired external ID
-   *
-   * @param externalID externally-generated ID
-   */
-  void addAvatar(int externalID) throws RuntimeException;
-
 
   /**
    * Gets the number of active avatars
