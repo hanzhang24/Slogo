@@ -32,7 +32,7 @@ public class History {
    *
    * @return user command history
    */
-  List<String> getAllHistory() {
+  public List<String> getAllHistory() {
     return commandLog;
   }
 }
