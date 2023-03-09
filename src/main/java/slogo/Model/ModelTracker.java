@@ -8,6 +8,8 @@ import java.util.*;
 import slogo.Model.AvatarManager.Avatar;
 import slogo.Model.AvatarManager.AvatarGroupManager;
 import slogo.Model.OperationFormat.OperationFormatter;
+import slogo.Model.UpdateManager.History;
+import slogo.Model.UpdateManager.OperationWorkspace;
 import slogo.Payload.ViewPayloadManager.ChangeLog;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
