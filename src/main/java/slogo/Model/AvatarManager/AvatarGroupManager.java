@@ -11,9 +11,9 @@ import java.util.ResourceBundle;
  * internally translates external IDs to internal indicies.
  */
 public class AvatarGroupManager {
-
   private static final String EXCEPTIONS_PATH = "Model.AvatarExceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
+  private static final int START_ID = 1;
   private List<Avatar> avatarList;
   private String avatarDefaultParametersFilename;
   private int currentActiveAvatarIndex; // tracks the list index for a specific current ID
@@ -26,11 +26,11 @@ public class AvatarGroupManager {
    */
   public AvatarGroupManager(String defaultParametersFilename) {
     this.avatarDefaultParametersFilename = defaultParametersFilename;
-    Avatar initialAvatar = new Avatar(1, defaultParametersFilename, EXCEPTIONS);
+    Avatar initialAvatar = new Avatar(START_ID, defaultParametersFilename, EXCEPTIONS);
     avatarList = new ArrayList<>();
     avatarList.add(initialAvatar);
     currentActiveAvatarIndex = 0;
-    activeAvatarIDs = new ArrayList<>();
+    activeAvatarIDs = new ArrayList<>(List.of(START_ID));
   }
 
   /**
