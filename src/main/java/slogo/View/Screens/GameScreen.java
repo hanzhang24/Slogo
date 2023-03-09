@@ -181,13 +181,15 @@ public class GameScreen extends Screen implements ModelView{
   private void step(){
     animations.step();
   }
+  public void run(){ commandBoxView.sendText(); }
+  public void clear(){ commandBoxView.clear(); }
+
   public void initializeSequentialTransition(){
     animations.resetAnimations();
   }
   public void playSequentialTransition(){
     animations.runAnimation();
   }
-
   public void updatePenColor(Color penTest) {
     this.avatar.updateColor(penTest);
   }
