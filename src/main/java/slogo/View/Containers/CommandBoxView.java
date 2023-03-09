@@ -21,21 +21,6 @@ public class CommandBoxView extends ContainerView {
     textBox = new TextArea();
     textBox.setId("Text-Box");
     container.getChildren().add(textBox);
-    createButtons(textBox, animations);
-  }
-
-  private void createButtons(TextArea textBox, Animator animations) {
-    VBox buttons = new VBox();
-    buttons.setId("Command-VBox");
-    Button run = new Button("Run");
-    run.setId("Run");
-    run.setOnAction(e -> sendText());
-    Button clear = new Button("Clear");
-    clear.setId("Clear");
-    clear.setOnAction(e -> textBox.clear());
-    buttons.getChildren().add(run);
-    buttons.getChildren().add(clear);
-    this.getContainer().getChildren().add(buttons);
   }
 
   public void sendText(){
@@ -46,6 +31,10 @@ public class CommandBoxView extends ContainerView {
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
+  }
+
+  public void clear() {
+    textBox.clear();
   }
   public void setController(Controller controller){
     this.controller = controller;

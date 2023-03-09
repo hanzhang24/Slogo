@@ -75,14 +75,7 @@ public class GameScreen extends Screen implements ModelView{
   }
 
   private void createButtions() {
-    List<String> actions = new ArrayList<>();
-    actions.add("Step");
-    actions.add("Pause");
-    actions.add("Reset");
-    actions.add("Run");
-    actions.add("Clear");
-
-    HBox container = makeInputPanel(actions, this, getLabelResources(), getReflectionResources());
+    HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
     container.setId("Animation-Panel");
 
     SliderView animationInputs  = new SliderView(animations);
@@ -189,6 +182,6 @@ public class GameScreen extends Screen implements ModelView{
   public void step(){
     animations.step();
   }
-  public void run(){}
-  public void clear(){}
+  public void run(){ commandBoxView.sendText(); }
+  public void clear(){ commandBoxView.clear(); }
 }
