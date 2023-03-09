@@ -276,6 +276,42 @@ public class ModelTest {
       assertEquals(0.0, modelTracker.getAvatarRotation());
     }
 
+    @Test
+    void testCreateAvatars() {
+      modelTracker.startOp();
+      List<Integer> activeIDs = new ArrayList<>(List.of(1, 5 ,7));
+      modelTracker.setActiveAvatars(activeIDs);
+      ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
 
+      assertEquals(7, modelTracker.getActiveAvatars().size());
+    }
+
+    @Test
+    void testManageAvatars() {
+      modelTracker.startOp();
+      List<Integer> activeIDs = new ArrayList<>(List.of(1, 2, 3));
+      modelTracker.setActiveAvatars(activeIDs);
+      modelTracker.setCurrentAvatarID(1);
+      double x = randomGenerator.nextDouble();
+      double y = randomGenerator.nextDouble();
+      modelTracker.setAvatarPosition(x, y);
+      modelTracker.setCurrentAvatarID(2);
+      double rot = randomGenerator.nextDouble();
+      modelTracker.setAvatarRotation(rot);
+      modelTracker.setCurrentAvatarID(3);
+      boolean penDown = randomGenerator.nextBoolean();
+      modelTracker.setAvatarPenDown(penDown);
+      ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
+
+      modelTracker.startOp();
+      modelTracker.setCurrentAvatarID(1);
+      assertEquals(x, modelTracker.getAvatarX());
+      assertEquals(y, modelTracker.getAvatarY());
+      modelTracker.setCurrentAvatarID(2);
+      assertEquals(rot, modelTracker.getAvatarRotation());
+      modelTracker.setCurrentAvatarID(3);
+      assertEquals(penDown, modelTracker.getAvatarIsPenDown());
+      modelTracker.endOp("", new ArrayList<>());
+    }
   }
 }
