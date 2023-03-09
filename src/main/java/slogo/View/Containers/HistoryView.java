@@ -27,6 +27,7 @@ public class HistoryView extends ContainerView {
   private String storedLibrary;
   private TextArea historyDisplay;
   private VBox container;
+  private String help;
 
   public HistoryView(){
     ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + HISTORY_REFLECTION);
@@ -77,6 +78,8 @@ public class HistoryView extends ContainerView {
     historyDisplay.clear();
     historyDisplay.setText(storedHistory);
   }
+
+  public void displayHelp() { historyDisplay.setText(help);}
 
   public void displayLibrary(){
     historyDisplay.clear();
