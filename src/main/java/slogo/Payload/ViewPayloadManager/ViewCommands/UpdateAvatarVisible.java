@@ -13,4 +13,9 @@ public class UpdateAvatarVisible extends ViewCommand {
     gameScreen.updateAvatarVisible(Boolean.parseBoolean(parameters.get(0)));
     // gameScreen.updateAvatarVisible(Boolean.parseBoolean(externalID, parameters.get(0)));
   }
+
+  @Override
+  public String getDescription() {
+    return super.getDescription() + externalID;
+  }
 }

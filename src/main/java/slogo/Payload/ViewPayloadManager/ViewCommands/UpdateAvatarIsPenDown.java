@@ -11,6 +11,10 @@ public class UpdateAvatarIsPenDown extends ViewCommand {
   public void executeSpecificCommand() {
     gameScreen.updateAvatarIsPenDown(Boolean.parseBoolean(parameters.get(0)));
     // gameScreen.updateAvatarIsPenDown(externalID, Boolean.parseBoolean(parameters.get(0)));
+  }
 
+  @Override
+  public String getDescription() {
+    return super.getDescription() + externalID;
   }
 }

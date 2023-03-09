@@ -15,4 +15,9 @@ public class UpdateAvatarRotation extends ViewCommand {
     gameScreen.updateAvatarRot(newXRotation);
     // gameScreen.updateAvatarRot(externalID, newXRotation);
   }
+
+  @Override
+  public String getDescription() {
+    return super.getDescription() + externalID;
+  }
 }

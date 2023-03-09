@@ -17,4 +17,9 @@ public class UpdateAvatarPosition extends ViewCommand {
     gameScreen.updateAvatarPosXY(newXPosition, newYPosition);
     // gameScreen.updateAvatarPosXY(externalID, newXPosition, newYPosition);
   }
+
+  @Override
+  public String getDescription() {
+    return super.getDescription() + externalID;
+  }
 }

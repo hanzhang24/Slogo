@@ -10,10 +10,11 @@ import java.util.List;
  * generically run in the ViewController by calling command.execute().
  */
 public abstract class ViewCommand {
+
   private static final String EXCEPTIONS_PATH = "Payload.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
-  private static final String DESCRIPTIONS_PATH = "Payload.ViewCommandsDescriptions";
-  protected static final ResourceBundle DESCRIPTIONS = ResourceBundle.getBundle(DESCRIPTIONS_PATH);
+  private static final String DESCRIPTIONS_PATH = "Payload.ViewCommandDescriptions";
+  private static final ResourceBundle DESCRIPTIONS = ResourceBundle.getBundle(DESCRIPTIONS_PATH);
   protected int externalID;
   GameScreen gameScreen;
   List<String> parameters;
@@ -40,8 +41,8 @@ public abstract class ViewCommand {
   /**
    * Checks that there are valid parameters before execution
    */
-  protected void checkParameters(){
-    if(parameters == null || parameters.size() == 0){
+  protected void checkParameters() {
+    if (parameters == null || parameters.size() == 0) {
       throw new RuntimeException(EXCEPTIONS.getString("InvalidParametersError"));
     }
   }
@@ -49,7 +50,7 @@ public abstract class ViewCommand {
   /**
    * Checks for valid parameters, then attempts to execute the command
    */
-  public void run(){
+  public void run() {
     checkParameters();
     executeSpecificCommand();
   }
@@ -64,7 +65,7 @@ public abstract class ViewCommand {
    *
    * @return command name
    */
-  public String getDescription(){
+  public String getDescription() {
     return DESCRIPTIONS.getString(this.getClass().getName());
   }
 

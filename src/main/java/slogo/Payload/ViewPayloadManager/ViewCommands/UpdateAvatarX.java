@@ -16,4 +16,9 @@ public class UpdateAvatarX extends ViewCommand {
     double newXPosition = Double.parseDouble(parameters.get(0));
     // gameScreen.updateAvatarX(newPosition);
   }
+
+  @Override
+  public String getDescription() {
+    return super.getDescription() + externalID;
+  }
 }

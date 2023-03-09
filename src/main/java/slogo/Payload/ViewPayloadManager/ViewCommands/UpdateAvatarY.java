@@ -16,4 +16,9 @@ public class UpdateAvatarY extends ViewCommand {
     double newYPosition = Double.parseDouble(parameters.get(0));
     // gameScreen.updateAvatarY(newPosition);
   }
+
+  @Override
+  public String getDescription() {
+    return super.getDescription() + externalID;
+  }
 }
