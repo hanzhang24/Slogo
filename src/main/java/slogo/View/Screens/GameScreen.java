@@ -3,7 +3,12 @@ package slogo.View.Screens;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.layout.HBox;
+<<<<<<< src/main/java/slogo/View/Screens/GameScreen.java
 import javafx.scene.layout.Pane;
+=======
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+>>>>>>> src/main/java/slogo/View/Screens/GameScreen.java
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
 import slogo.View.Containers.SliderView;
@@ -51,7 +56,7 @@ public class GameScreen extends Screen implements ModelView{
     createCanvas();
     MakeTurtle();
     createCommandBox();
-    createButtions();
+    createButtons();
     createHistoryView();
 
     setScene(new Scene(all, width, height));
@@ -62,8 +67,10 @@ public class GameScreen extends Screen implements ModelView{
 
   private void createHistoryView() {
     historyView = new HistoryView();
+    VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()), getLabelResources());
+    container.setId("History-Container");
     String[] indexes = LayoutResources.getString("HistoryView").split(",");
-    setIndexes(indexes, historyView.getHistoryContainer());
+    setIndexes(indexes, container);
   }
 
   private void setIndexes(String[] indexes, Pane node) {
@@ -74,7 +81,7 @@ public class GameScreen extends Screen implements ModelView{
         indexes[1]));
   }
 
-  private void createButtions() {
+  private void createButtons() {
     HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
     container.setId("Animation-Panel");
 

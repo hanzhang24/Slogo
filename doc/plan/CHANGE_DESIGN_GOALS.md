@@ -44,3 +44,18 @@ public void handlerName(){
 * Once all of the above are done... look into writing a speech-to-text conversion class.
   * Needs one public method `recordSpeech()` that returns a String that will populate the CommandBox
   * Implementation details are unknown at the moment and will require research
+
+
+## Thursday Goals
+* Color picker inside the View
+* Introduce a color scheme picker (night mode)
+* Fix HistoryView
+  * History currently disappears when a command is run
+  * Have dropdown box options translate with language
+* Make a return value box
+* Make a help dialog box (as much as you can)
+* JavaDoc for backend/frontend
+* Testing for Nodes
+* Bug fixes for avatar creation
+* Update ModelView interface with IDs, and reimplement game screen
+* Create an interface called InputCollector that returns a Sting to run in the Command Box

@@ -2,6 +2,7 @@ package slogo.View.Containers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +10,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.w3c.dom.Text;
 
 public class HistoryView extends ContainerView {
 
@@ -20,38 +22,47 @@ public class HistoryView extends ContainerView {
   private ComboBox<String> Options;
 
   private ResourceBundle ReflectionResources;
-  private static final ObservableList<String> DROP_DOWN_OPTIONS =
-      FXCollections.observableArrayList(
-          "Commands",
-          "Library",
-          "Help"
-      );
+
   private String storedHistory;
   private String storedLibrary;
-  private String help;
   private TextArea historyDisplay;
-
+  private VBox container;
+  private String help;
 
   public HistoryView(){
-    VBox container = new VBox();
-    container.setId("History-Container");
-    container.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
-    this.setContainer(container);
-    setUpComboBox(DROP_DOWN_OPTIONS, container);
-    historyDisplay = new TextArea();
-    historyDisplay.setId("History-Display");
-    container.getChildren().add(historyDisplay);
     ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + HISTORY_REFLECTION);
-    storedHistory = "";
-    storedLibrary = "";
-    help = "";
   }
 
-  private void setUpComboBox(ObservableList<String> options, VBox container) {
-    Options = new ComboBox<>(options);
+  public VBox make(List<String> options, ResourceBundle LabelResources) {
+    container = new VBox();
+    container.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+    this.setContainer(container);
+
+    container.getChildren().add(makeScreen());
+    container.getChildren().add(makeDropDown(options, LabelResources));
+
+    return container;
+  }
+
+  private ComboBox<String> makeDropDown(List<String> options, ResourceBundle LabelResources) {
+    Options = new ComboBox<>();
+    for(String s:options) {
+      Options.getItems().add(s);
+    }
+
+    for (int i = 0; i < options.size(); i++) {
+      Options.getItems().set(i, LabelResources.getString(options.get(i)));
+    }
+
     Options.setId("History-Selector");
     Options.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateHistoryDisplay(Options.getValue())));
-    container.getChildren().add(Options);
+    return Options;
+  }
+
+  private TextArea makeScreen() {
+    historyDisplay = new TextArea();
+    historyDisplay.setId("History-Display");
+    return historyDisplay;
   }
 
   private void updateHistoryDisplay(String selected){
@@ -68,12 +79,11 @@ public class HistoryView extends ContainerView {
     historyDisplay.setText(storedHistory);
   }
 
+  public void displayHelp() { historyDisplay.setText(help);}
+
   public void displayLibrary(){
     historyDisplay.clear();
     historyDisplay.setText(storedLibrary);
-  }
-  public void displayHelp(){
-    historyDisplay.setText(help);
   }
 
   public Pane getHistoryContainer(){
