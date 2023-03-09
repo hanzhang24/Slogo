@@ -1,4 +1,4 @@
-package slogo.Model.AvatarRepresentation;
+package slogo.Model.AvatarManager;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -183,9 +183,9 @@ public interface Model {
 
 
   /**
-   * Gets the number of active avatars
+   * Gets the total number of avatars
    *
-   * @return number of active avatars
+   * @return total number of avatars
    */
   int getTotalNumberOfAvatars();
 }
