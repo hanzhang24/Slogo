@@ -11,7 +11,7 @@ public class RandomRangeCommand extends Command {
     public RandomRangeCommand() {
         this.setNumArguments(2);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
 

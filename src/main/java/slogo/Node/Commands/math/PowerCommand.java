@@ -8,7 +8,7 @@ public class PowerCommand extends Command {
     public PowerCommand() {
         this.setNumArguments(2);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double base = getChild(0).execute().getNumeric();

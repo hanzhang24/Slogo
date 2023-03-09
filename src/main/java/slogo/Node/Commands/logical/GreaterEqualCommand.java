@@ -9,7 +9,7 @@ public class GreaterEqualCommand extends Command {
     public GreaterEqualCommand(){
         this.setNumArguments(2);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double arg_1 = getChild(0).execute().getNumeric();

@@ -1,17 +1,17 @@
-package slogo.Node.Commands.avatar;
+package slogo.Node.Commands.display;
 
 import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
-public class ShowTurtleCommand extends Command {
-    public ShowTurtleCommand() {
+public class HideTurtleCommand extends Command {
+    public HideTurtleCommand() {
         this.setNumArguments(0);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
-            model.setAvatarVisible(true);
-            return new NodeValue(1);
+            model.setAvatarVisible(false);
+            return new NodeValue(0);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

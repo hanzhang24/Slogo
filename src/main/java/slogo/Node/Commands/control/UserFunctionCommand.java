@@ -24,7 +24,14 @@ public class UserFunctionCommand extends Command {
         this.addChild(arguments);
         this.addChild(body);
     }
+
     @Override
+    public boolean hasCompatibleNumChildren() {
+        int args = getNumArguments();
+        int numChildren = getChildren().size();
+        return args == numChildren - OFFSET;
+    }
+
     public NodeValue execute() throws Exception {
         // set the variables to the passed values, LOCALLY
         int numArguments = this.getNumArguments();
@@ -37,6 +44,7 @@ public class UserFunctionCommand extends Command {
             originalValues.add(model.getUserVariable(argumentName));
             model.setUserVariable(argumentName, argumentValue);
         }
+
         // execute the body
         NodeValue result = getChild(BODY).execute();
 
