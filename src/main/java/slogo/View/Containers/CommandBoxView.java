@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import slogo.Controller.Controller;
 import slogo.View.Animator;
+import slogo.View.PopUp;
 
 public class CommandBoxView extends ContainerView {
   private Controller controller;
@@ -29,7 +30,7 @@ public class CommandBoxView extends ContainerView {
       controller.runInput(input);
       animations.resetAnimations();
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      new PopUp(e.getMessage());
     }
   }
 

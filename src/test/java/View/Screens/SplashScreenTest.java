@@ -34,7 +34,7 @@ class SplashScreenTest extends DukeApplicationTest {
 
   @Override
   public void start (Stage stage) {
-    thisScreen = new SplashScreen(stage, DEFAULT_LANGUAGE, LANGUAGE_OPTIONS, new ScreenController(stage));
+    thisScreen = new SplashScreen(DEFAULT_LANGUAGE, LANGUAGE_OPTIONS, new ScreenController(stage));
     stage.setScene(thisScreen.makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
     stage.setTitle(TITLE);
     stage.show();
