@@ -1,16 +1,9 @@
 package slogo.View.Screens;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
 import slogo.View.Containers.SliderView;
@@ -21,9 +14,7 @@ import slogo.View.DrawBoardView;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 
 public class GameScreen extends Screen implements ModelView{
 

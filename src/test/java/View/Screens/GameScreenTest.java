@@ -139,6 +139,8 @@ class GameScreenTest extends DukeApplicationTest {
       press(KeyCode.ENTER);
       writeInputTo(animationInput, "Hi");
       press(KeyCode.ENTER);
+      Button ok = lookup("#OK-Button").query();
+      clickOn(ok);
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
     @Test
