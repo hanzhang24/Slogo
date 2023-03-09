@@ -30,7 +30,6 @@ public class GameScreen extends Screen implements ModelView{
 
   private  Color color;
   private PenView avatar;
-  private int speed;
   private Animator animations;
   private CommandBoxView commandBoxView;
   private HistoryView historyView;
@@ -60,39 +59,50 @@ public class GameScreen extends Screen implements ModelView{
   @Override
   public Scene makeScene(int width, int height) {
     setUpGridPane();
-
-    canvas = new DrawBoardView();
-    canvas.setColor(this.color);
-    root.getChildren().add(canvas.getContainer());
-    GridPane.setConstraints(canvas.getContainer(), 0, 0);
-
+    createCanvas();
     MakeTurtle();
+    createCommandBox();
+    createButtions();
+    createHistoryView();
 
-    commandBoxView = new CommandBoxView(animations);
-    root.getChildren().add(commandBoxView.getCommandContainer());
-    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 2);
+    this.scene = new Scene(all, width, height);
+    scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
 
+    return scene;
+  }
+
+  private void createHistoryView() {
+    historyView = new HistoryView();
+    root.getChildren().add(historyView.getHistoryContainer());
+    GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
+  }
+
+  private void createButtions() {
     List<String> actions = new ArrayList<>();
-
     actions.add("Step");
     actions.add("Pause");
     actions.add("Reset");
-
     HBox container = makeInputPanel(actions, this, LabelResources, ReflectionResources);
     container.setId("Animation-Panel");
+
     SliderView animationInputs  = new SliderView(animations);
     container.getChildren().add(animationInputs.getSliderContainer());
     root.getChildren().add(container);
     GridPane.setConstraints(container, 0, 1);
 
-    this.scene = new Scene(all, width, height);
-    scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
+  }
 
-    historyView = new HistoryView();
-    root.getChildren().add(historyView.getHistoryContainer());
-    GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
+  private void createCommandBox() {
+    commandBoxView = new CommandBoxView(animations);
+    root.getChildren().add(commandBoxView.getCommandContainer());
+    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 2);
+  }
 
-    return scene;
+  private void createCanvas() {
+    canvas = new DrawBoardView();
+    canvas.setColor(this.color);
+    root.getChildren().add(canvas.getContainer());
+    GridPane.setConstraints(canvas.getContainer(), 0, 0);
   }
 
   private void MakeTurtle() {
@@ -101,6 +111,7 @@ public class GameScreen extends Screen implements ModelView{
     all.getChildren().add(avatar.getImage());
     animations = new Animator(avatar);
   }
+
   private void setUpGridPane() {
     root = new GridPane();
     root.getStyleClass().add("grid-pane");
