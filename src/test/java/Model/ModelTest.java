@@ -277,6 +277,16 @@ public class ModelTest {
     }
 
     @Test
+    void testInitialActiveAvatars() {
+      modelTracker.startOp();
+      List<Integer> initialActive = modelTracker.getActiveAvatars();
+      modelTracker.endOp("", new ArrayList<>());
+
+      assertEquals(initialActive.size(), 1);
+      assertEquals(initialActive.get(0), 1);
+    }
+
+    @Test
     void testCreateAvatars() {
       modelTracker.startOp();
       List<Integer> activeIDs = new ArrayList<>(List.of(1, 5 ,7));
