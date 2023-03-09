@@ -40,8 +40,6 @@ public class SplashScreen extends Screen {
     private ColorPicker colorPicker;
     private ComboBox languagePicker;
 
-    private Screen nextScreen;
-
     ObservableList<String> languageOptions;
     private ScreenController screenController;
 

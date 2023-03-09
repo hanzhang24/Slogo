@@ -48,6 +48,7 @@ public class ScreenController {
     modelController.setViewController(viewController);
     gameScreen.getCommandBoxView().setController(modelController);
   }
+
   public GameScreen getGameScreen() {
     return gameScreen;
   }

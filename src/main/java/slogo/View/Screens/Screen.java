@@ -29,7 +29,7 @@ public abstract class Screen {
 
   public static final String DEFAULT_RESOURCE_PACKAGE = "View.";
 
-  protected ResourceBundle resources;
+  private ResourceBundle resources;
 
   public Screen(Stage stage, String language) {
     this.stage = stage;
