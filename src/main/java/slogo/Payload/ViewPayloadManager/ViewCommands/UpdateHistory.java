@@ -11,9 +11,4 @@ public class UpdateHistory extends ViewCommand {
   public void executeSpecificCommand() {
     gameScreen.updateDisplayedHistory(parameters.get(0));
   }
-
-  @Override
-  public String getDescription() {
-    return "Update Displayed History";
-  }
 }

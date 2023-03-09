@@ -15,9 +15,4 @@ public class UpdateCreateAvatar extends ViewCommand {
     // gameScreen.createAvatar(externalID, numericDefault, booleanDefault, colorDefault);
     // this could vary here, where I can pass you all the info
   }
-
-  @Override
-  public String getDescription() {
-    return "Create New Avatar";
-  }
 }

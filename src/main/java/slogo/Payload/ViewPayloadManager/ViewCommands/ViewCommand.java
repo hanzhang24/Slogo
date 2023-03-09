@@ -12,6 +12,8 @@ import java.util.List;
 public abstract class ViewCommand {
   private static final String EXCEPTIONS_PATH = "Payload.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
+  private static final String DESCRIPTIONS_PATH = "Payload.ViewCommandsDescriptions";
+  protected static final ResourceBundle DESCRIPTIONS = ResourceBundle.getBundle(DESCRIPTIONS_PATH);
   protected int externalID;
   GameScreen gameScreen;
   List<String> parameters;
@@ -62,7 +64,9 @@ public abstract class ViewCommand {
    *
    * @return command name
    */
-  public abstract String getDescription();
+  public String getDescription(){
+    return DESCRIPTIONS.getString(this.getClass().getName());
+  }
 
   /**
    * Return the parameters in the command

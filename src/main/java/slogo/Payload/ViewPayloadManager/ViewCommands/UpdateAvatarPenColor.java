@@ -24,9 +24,4 @@ public class UpdateAvatarPenColor extends ViewCommand {
     // gameScreen.updateAvatarPenColor(externalID, parsedColor[RED_INDEX], parsedColor[GREEN_INDEX], parsedColor[BLUE_INDEX]);
 
   }
-
-  @Override
-  public String getDescription() {
-    return "Update Avatar Pen Color";
-  }
 }

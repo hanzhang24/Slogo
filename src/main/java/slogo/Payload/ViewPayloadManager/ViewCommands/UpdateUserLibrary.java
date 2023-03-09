@@ -20,14 +20,4 @@ public class UpdateUserLibrary extends ViewCommand {
   void executeSpecificCommand() {
     gameScreen.addToUserLibrary(parameters.get(0));
   }
-
-  /**
-   * Return the name of the command
-   *
-   * @return command name
-   */
-  @Override
-  public String getDescription() {
-    return "Update User Library";
-  }
 }

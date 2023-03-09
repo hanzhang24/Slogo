@@ -13,9 +13,4 @@ public class UpdateAvatarIsPenDown extends ViewCommand {
     // gameScreen.updateAvatarIsPenDown(externalID, Boolean.parseBoolean(parameters.get(0)));
 
   }
-
-  @Override
-  public String getDescription() {
-    return "Update Avatar Is Pen Down";
-  }
 }

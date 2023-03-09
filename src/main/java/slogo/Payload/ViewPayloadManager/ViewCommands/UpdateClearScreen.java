@@ -12,9 +12,4 @@ public class UpdateClearScreen extends ViewCommand {
   void executeSpecificCommand() {
     gameScreen.clearScreen();
   }
-
-  @Override
-  public String getDescription() {
-    return "Clear Screen";
-  }
 }
