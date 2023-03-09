@@ -1,4 +1,4 @@
-package slogo.Model;
+package slogo.Model.OperationFormat;
 
 import java.util.Random;
 

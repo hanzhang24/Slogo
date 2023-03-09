@@ -10,12 +10,13 @@
 package slogo.Model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import slogo.Model.AvatarManager.Avatar;
+import slogo.Model.AvatarManager.AvatarGroupManager;
+import slogo.Model.OperationFormat.OperationFormatter;
 import slogo.Payload.ViewPayloadManager.ChangeLog;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
@@ -30,14 +31,10 @@ public class ModelTracker implements Model {
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private static final String KEY_CODES_PATH = "Model.KeyCodes";
   private static final ResourceBundle KEY_CODES = ResourceBundle.getBundle(KEY_CODES_PATH);
-  private List<Avatar> avatarList;
-  private String avatarDefaultParametersFilename;
-  private int currentActiveAvatarIndex; // tracks the list index for a specific current ID
-  private List<Integer> activeAvatarIDs; // keeps all IDs of active avatars
-  private OperationSignatureGenerator operationSignatureGenerator;
-  private int operationSignature;
-  private Map<String, Double> userVariables;
+  private AvatarGroupManager avatarGroupManager;
+  private OperationFormatter operationFormatter;
   private History history;
+  private Map<String, Double> userVariables;
   private Map<String, String> workspace;
   private ViewPayload viewPayload;
 
@@ -45,7 +42,7 @@ public class ModelTracker implements Model {
    * Class constructor - default
    */
   public ModelTracker() {
-    initializeAvatars("DefaultParameters");
+    avatarGroupManager = new AvatarGroupManager("DefaultParameters");
     initializePeripheralStructures();
   }
 
@@ -53,19 +50,8 @@ public class ModelTracker implements Model {
    * Class constructor - for custom filenames
    */
   public ModelTracker(String defaultParametersFilename) {
-    initializeAvatars(defaultParametersFilename);
+    avatarGroupManager = new AvatarGroupManager(defaultParametersFilename);
     initializePeripheralStructures();
-  }
-
-  /**
-   * Initialize avatar-related settings
-   */
-  private void initializeAvatars(String defaultParametersFilename) {
-    this.avatarDefaultParametersFilename = defaultParametersFilename;
-    Avatar initialAvatar = new Avatar(1, defaultParametersFilename, EXCEPTIONS);
-    avatarList = new ArrayList<>();
-    avatarList.add(initialAvatar);
-    currentActiveAvatarIndex = 0;
   }
 
   /**
@@ -75,9 +61,7 @@ public class ModelTracker implements Model {
     userVariables = new HashMap<>();
     history = new History();
     workspace = null;
-    operationSignatureGenerator = new OperationSignatureGenerator();
-    operationSignature = -1;
-    activeAvatarIDs = new ArrayList<>();
+    operationFormatter = new OperationFormatter();
   }
 
   /**
@@ -88,7 +72,7 @@ public class ModelTracker implements Model {
     checkPreviousOperationClosed();
     viewPayload = new ViewPayload();
     workspace = new HashMap<>();
-    operationSignature = operationSignatureGenerator.generateOperationSignature();
+    operationFormatter.generateNewSignature();
   }
 
   /**
@@ -108,7 +92,7 @@ public class ModelTracker implements Model {
    */
   private void pushWorkspaceUpdates() {
     for (String key : workspace.keySet()) {
-      if (key.contains(operationSignature + "")) { // belongs to an avatar
+      if (operationFormatter.isEncodedKey(key)) { // belongs to an avatar
         updateAvatar(key);
       } else {
         userVariables.put(key, Double.parseDouble(workspace.get(key)));
@@ -123,10 +107,8 @@ public class ModelTracker implements Model {
    * @param key key that represents one updated Avatar value
    */
   private void updateAvatar(String key) {
-    String[] splitKey = key.split("_");
-    int index = Integer.parseInt(splitKey[1].substring(6));
-    String parameter = splitKey[2];
-    avatarList.get(index).setValue(parameter, workspace.get(key));
+    avatarGroupManager.setAvatarValue(operationFormatter.decodeID(key),
+        operationFormatter.decodeParameter(key), workspace.get(key));
   }
 
   /**
@@ -180,17 +162,6 @@ public class ModelTracker implements Model {
   }
 
   /**
-   * Formats the lookup string
-   *
-   * @param key original lookup String
-   * @return formatted lookup String
-   */
-  private String formatLookupString(String key) {
-    return String.format("Signature:%d_Index:%d_%s", operationSignature, currentActiveAvatarIndex,
-        key);
-  }
-
-  /**
    * Helper method to get a particular Avatar parameter
    *
    * @param avatarKeyCode parameter name
@@ -198,14 +169,15 @@ public class ModelTracker implements Model {
    */
   private double getAvatarParameter(String avatarKeyCode) {
     if (activeOpRunning()) {
-      String formattedKey = formatLookupString(avatarKeyCode);
+      String formattedKey = operationFormatter.encodeString(avatarKeyCode,
+          avatarGroupManager.getCurrentAvatarID());
       if (workspace.containsKey(formattedKey)) {
         return Double.parseDouble(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentActiveAvatarIndex).getDouble(avatarKeyCode);
+        return avatarGroupManager.getAvatarDouble(avatarKeyCode);
       }
     } else {
-      return avatarList.get(currentActiveAvatarIndex).getDouble(avatarKeyCode);
+      return avatarGroupManager.getAvatarDouble(avatarKeyCode);
     }
   }
 
@@ -247,16 +219,17 @@ public class ModelTracker implements Model {
   @Override
   public int[] getAvatarPenColor() {
     if (activeOpRunning()) {
-      String formattedKey = formatLookupString(KEY_CODES.getString("PenColor"));
+      String formattedKey = operationFormatter.encodeString(KEY_CODES.getString("PenColor"),
+          avatarGroupManager.getCurrentAvatarID());
       if (workspace.containsKey(formattedKey)) {
         return parseColors(workspace.get(formattedKey));
       } else {
         return parseColors(
-            avatarList.get(currentActiveAvatarIndex).getString(KEY_CODES.getString("PenColor")));
+            avatarGroupManager.getAvatarString(KEY_CODES.getString("PenColor")));
       }
     } else {
       return parseColors(
-          avatarList.get(currentActiveAvatarIndex).getString(KEY_CODES.getString("PenColor")));
+          avatarGroupManager.getAvatarString(KEY_CODES.getString("PenColor")));
     }
   }
 
@@ -283,15 +256,15 @@ public class ModelTracker implements Model {
   @Override
   public boolean getAvatarIsPenDown() {
     if (activeOpRunning()) {
-      String formattedKey = formatLookupString(KEY_CODES.getString("IsPenDown"));
+      String formattedKey = operationFormatter.encodeString(KEY_CODES.getString("IsPenDown"),
+          avatarGroupManager.getCurrentAvatarID());
       if (workspace.containsKey(formattedKey)) {
         return Boolean.parseBoolean(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentActiveAvatarIndex)
-            .getBoolean(KEY_CODES.getString("IsPenDown"));
+        return avatarGroupManager.getAvatarBoolean(KEY_CODES.getString("IsPenDown"));
       }
     } else {
-      return avatarList.get(currentActiveAvatarIndex).getBoolean(KEY_CODES.getString("IsPenDown"));
+      return avatarGroupManager.getAvatarBoolean(KEY_CODES.getString("IsPenDown"));
     }
   }
 
@@ -303,14 +276,15 @@ public class ModelTracker implements Model {
   @Override
   public boolean getAvatarVisible() {
     if (activeOpRunning()) {
-      String formattedKey = formatLookupString(KEY_CODES.getString("Visible"));
+      String formattedKey = operationFormatter.encodeString(KEY_CODES.getString("Visible"),
+          avatarGroupManager.getCurrentAvatarID());
       if (workspace.containsKey(formattedKey)) {
         return Boolean.parseBoolean(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentActiveAvatarIndex).getBoolean(KEY_CODES.getString("Visible"));
+        return avatarGroupManager.getAvatarBoolean(KEY_CODES.getString("Visible"));
       }
     } else {
-      return avatarList.get(currentActiveAvatarIndex).getBoolean(KEY_CODES.getString("Visible"));
+      return avatarGroupManager.getAvatarBoolean(KEY_CODES.getString("Visible"));
     }
   }
 
@@ -363,9 +337,9 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarPosition(double x, double y) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(KEY_CODES.getString("X")), x + "");
-    workspace.put(formatLookupString(KEY_CODES.getString("Y")), y + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Position"), fetchExternalIDFromIndex(), x, y));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("X"), getCurrentAvatarID()), x + "");
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Y"), getCurrentAvatarID()), y + "");
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Position"), avatarGroupManager.getCurrentAvatarID(), x, y));
   }
 
   /**
@@ -376,8 +350,8 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarRotation(double rotation) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(KEY_CODES.getString("Rotation")), rotation + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Rotation"), fetchExternalIDFromIndex(), rotation));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Rotation"), avatarGroupManager.getCurrentAvatarID()), rotation + "");
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Rotation"), avatarGroupManager.getCurrentAvatarID(), rotation));
   }
 
   /**
@@ -394,8 +368,8 @@ public class ModelTracker implements Model {
     int castedGreen = (int) green;
     int castedBlue = (int) blue;
     String convertedColor = castedRed + " " + castedGreen + " " + castedBlue;
-    workspace.put(formatLookupString(KEY_CODES.getString("PenColor")), convertedColor);
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), fetchExternalIDFromIndex(), convertedColor));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("PenColor"), avatarGroupManager.getCurrentAvatarID()), convertedColor);
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), avatarGroupManager.getCurrentAvatarID(), convertedColor));
   }
 
   /**
@@ -406,8 +380,8 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarPenDown(boolean isPenDown) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(KEY_CODES.getString("IsPenDown")), isPenDown + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("IsPenDown"), fetchExternalIDFromIndex(), isPenDown + ""));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("IsPenDown"), avatarGroupManager.getCurrentAvatarID()), isPenDown + "");
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("IsPenDown"), avatarGroupManager.getCurrentAvatarID(), isPenDown + ""));
   }
 
   /**
@@ -418,8 +392,8 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarVisible(boolean visible) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(formatLookupString(KEY_CODES.getString("Visible")), visible + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Visible"), fetchExternalIDFromIndex(), visible + ""));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Visible"), avatarGroupManager.getCurrentAvatarID()), visible + "");
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Visible"), avatarGroupManager.getCurrentAvatarID(), visible + ""));
   }
 
   /**
@@ -440,9 +414,9 @@ public class ModelTracker implements Model {
   @Override
   public void resetOrientation() throws RuntimeException {
     checkCurrentOperationConfigured();
-    for (Avatar avatar : avatarList) {
-      setCurrentAvatarID(avatar.getExternalID());
-      double numericDefault = avatar.getNumericDefault();
+    double numericDefault = avatarGroupManager.getNumericDefault();
+    for (Integer externalID : avatarGroupManager.getAllExternalIDs()) {
+      setCurrentAvatarID(externalID);
       setAvatarPosition(numericDefault, numericDefault);
       setAvatarRotation(numericDefault); // Remove magic numbers
     }
@@ -456,7 +430,7 @@ public class ModelTracker implements Model {
    */
   @Override
   public List<Integer> getActiveAvatars() {
-    return Collections.unmodifiableList(activeAvatarIDs);
+    return avatarGroupManager.getActiveAvatars();
   }
 
   /**
@@ -467,52 +441,12 @@ public class ModelTracker implements Model {
    */
   @Override
   public void setActiveAvatars(List<Integer> externalIDs) {
-    activeAvatarIDs.clear();
-    int maxID = Collections.max(externalIDs);
-    for (int i = 0; i < maxID; i++) {
-      if (searchForAvatarID(i) == Integer.MIN_VALUE) {
-        addAvatar(i);
-      }
-      activeAvatarIDs.add(i);
-    }
-  }
-
-  /**
-   * Adds a new avatar with the desired external ID
-   *
-   * @param externalID externally-generated ID
-   */
-  public void addAvatar(int externalID) throws RuntimeException {
     checkCurrentOperationConfigured();
-    int index = searchForAvatarID(externalID);
-    if (index != Integer.MIN_VALUE) {
-      throw new RuntimeException(EXCEPTIONS.getString("OverlappingIDError"));
-    } else {
-      Avatar newAvatar = new Avatar(externalID, avatarDefaultParametersFilename, EXCEPTIONS);
-      avatarList.add(newAvatar);
+    List<Avatar> newAvatarList = avatarGroupManager.setActiveAvatars(externalIDs);
+    for(Avatar newAvatar : newAvatarList){
       viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("CreateAvatar"), newAvatar.getExternalID(), newAvatar.getNumericDefault() + "",
           newAvatar.getBooleanDefault() + ""));
     }
-  }
-
-  /**
-   * Searches for the internal index of an Avatar with a specified external ID. If not found,
-   * returns Integer.MIN_VALUE;
-   *
-   * @param externalID external given ID
-   * @return internal list index
-   */
-  private int searchForAvatarID(int externalID) {
-    for (int i = 0; i < avatarList.size(); i++) {
-      if (avatarList.get(i).getExternalID() == externalID) {
-        return i;
-      }
-    }
-    return Integer.MIN_VALUE;
-  }
-
-  private int fetchExternalIDFromIndex(){
-    return avatarList.get(currentActiveAvatarIndex).getExternalID();
   }
 
   /**
@@ -522,7 +456,7 @@ public class ModelTracker implements Model {
    */
   @Override
   public int getCurrentAvatarID() {
-    return avatarList.get(currentActiveAvatarIndex).getExternalID();
+    return avatarGroupManager.getCurrentAvatarID();
   }
 
 
@@ -534,12 +468,7 @@ public class ModelTracker implements Model {
   @Override
   public void setCurrentAvatarID(int id) throws RuntimeException {
     checkCurrentOperationConfigured();
-    int index = searchForAvatarID(id);
-    if (index != Integer.MIN_VALUE) {
-      currentActiveAvatarIndex = index;
-    } else {
-      throw new RuntimeException(EXCEPTIONS.getString("NonexistentAvatarError"));
-    }
+    avatarGroupManager.setCurrentAvatarID(id);
   }
 
   /**
@@ -549,6 +478,6 @@ public class ModelTracker implements Model {
    */
   @Override
   public int getTotalNumberOfAvatars() {
-    return avatarList.size();
+    return avatarGroupManager.getTotalNumberOfAvatars();
   }
 }
