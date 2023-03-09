@@ -9,6 +9,7 @@ import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
@@ -29,9 +30,11 @@ public class GameScreen extends Screen implements ModelView{
   private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
   private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
   private static final String STYLESHEET = "GameScreen.css";
+  private static final String GAME_SCREEN_LAYOUT = "GameScreenLayout";
 
+  private ResourceBundle LayoutResources;
 
-  private  Color color;
+  private Color color;
   private PenView avatar;
   private Animator animations;
   private CommandBoxView commandBoxView;
@@ -39,11 +42,9 @@ public class GameScreen extends Screen implements ModelView{
   private DrawBoardView canvas;
   private Group all;
 
-
-
-
   public GameScreen(String language, Color color) {
     super(language);
+    LayoutResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + GAME_SCREEN_LAYOUT);
     setRoot(new GridPane());
     this.color = color;
     all = new Group();
@@ -70,8 +71,16 @@ public class GameScreen extends Screen implements ModelView{
 
   private void createHistoryView() {
     historyView = new HistoryView();
-    getRoot().getChildren().add(historyView.getHistoryContainer());
-    GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
+    String[] indexes = LayoutResources.getString("HistoryView").split(",");
+    setIndexes(indexes, historyView.getHistoryContainer());
+  }
+
+  private void setIndexes(String[] indexes, Pane node) {
+    getRoot().getChildren().add(node);
+    System.out.println(indexes[0]);
+    System.out.println(indexes[1]);
+    GridPane.setConstraints(node, Integer.parseInt(indexes[0]),Integer.parseInt(
+        indexes[1]));
   }
 
   private void createButtions() {
@@ -80,22 +89,21 @@ public class GameScreen extends Screen implements ModelView{
 
     SliderView animationInputs  = new SliderView(animations);
     container.getChildren().add(animationInputs.getSliderContainer());
-    getRoot().getChildren().add(container);
-    GridPane.setConstraints(container, 0, 1);
-
+    String[] indexes = LayoutResources.getString("ButtonPanel").split(",");
+    setIndexes(indexes, container);
   }
 
   private void createCommandBox() {
     commandBoxView = new CommandBoxView(animations);
-    getRoot().getChildren().add(commandBoxView.getCommandContainer());
-    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 2);
+    String[] indexes = LayoutResources.getString("CommandBox").split(",");
+    setIndexes(indexes, commandBoxView.getCommandContainer());
   }
 
   private void createCanvas() {
     canvas = new DrawBoardView();
     canvas.setColor(this.color);
-    getRoot().getChildren().add(canvas.getContainer());
-    GridPane.setConstraints(canvas.getContainer(), 0, 0);
+    String[] indexes = LayoutResources.getString("Canvas").split(",");
+    setIndexes(indexes, canvas.getContainer());
   }
 
   private void MakeTurtle() {
