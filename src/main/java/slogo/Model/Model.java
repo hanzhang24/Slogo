@@ -28,14 +28,6 @@ public interface Model {
   void bail();
 
   /**
-   * Switches the avatar to the one with the specified ID. By default, the ID is set to zero for the
-   * initial avatar.
-   *
-   * @param id new avatar ID
-   */
-  void setCurrentAvatar(int id) throws RuntimeException;
-
-  /**
    * Gets the x position of the current avatar
    *
    * @return avatar's x-position
@@ -128,9 +120,9 @@ public interface Model {
   /**
    * Sets the current avatar's pen color
    *
-   * @param red red value 0-255
+   * @param red   red value 0-255
    * @param green green value 0-255
-   * @param blue blue value 0-255
+   * @param blue  blue value 0-255
    */
   void setAvatarPenColor(double red, double green, double blue) throws RuntimeException;
 
@@ -160,4 +152,40 @@ public interface Model {
    * Sets all avatars to the default position and rotation values
    */
   void resetOrientation() throws RuntimeException;
+
+
+  /**
+   * Gets the list of active avatar external IDs
+   * @return list of active avatar external IDs
+   */
+  List<Integer> getActiveAvatars();
+
+  /**
+   * Sets the list of Avatar IDs to be active. Any previously active avatars are removed
+   * @param externalIDs list of new active avatarIDs
+   */
+  void setActiveAvatars(List<Integer> externalIDs);
+
+  /**
+   * Gets the current avatar's external ID
+   *
+   * @return external ID
+   */
+  int getCurrentAvatarID();
+
+  /**
+   * Switches the avatar to the one with the specified ID. By default, the ID is set to zero for the
+   * initial avatar.
+   *
+   * @param id new avatar ID
+   */
+  void setCurrentAvatarID(int id) throws RuntimeException;
+
+
+  /**
+   * Gets the total number of avatars
+   *
+   * @return total number of avatars
+   */
+  int getTotalNumberOfAvatars();
 }

@@ -6,18 +6,18 @@ import java.util.List;
  * @author Alec Liu This command updates the Avatar's rotation.
  */
 public class UpdateAvatarRotation extends ViewCommand {
-  public UpdateAvatarRotation(List<String> parameters) {
-    super(parameters);
+  public UpdateAvatarRotation(List<String> parameters, int externalID) {
+    super(parameters, externalID);
   }
-
   @Override
   public void executeSpecificCommand() {
     double newXRotation = Double.parseDouble(parameters.get(0));
     gameScreen.updateAvatarRot(newXRotation);
+    // gameScreen.updateAvatarRot(externalID, newXRotation);
   }
 
   @Override
   public String getDescription() {
-    return "Update Avatar Rotation";
+    return super.getDescription() + externalID;
   }
 }

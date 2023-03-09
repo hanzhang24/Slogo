@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Alec Liu Test class for ModelTracker. Verifies functionality.
  */
-public class ModelTrackerTest {
+public class ModelTest {
 
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
@@ -217,7 +217,7 @@ public class ModelTrackerTest {
     void testSetNonexistentAvatarID() {
       modelTracker.startOp();
       Exception exception = assertThrows(RuntimeException.class,
-          () -> modelTracker.setCurrentAvatar(2));
+          () -> modelTracker.setCurrentAvatarID(2));
       String expected = EXCEPTIONS.getString("NonexistentAvatarError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
@@ -275,5 +275,7 @@ public class ModelTrackerTest {
       assertEquals(0.0, modelTracker.getAvatarY());
       assertEquals(0.0, modelTracker.getAvatarRotation());
     }
+
+
   }
 }

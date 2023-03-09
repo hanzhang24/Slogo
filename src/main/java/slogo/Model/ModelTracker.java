@@ -1,15 +1,21 @@
 /**
  * TODO: implement strategy pattern for avatar initialization,
- *       implement external and internal ID tracking
+ *       implement external and internal ID tracking,
+ *       change setID to also create an Avatar if needed and add a corresponding command to payload
+ *       adopt new ID into ALL avatar payload objects
+ *       expose new API methods to get current ID and avatar list size (may need new exceptions too)
+ *       make sure that the ID's being generated are all external ID's for the payload
+ *       finishing unit testing
  */
 package slogo.Model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import slogo.Model.AvatarRepresentation.Avatar;
+import slogo.Model.AvatarManager.Avatar;
 import slogo.Payload.ViewPayloadManager.ChangeLog;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
@@ -19,12 +25,15 @@ import slogo.Payload.ViewPayloadManager.ViewPayload;
  * behavior.
  */
 public class ModelTracker implements Model {
+
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private static final String KEY_CODES_PATH = "Model.KeyCodes";
   private static final ResourceBundle KEY_CODES = ResourceBundle.getBundle(KEY_CODES_PATH);
   private List<Avatar> avatarList;
-  private int currentAvatarID;
+  private String avatarDefaultParametersFilename;
+  private int currentActiveAvatarIndex; // tracks the list index for a specific current ID
+  private List<Integer> activeAvatarIDs; // keeps all IDs of active avatars
   private OperationSignatureGenerator operationSignatureGenerator;
   private int operationSignature;
   private Map<String, Double> userVariables;
@@ -52,10 +61,11 @@ public class ModelTracker implements Model {
    * Initialize avatar-related settings
    */
   private void initializeAvatars(String defaultParametersFilename) {
-    Avatar initialAvatar = new Avatar(defaultParametersFilename, EXCEPTIONS);
+    this.avatarDefaultParametersFilename = defaultParametersFilename;
+    Avatar initialAvatar = new Avatar(1, defaultParametersFilename, EXCEPTIONS);
     avatarList = new ArrayList<>();
     avatarList.add(initialAvatar);
-    currentAvatarID = 0;
+    currentActiveAvatarIndex = 0;
   }
 
   /**
@@ -67,7 +77,9 @@ public class ModelTracker implements Model {
     workspace = null;
     operationSignatureGenerator = new OperationSignatureGenerator();
     operationSignature = -1;
+    activeAvatarIDs = new ArrayList<>();
   }
+
   /**
    * Initializes the proper workspace for a new Controller operation, generating a new associated
    * operation signature
@@ -112,14 +124,15 @@ public class ModelTracker implements Model {
    */
   private void updateAvatar(String key) {
     String[] splitKey = key.split("_");
-    int id = Integer.parseInt(splitKey[1].substring(3));
+    int index = Integer.parseInt(splitKey[1].substring(6));
     String parameter = splitKey[2];
-    avatarList.get(id).setValue(parameter, workspace.get(key));
+    avatarList.get(index).setValue(parameter, workspace.get(key));
   }
 
   /**
    * Logs history and return value information into the Model and ViewPayload
-   * @param userInput user typed command
+   *
+   * @param userInput    user typed command
    * @param returnValues controller generated return values
    */
   private void logSupplementalInformation(String userInput, List<Double> returnValues) {
@@ -173,27 +186,13 @@ public class ModelTracker implements Model {
    * @return formatted lookup String
    */
   private String formatLookupString(String key) {
-    return String.format("Signature:%d_ID:%d_%s", operationSignature, currentAvatarID, key);
-  }
-
-  /**
-   * Switches the avatar to the one with the specified ID. By default, the ID is set to zero for the
-   * initial avatar.
-   *
-   * @param id new avatar ID
-   */
-  @Override
-  public void setCurrentAvatar(int id) throws RuntimeException {
-    checkCurrentOperationConfigured();
-    if(id >= 0 && id < avatarList.size()){
-      currentAvatarID = id;
-    } else {
-      throw new RuntimeException(EXCEPTIONS.getString("NonexistentAvatarError"));
-    }
+    return String.format("Signature:%d_Index:%d_%s", operationSignature, currentActiveAvatarIndex,
+        key);
   }
 
   /**
    * Helper method to get a particular Avatar parameter
+   *
    * @param avatarKeyCode parameter name
    * @return value of the parameter
    */
@@ -203,10 +202,10 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(formattedKey)) {
         return Double.parseDouble(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentAvatarID).getDouble(avatarKeyCode);
+        return avatarList.get(currentActiveAvatarIndex).getDouble(avatarKeyCode);
       }
     } else {
-      return avatarList.get(currentAvatarID).getDouble(avatarKeyCode);
+      return avatarList.get(currentActiveAvatarIndex).getDouble(avatarKeyCode);
     }
   }
 
@@ -252,22 +251,25 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(formattedKey)) {
         return parseColors(workspace.get(formattedKey));
       } else {
-        return parseColors(avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor")));
+        return parseColors(
+            avatarList.get(currentActiveAvatarIndex).getString(KEY_CODES.getString("PenColor")));
       }
     } else {
-      return parseColors(avatarList.get(currentAvatarID).getString(KEY_CODES.getString("PenColor")));
+      return parseColors(
+          avatarList.get(currentActiveAvatarIndex).getString(KEY_CODES.getString("PenColor")));
     }
   }
 
   /**
    * Parses colors from String representation into RGB values
+   *
    * @param color String representation of color
    * @return RGB values
    */
-  private int[] parseColors(String color){
+  private int[] parseColors(String color) {
     String[] parsedString = color.split(" ");
     int[] parsedColors = new int[parsedString.length];
-    for(int i = 0; i < parsedColors.length; i++){
+    for (int i = 0; i < parsedColors.length; i++) {
       parsedColors[i] = Integer.parseInt(parsedString[i]);
     }
     return parsedColors;
@@ -285,10 +287,11 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(formattedKey)) {
         return Boolean.parseBoolean(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("IsPenDown"));
+        return avatarList.get(currentActiveAvatarIndex)
+            .getBoolean(KEY_CODES.getString("IsPenDown"));
       }
     } else {
-      return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("IsPenDown"));
+      return avatarList.get(currentActiveAvatarIndex).getBoolean(KEY_CODES.getString("IsPenDown"));
     }
   }
 
@@ -304,10 +307,10 @@ public class ModelTracker implements Model {
       if (workspace.containsKey(formattedKey)) {
         return Boolean.parseBoolean(workspace.get(formattedKey));
       } else {
-        return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("Visible"));
+        return avatarList.get(currentActiveAvatarIndex).getBoolean(KEY_CODES.getString("Visible"));
       }
     } else {
-      return avatarList.get(currentAvatarID).getBoolean(KEY_CODES.getString("Visible"));
+      return avatarList.get(currentActiveAvatarIndex).getBoolean(KEY_CODES.getString("Visible"));
     }
   }
 
@@ -362,7 +365,7 @@ public class ModelTracker implements Model {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("X")), x + "");
     workspace.put(formatLookupString(KEY_CODES.getString("Y")), y + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Position"), x, y));
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Position"), fetchExternalIDFromIndex(), x, y));
   }
 
   /**
@@ -374,15 +377,15 @@ public class ModelTracker implements Model {
   public void setAvatarRotation(double rotation) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("Rotation")), rotation + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Rotation"), rotation));
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Rotation"), fetchExternalIDFromIndex(), rotation));
   }
 
   /**
    * Sets the current avatar's pen color
    *
-   * @param red red value 0-255
+   * @param red   red value 0-255
    * @param green green value 0-255
-   * @param blue blue value 0-255
+   * @param blue  blue value 0-255
    */
   @Override
   public void setAvatarPenColor(double red, double green, double blue) throws RuntimeException {
@@ -392,7 +395,7 @@ public class ModelTracker implements Model {
     int castedBlue = (int) blue;
     String convertedColor = castedRed + " " + castedGreen + " " + castedBlue;
     workspace.put(formatLookupString(KEY_CODES.getString("PenColor")), convertedColor);
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), convertedColor));
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), fetchExternalIDFromIndex(), convertedColor));
   }
 
   /**
@@ -404,7 +407,7 @@ public class ModelTracker implements Model {
   public void setAvatarPenDown(boolean isPenDown) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("IsPenDown")), isPenDown + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("IsPenDown"), isPenDown + ""));
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("IsPenDown"), fetchExternalIDFromIndex(), isPenDown + ""));
   }
 
   /**
@@ -416,7 +419,7 @@ public class ModelTracker implements Model {
   public void setAvatarVisible(boolean visible) throws RuntimeException {
     checkCurrentOperationConfigured();
     workspace.put(formatLookupString(KEY_CODES.getString("Visible")), visible + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Visible"), visible + ""));
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Visible"), fetchExternalIDFromIndex(), visible + ""));
   }
 
   /**
@@ -437,12 +440,115 @@ public class ModelTracker implements Model {
   @Override
   public void resetOrientation() throws RuntimeException {
     checkCurrentOperationConfigured();
-    for (int i = 0; i < avatarList.size(); i++) {
-      setCurrentAvatar(i);
-      double numericDefault = avatarList.get(i).getNumericDefault();
-      setAvatarPosition(numericDefault, numericDefault); // Remove magic numbers, using XML interpreter
+    for (Avatar avatar : avatarList) {
+      setCurrentAvatarID(avatar.getExternalID());
+      double numericDefault = avatar.getNumericDefault();
+      setAvatarPosition(numericDefault, numericDefault);
       setAvatarRotation(numericDefault); // Remove magic numbers
     }
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("ClearScreen")));
+  }
+
+  /**
+   * Gets the list of active avatar external IDs. Returned list is immutable for safety
+   *
+   * @return list of active avatar external IDs
+   */
+  @Override
+  public List<Integer> getActiveAvatars() {
+    return Collections.unmodifiableList(activeAvatarIDs);
+  }
+
+  /**
+   * Sets the list of Avatar IDs to be active. Any previously active avatars are removed. Based upon
+   * the max ID given, avatars are created to fill each nonexistent ID.
+   *
+   * @param externalIDs list of new active avatarIDs
+   */
+  @Override
+  public void setActiveAvatars(List<Integer> externalIDs) {
+    activeAvatarIDs.clear();
+    int maxID = Collections.max(externalIDs);
+    for (int i = 0; i < maxID; i++) {
+      if (searchForAvatarID(i) == Integer.MIN_VALUE) {
+        addAvatar(i);
+      }
+      activeAvatarIDs.add(i);
+    }
+  }
+
+  /**
+   * Adds a new avatar with the desired external ID
+   *
+   * @param externalID externally-generated ID
+   */
+  public void addAvatar(int externalID) throws RuntimeException {
+    checkCurrentOperationConfigured();
+    int index = searchForAvatarID(externalID);
+    if (index != Integer.MIN_VALUE) {
+      throw new RuntimeException(EXCEPTIONS.getString("OverlappingIDError"));
+    } else {
+      Avatar newAvatar = new Avatar(externalID, avatarDefaultParametersFilename, EXCEPTIONS);
+      avatarList.add(newAvatar);
+      viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("CreateAvatar"), newAvatar.getExternalID(), newAvatar.getNumericDefault() + "",
+          newAvatar.getBooleanDefault() + ""));
+    }
+  }
+
+  /**
+   * Searches for the internal index of an Avatar with a specified external ID. If not found,
+   * returns Integer.MIN_VALUE;
+   *
+   * @param externalID external given ID
+   * @return internal list index
+   */
+  private int searchForAvatarID(int externalID) {
+    for (int i = 0; i < avatarList.size(); i++) {
+      if (avatarList.get(i).getExternalID() == externalID) {
+        return i;
+      }
+    }
+    return Integer.MIN_VALUE;
+  }
+
+  private int fetchExternalIDFromIndex(){
+    return avatarList.get(currentActiveAvatarIndex).getExternalID();
+  }
+
+  /**
+   * Gets the current avatar's external ID
+   *
+   * @return external ID
+   */
+  @Override
+  public int getCurrentAvatarID() {
+    return avatarList.get(currentActiveAvatarIndex).getExternalID();
+  }
+
+
+  /**
+   * Switches the avatar to the one with the specified ID.
+   *
+   * @param id new avatar ID
+   */
+  @Override
+  public void setCurrentAvatarID(int id) throws RuntimeException {
+    checkCurrentOperationConfigured();
+    int index = searchForAvatarID(id);
+    if (index != Integer.MIN_VALUE) {
+      currentActiveAvatarIndex = index;
+    } else {
+      throw new RuntimeException(EXCEPTIONS.getString("NonexistentAvatarError"));
+    }
+  }
+
+  /**
+   * Gets the total number of avatars
+   *
+   * @return total number of avatars
+   */
+  @Override
+  public int getTotalNumberOfAvatars() {
+    return avatarList.size();
   }
 }

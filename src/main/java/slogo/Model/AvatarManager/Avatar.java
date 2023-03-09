@@ -1,4 +1,4 @@
-package slogo.Model.AvatarRepresentation;
+package slogo.Model.AvatarManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +15,7 @@ public class Avatar {
   private static final String REGEX = ",";
   private static final int TYPE_INDEX = 0;
   private static final int VALUE_INDEX = 1;
+  private int externalID;
   private ResourceBundle defaultParametersBundle;
   private ResourceBundle exceptionResourceBundle;
   private Map<String, Double> numericParameters;
@@ -27,7 +28,9 @@ public class Avatar {
    * @param defaultParametersFilename filename for the default parameters
    * @param exceptionResourceBundle   resource bundle for exception messages
    */
-  public Avatar(String defaultParametersFilename, ResourceBundle exceptionResourceBundle) {
+  public Avatar(int externalID, String defaultParametersFilename,
+      ResourceBundle exceptionResourceBundle) {
+    this.externalID = externalID;
     this.defaultParametersBundle = ResourceBundle.getBundle(
         DEFAULT_PARAMETERS_BASE_PATH + defaultParametersFilename);
     this.exceptionResourceBundle = exceptionResourceBundle;
@@ -52,6 +55,15 @@ public class Avatar {
   }
 
   /**
+   * Gets the external ID of the Avatar
+   *
+   * @return external ID
+   */
+  public int getExternalID() {
+    return externalID;
+  }
+
+  /**
    * Gets the double associated with a given key
    *
    * @param key given parameter
@@ -67,8 +79,18 @@ public class Avatar {
    * @return numeric default
    */
   public double getNumericDefault() {
-    return numericParameters.get("Default");
+    return numericParameters.get("NumericDefault");
   }
+
+  /**
+   * Gets the default value for boolean parameters
+   *
+   * @return numeric default
+   */
+  public boolean getBooleanDefault() {
+    return booleanParameters.get("BooleanDefault");
+  }
+
 
   /**
    * Gets the String associated with a given key
@@ -91,8 +113,8 @@ public class Avatar {
   }
 
   /**
-   * Adds an updated default parameter to the correct map. Assumes that each default parameter is the
-   * correct type
+   * Adds an updated default parameter to the correct map. Assumes that each default parameter is
+   * the correct type
    *
    * @param key   name of the parameter
    * @param value value of the parameter
