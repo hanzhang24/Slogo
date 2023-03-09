@@ -1,4 +1,4 @@
-package slogo.Node.Commands.avatar;
+package slogo.Node.Commands.display;
 
 import slogo.Geometry.Vector;
 import slogo.Node.NodeCategories.Command;

@@ -5,6 +5,10 @@ import slogo.Node.NodeValue;
 import java.util.List;
 
 public class Group extends Node {
+
+    public boolean hasCompatibleNumChildren() {
+        return true;
+    }
     public NodeValue execute() {
         checkContext();
         try {

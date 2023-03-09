@@ -35,6 +35,8 @@ public abstract class Node {
     public List<Node> getChildren() {
         return this.children;
     }
+
+    public abstract boolean hasCompatibleNumChildren();
     public void addChild(Node node) {
         this.children.add(node);
     }

@@ -19,6 +19,10 @@ public class Constant extends Node {
         this.value = new NodeValue(value);
     }
 
+    public boolean hasCompatibleNumChildren() {
+        return this.getChildren().size() == 1;
+    }
+
     public NodeValue execute() {
         return this.value;
     }

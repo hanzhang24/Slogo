@@ -9,6 +9,9 @@ public class AddCommand extends Command {
         this.setNumArguments(2);
     }
 
+    public boolean hasCompatibleNumChildren() {
+        return getNumArguments() >= 2;
+    }
     public NodeValue execute() {
         checkContext();
         try {

@@ -8,6 +8,11 @@ public class AndCommand extends Command {
     public AndCommand(){
         this.setNumArguments(2);
     }
+
+    @Override
+    public boolean hasCompatibleNumChildren() {
+        return getChildren().size() >= 2;
+    }
     public NodeValue execute() {
         checkContext();
         try {

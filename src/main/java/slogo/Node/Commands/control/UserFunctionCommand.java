@@ -24,6 +24,13 @@ public class UserFunctionCommand extends Command {
         this.addChild(arguments);
         this.addChild(body);
     }
+
+    @Override
+    public boolean hasCompatibleNumChildren() {
+        int args = getNumArguments();
+        int numChildren = getChildren().size();
+        return (numChildren - OFFSET) % args == 0 && (numChildren - OFFSET) >= args;
+    }
     @Override
     public NodeValue execute() throws Exception {
         // set the variables to the passed values, LOCALLY

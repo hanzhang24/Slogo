@@ -16,6 +16,10 @@ public class Root extends Node {
         }
         return result;
     }
+
+    public boolean hasCompatibleNumChildren() {
+        return true;
+    }
     public List<Double> getReturnValues(){
         return returnValues;
     }

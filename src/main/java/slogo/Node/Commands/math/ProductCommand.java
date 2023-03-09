@@ -8,6 +8,10 @@ public class ProductCommand extends Command {
     public ProductCommand() {
         this.setNumArguments(2);
     }
+    @Override
+    public boolean hasCompatibleNumChildren(){
+        return getChildren().size() >= 2;
+    }
     public NodeValue execute() {
         checkContext();
         try {

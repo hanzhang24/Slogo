@@ -8,6 +8,11 @@ public class OrCommand extends Command {
     public OrCommand(){
         this.setNumArguments(2);
     }
+
+    @Override
+    public boolean hasCompatibleNumChildren() {
+        return getChildren().size() >= 2;
+    }
     public NodeValue execute() {
         checkContext();
         try {

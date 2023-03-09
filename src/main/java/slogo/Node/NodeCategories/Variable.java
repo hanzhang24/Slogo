@@ -18,6 +18,10 @@ public class Variable extends Node {
     public String getName() {
         return this.name;
     }
+
+    public boolean hasCompatibleNumChildren() {
+        return this.getChildren().size() == 1;
+    }
     public NodeValue getValue() {
         checkContext();
         return new NodeValue(model.getUserVariable(this.name));
