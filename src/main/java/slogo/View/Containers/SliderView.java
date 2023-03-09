@@ -37,15 +37,17 @@ public class SliderView extends ContainerView {
     container.getChildren().add(area);
     area.setOnKeyPressed(event -> {
       if (event.getCode() == KeyCode.ENTER){
-        double newSpeed = Double.parseDouble(sliderBundle.getString("Default"));
+        double newSpeed;
         try {
           newSpeed = Double.parseDouble(area.getText());
         }
         catch (Exception e){
           new PopUp(sliderBundle.getString("ErrorMessage"));
+          newSpeed = Double.parseDouble(sliderBundle.getString("Default"));
         }
         if(newSpeed <= 0 || newSpeed > 100){
           new PopUp(sliderBundle.getString("ErrorRange"));
+          newSpeed = Double.parseDouble(sliderBundle.getString("Default"));
         }
         setAnimationSpeed(animations, newSpeed);
         area.clear();

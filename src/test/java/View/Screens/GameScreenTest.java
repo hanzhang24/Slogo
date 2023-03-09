@@ -76,8 +76,8 @@ class GameScreenTest extends DukeApplicationTest {
   void testUpdatePosition() {
     simulateAction(0, 0, () -> {
       thisScreen.updateAvatarPosXY(10, 10);
-      assertEquals(285, thisScreen.getAvatar().getXCor());
-      assertEquals(285, thisScreen.getAvatar().getYCor());
+      assertEquals(260, thisScreen.getAvatar().getXCor());
+      assertEquals(240, thisScreen.getAvatar().getYCor());
     });
   }
 
@@ -97,29 +97,29 @@ class GameScreenTest extends DukeApplicationTest {
     void testInputFd50() {
       writeInputTo(area, "fd 50");
       clickOn(run);
-      assertEquals(325, thisScreen.getAvatar().getXCor());
-      assertEquals(275, thisScreen.getAvatar().getYCor());
+      assertEquals(300, thisScreen.getAvatar().getXCor());
+      assertEquals(250, thisScreen.getAvatar().getYCor());
     }
     @Test
     void testInputHome() {
       writeInputTo(area, "home");
       clickOn(run);
-      assertEquals(275, thisScreen.getAvatar().getXCor());
-      assertEquals(275, thisScreen.getAvatar().getYCor());
+      assertEquals(250, thisScreen.getAvatar().getXCor());
+      assertEquals(250, thisScreen.getAvatar().getYCor());
     }
     @Test
     void testInputMultiple50(){
       writeInputTo(area, "fd 50 \nfd 50");
       clickOn(run);
-      assertEquals(375, thisScreen.getAvatar().getXCor());
-      assertEquals(275, thisScreen.getAvatar().getYCor());
+      assertEquals(350, thisScreen.getAvatar().getXCor());
+      assertEquals(250, thisScreen.getAvatar().getYCor());
     }
     @Test
     void testInputForwardThenHome(){
       writeInputTo(area, "fd 50 \nhome");
       clickOn(run);
-      assertEquals(275, thisScreen.getAvatar().getXCor());
-      assertEquals(275, thisScreen.getAvatar().getYCor());
+      assertEquals(250, thisScreen.getAvatar().getXCor());
+      assertEquals(250, thisScreen.getAvatar().getYCor());
     }
   }
 
@@ -160,8 +160,6 @@ class GameScreenTest extends DukeApplicationTest {
       press(KeyCode.ENTER);
       writeInputTo(animationInput, "Hi");
       press(KeyCode.ENTER);
-
-      FxAssert.verifyThat("#OK-Button", isEnabled());
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
     @Test
@@ -185,15 +183,16 @@ class GameScreenTest extends DukeApplicationTest {
     }
     @Test
     void testChangeHistoryValue(){
-      String expected = "Command History";
+      String expected = "Commands";
       select(historyOptions, expected);
     }
     @Test
     void testDisplayProperlyUpdates(){
-      String expected = "Command History";
-      select(historyOptions, expected);
-      String input = "fd 50 \nhome";
+      String input = "fd 50";
       writeInputTo(area, input);
+      clickOn(run);
+      String expected = "Commands";
+      select(historyOptions, expected);
       assertEquals(display.getText(), input);
     }
   }

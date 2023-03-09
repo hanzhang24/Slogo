@@ -6,9 +6,9 @@ import slogo.Node.NodeValue;
 public class RemainderCommand extends Command {
 
     public RemainderCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double dividend = getChild(0).execute().getNumeric();

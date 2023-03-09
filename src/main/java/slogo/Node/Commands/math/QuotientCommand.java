@@ -6,9 +6,9 @@ import slogo.Node.NodeValue;
 public class QuotientCommand extends Command {
 
     public QuotientCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double numerator = getChild(0).execute().getNumeric();

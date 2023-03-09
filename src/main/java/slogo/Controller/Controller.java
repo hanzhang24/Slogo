@@ -10,7 +10,6 @@ import slogo.Parser.Parser;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class Controller {
     private Model model;
     private ViewController viewController;
@@ -19,10 +18,13 @@ public class Controller {
         this.model = new ModelTracker();
         this.commandManager = new CommandManager();
     }
-    public NodeValue runInput(String input) {
+    public NodeValue runInput(String input) throws Exception {
         try {
             Parser parser = new Parser(commandManager);
-            Root root = (Root) parser.parseInput(input);
+            Node uncasted = parser.parseInput(input);
+            if (uncasted == null)
+                throw new Exception("input had no runnable commands");
+            Root root = (Root) uncasted;
             root.initContext(model);
             model.startOp();
             NodeValue result = root.execute();
@@ -32,7 +34,7 @@ public class Controller {
             return result;
         } catch (Exception e) {
             model.bail();
-            throw new RuntimeException("Not implemented");
+            throw e;
         }
     };
 

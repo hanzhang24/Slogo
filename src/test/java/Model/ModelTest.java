@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Alec Liu Test class for ModelTracker. Verifies functionality.
  */
-public class ModelTrackerTest {
+public class ModelTest {
 
   private static final String EXCEPTIONS_PATH = "Model.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
@@ -217,7 +217,7 @@ public class ModelTrackerTest {
     void testSetNonexistentAvatarID() {
       modelTracker.startOp();
       Exception exception = assertThrows(RuntimeException.class,
-          () -> modelTracker.setCurrentAvatar(2));
+          () -> modelTracker.setCurrentAvatarID(2));
       String expected = EXCEPTIONS.getString("NonexistentAvatarError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
@@ -274,6 +274,54 @@ public class ModelTrackerTest {
       assertEquals(0.0, modelTracker.getAvatarX());
       assertEquals(0.0, modelTracker.getAvatarY());
       assertEquals(0.0, modelTracker.getAvatarRotation());
+    }
+
+    @Test
+    void testInitialActiveAvatars() {
+      modelTracker.startOp();
+      List<Integer> initialActive = modelTracker.getActiveAvatars();
+      modelTracker.endOp("", new ArrayList<>());
+
+      assertEquals(initialActive.size(), 1);
+      assertEquals(initialActive.get(0), 1);
+    }
+
+    @Test
+    void testCreateAvatars() {
+      modelTracker.startOp();
+      List<Integer> activeIDs = new ArrayList<>(List.of(1, 5 ,7));
+      modelTracker.setActiveAvatars(activeIDs);
+      ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
+
+      assertEquals(7, modelTracker.getActiveAvatars().size());
+    }
+
+    @Test
+    void testManageAvatars() {
+      modelTracker.startOp();
+      List<Integer> activeIDs = new ArrayList<>(List.of(1, 2, 3));
+      modelTracker.setActiveAvatars(activeIDs);
+      modelTracker.setCurrentAvatarID(1);
+      double x = randomGenerator.nextDouble();
+      double y = randomGenerator.nextDouble();
+      modelTracker.setAvatarPosition(x, y);
+      modelTracker.setCurrentAvatarID(2);
+      double rot = randomGenerator.nextDouble();
+      modelTracker.setAvatarRotation(rot);
+      modelTracker.setCurrentAvatarID(3);
+      boolean penDown = randomGenerator.nextBoolean();
+      modelTracker.setAvatarPenDown(penDown);
+      ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
+
+      modelTracker.startOp();
+      modelTracker.setCurrentAvatarID(1);
+      assertEquals(x, modelTracker.getAvatarX());
+      assertEquals(y, modelTracker.getAvatarY());
+      modelTracker.setCurrentAvatarID(2);
+      assertEquals(rot, modelTracker.getAvatarRotation());
+      modelTracker.setCurrentAvatarID(3);
+      assertEquals(penDown, modelTracker.getAvatarIsPenDown());
+      modelTracker.endOp("", new ArrayList<>());
     }
   }
 }

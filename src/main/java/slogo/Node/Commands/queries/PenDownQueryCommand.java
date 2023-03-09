@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 
 public class PenDownQueryCommand extends Command {
     public PenDownQueryCommand() {
-        this.setNumParameters(0);
+        this.setNumArguments(0);
     }
 
     public NodeValue execute() throws Exception {

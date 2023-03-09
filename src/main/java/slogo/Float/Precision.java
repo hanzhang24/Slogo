@@ -19,6 +19,10 @@ public class Precision {
         else return 0;
     }
 
+    public static int round(double val) {
+        return (int) Math.round(val);
+    }
+
     public static int floor(double val) {
         return (int) Math.floor(val + precision);
     }

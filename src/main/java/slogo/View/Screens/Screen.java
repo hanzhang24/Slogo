@@ -1,20 +1,13 @@
 package slogo.View.Screens;
 
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -23,17 +16,23 @@ import javafx.stage.Stage;
 
 public abstract class Screen {
 
-  protected Stage stage;
-  protected Pane root;
-  protected Scene scene;
+  private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
+  private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
+  private static final String REFLECTION_RESOURCES = "ReflectionActions";
+  private static final String PANEL_RESOURCES = "PanelActions";
+  private static final String STYLESHEET = "GameScreen.css";
 
-  public static final String DEFAULT_RESOURCE_PACKAGE = "View.";
+  private ResourceBundle LabelResources;
+  private ResourceBundle ReflectionResources;
+  private ResourceBundle PanelResources;
 
-  protected ResourceBundle resources;
+  private Pane root;
+  private Scene scene;
 
-  public Screen(Stage stage, String language) {
-    this.stage = stage;
-    resources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
+  public Screen(String language) {
+    LabelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
+    ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + REFLECTION_RESOURCES);
+    PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
   }
 
   public abstract Scene makeScene(int width, int height);
@@ -48,7 +47,6 @@ public abstract class Screen {
   protected List<String> getPanelButtons (String property, ResourceBundle PanelResources) {
     return Arrays.asList(PanelResources.getString(property).split(","));
   }
-
   protected HBox makeInputPanel (List<String> actions, Screen screen, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
     HBox result = new HBox();
     // create buttons, with their associated actions
@@ -77,5 +75,44 @@ public abstract class Screen {
     result.setId(property);
     return result;
   }
+
+
+  protected ResourceBundle getLabelResources() {
+    return LabelResources;
+  }
+  protected void setLabelResources(ResourceBundle labelResources) {
+    LabelResources = labelResources;
+  }
+  protected ResourceBundle getReflectionResources() {
+    return ReflectionResources;
+  }
+  protected void setReflectionResources(ResourceBundle reflectionResources) {
+    ReflectionResources = reflectionResources;
+  }
+  protected ResourceBundle getPanelResources() {
+    return PanelResources;
+  }
+  protected void setPanelResources(ResourceBundle panelResources) {
+    PanelResources = panelResources;
+  }
+  protected Pane getRoot() {
+    return root;
+  }
+  protected void setRoot(Pane root) {
+    this.root = root;
+  }
+  protected Scene getScene() {
+    return scene;
+  }
+  protected void setScene(Scene scene) {
+    this.scene = scene;
+  }
+  protected ResourceBundle getResources() {
+    return LabelResources;
+  }
+  protected void setResources(ResourceBundle resources) {
+    this.LabelResources = resources;
+  }
+
 
 }

@@ -6,9 +6,9 @@ import slogo.Node.NodeValue;
 
 public class LessEqualCommand extends Command {
     public LessEqualCommand(){
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double arg_1 = getChild(0).execute().getNumeric();

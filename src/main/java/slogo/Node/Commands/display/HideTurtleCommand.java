@@ -1,18 +1,16 @@
-package slogo.Node.Commands.avatar;
+package slogo.Node.Commands.display;
 
 import slogo.Node.NodeCategories.Command;
 import slogo.Node.NodeValue;
 
 public class HideTurtleCommand extends Command {
     public HideTurtleCommand() {
-        this.setNumParameters(0);
+        this.setNumArguments(0);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
-            // TODO: CURRENTLY DOES NOTHING
-            // model.setAvatarShow(false)
-            System.out.println("Model has not interface to show/hide turtle yet");
+            model.setAvatarVisible(false);
             return new NodeValue(0);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

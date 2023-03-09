@@ -6,16 +6,15 @@ import slogo.Node.NodeValue;
 
 public class IfCommand extends Command {
     public IfCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
 
     public NodeValue execute() throws Exception {
         checkContext();
         boolean conditional = Precision.asBoolean(getChild(0).execute().getNumeric());
 
-        if (conditional) {
-            return getChild(1).execute();
-        }
+        if (conditional) return getChild(1).execute();
+
         return new NodeValue(0);
     }
 }

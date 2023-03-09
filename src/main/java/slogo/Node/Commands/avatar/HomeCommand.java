@@ -6,9 +6,9 @@ import slogo.Node.NodeValue;
 
 public class HomeCommand extends Command {
     public HomeCommand() {
-        this.setNumParameters(0);
+        this.setNumArguments(0);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double x = model.getAvatarX(), y = model.getAvatarY(), rotation = model.getAvatarRotation();

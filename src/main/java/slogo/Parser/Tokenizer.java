@@ -19,7 +19,7 @@ public class Tokenizer {
     }
 
     public String separateListDelimiters(String input) {
-        return input.replaceAll("[\\[\\]]", " $0 ");
+        return input.replaceAll("[\\[\\]\\(\\)]", " $0 ");
     }
 
     public void toNextToken() {

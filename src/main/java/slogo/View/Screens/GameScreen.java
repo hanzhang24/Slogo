@@ -26,31 +26,27 @@ import javafx.scene.shape.Line;
 
 public class GameScreen extends Screen implements ModelView{
 
-  public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
+  private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
+  private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
+  private static final String STYLESHEET = "GameScreen.css";
+
 
   private  Color color;
   private PenView avatar;
-  private int speed;
   private Animator animations;
   private CommandBoxView commandBoxView;
   private HistoryView historyView;
   private DrawBoardView canvas;
   private Group all;
-  private ResourceBundle LabelResources;
-  private ResourceBundle ReflectionResources;
-  private ResourceBundle PanelResources;
-  private static final String REFLECTION_RESOURCES = "ReflectionActions";
-  private static final String PANEL_RESOURCES = "PanelActions";
 
-  public GameScreen(Stage stage, String language, Color color) {
-    super(stage, language);
-    this.root = new GridPane();
+
+
+
+  public GameScreen(String language, Color color) {
+    super(language);
+    setRoot(new GridPane());
     this.color = color;
     all = new Group();
-
-    LabelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
-    ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + REFLECTION_RESOURCES);
-    PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
   }
 
   public double getAnimationSpeed() {
@@ -60,39 +56,46 @@ public class GameScreen extends Screen implements ModelView{
   @Override
   public Scene makeScene(int width, int height) {
     setUpGridPane();
-
-    canvas = new DrawBoardView();
-    canvas.setColor(this.color);
-    root.getChildren().add(canvas.getContainer());
-    GridPane.setConstraints(canvas.getContainer(), 0, 0);
-
+    createCanvas();
     MakeTurtle();
+    createCommandBox();
+    createButtions();
+    createHistoryView();
 
-    commandBoxView = new CommandBoxView(animations);
-    root.getChildren().add(commandBoxView.getCommandContainer());
-    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 2);
+    setScene(new Scene(all, width, height));
+    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
 
-    List<String> actions = new ArrayList<>();
+    return getScene();
+  }
 
-    actions.add("Step");
-    actions.add("Pause");
-    actions.add("Reset");
+  private void createHistoryView() {
+    historyView = new HistoryView();
+    getRoot().getChildren().add(historyView.getHistoryContainer());
+    GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
+  }
 
-    HBox container = makeInputPanel(actions, this, LabelResources, ReflectionResources);
+  private void createButtions() {
+    HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
     container.setId("Animation-Panel");
+
     SliderView animationInputs  = new SliderView(animations);
     container.getChildren().add(animationInputs.getSliderContainer());
-    root.getChildren().add(container);
+    getRoot().getChildren().add(container);
     GridPane.setConstraints(container, 0, 1);
 
-    this.scene = new Scene(all, width, height);
-    scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
+  }
 
-    historyView = new HistoryView();
-    root.getChildren().add(historyView.getHistoryContainer());
-    GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
+  private void createCommandBox() {
+    commandBoxView = new CommandBoxView(animations);
+    getRoot().getChildren().add(commandBoxView.getCommandContainer());
+    GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 2);
+  }
 
-    return scene;
+  private void createCanvas() {
+    canvas = new DrawBoardView();
+    canvas.setColor(this.color);
+    getRoot().getChildren().add(canvas.getContainer());
+    GridPane.setConstraints(canvas.getContainer(), 0, 0);
   }
 
   private void MakeTurtle() {
@@ -101,11 +104,12 @@ public class GameScreen extends Screen implements ModelView{
     all.getChildren().add(avatar.getImage());
     animations = new Animator(avatar);
   }
+
   private void setUpGridPane() {
-    root = new GridPane();
-    root.getStyleClass().add("grid-pane");
-    root.setId("Pane");
-    all.getChildren().add(root);
+    setRoot(new GridPane());
+    getRoot().getStyleClass().add("grid-pane");
+    getRoot().setId("Pane");
+    all.getChildren().add(getRoot());
   }
 
   public void updateAvatarIsPenDown(boolean penStatus) {
@@ -123,7 +127,6 @@ public class GameScreen extends Screen implements ModelView{
     double OldXCor = avatar.getXCor();
     double OldYCor = avatar.getYCor();
     animations.makeTranslation(newX, newY);
-    animations.runAnimation();
     avatar.setCoordinates(newX, newY);
     if(avatar.getPenActive()){
 //      all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300,  newY + 300));
@@ -169,13 +172,23 @@ public class GameScreen extends Screen implements ModelView{
     return avatar;
   }
 
-  public void reset(){
+  private void reset(){
     clearScreen();
   }
-  public void pause(){
+  private void pause(){
     animations.pause();
   }
-  public void step(){
+  private void step(){
     animations.step();
+  }
+  public void initializeSequentialTransition(){
+    animations.resetAnimations();
+  }
+  public void playSequentialTransition(){
+    animations.runAnimation();
+  }
+
+  public void updatePenColor(Color penTest) {
+    this.avatar.updateColor(penTest);
   }
 }
