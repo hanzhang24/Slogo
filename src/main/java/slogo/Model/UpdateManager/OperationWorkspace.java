@@ -1,4 +1,4 @@
-package slogo.Model;
+package slogo.Model.UpdateManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
