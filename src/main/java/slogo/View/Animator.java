@@ -1,6 +1,7 @@
 package slogo.View;
 
 import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
@@ -42,8 +43,10 @@ public class Animator {
     double pathLength = Math.sqrt(Math.pow(XLength, 2) + Math.pow(YLength, 2));
     Path path = new Path();
     path.getElements().addAll(new MoveTo(XStart, YStart), new LineTo(endX, endY));
-    avatar.setCoordinates(endX, endY);
+//    avatar.setCoordinates(endX, endY);
     PathTransition pt = new PathTransition(Duration.seconds((FRAMES_PER_SECOND/animationSpeed)*pathLength/500), path, avatar.getImage());
+    //Makes it linear
+    pt.setInterpolator(Interpolator.LINEAR);
     return pt;
   }
   public void runAnimation(){
@@ -104,10 +107,8 @@ public class Animator {
   public void setAnimationSpeed(double speed){
     animationSpeed = speed;
   }
-
   public void pause() {
   }
-
   public void step() {
   }
 }

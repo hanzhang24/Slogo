@@ -127,7 +127,6 @@ public class GameScreen extends Screen implements ModelView{
     double OldXCor = avatar.getXCor();
     double OldYCor = avatar.getYCor();
     animations.makeTranslation(newX, newY);
-    animations.runAnimation();
     avatar.setCoordinates(newX, newY);
     if(avatar.getPenActive()){
 //      all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300,  newY + 300));
@@ -173,15 +172,23 @@ public class GameScreen extends Screen implements ModelView{
     return avatar;
   }
 
-  public void reset(){
+  private void reset(){
     clearScreen();
   }
-  public void pause(){
+  private void pause(){
     animations.pause();
   }
-  public void step(){
+  private void step(){
     animations.step();
   }
-  public void run(){ commandBoxView.sendText(); }
-  public void clear(){ commandBoxView.clear(); }
+  public void initializeSequentialTransition(){
+    animations.resetAnimations();
+  }
+  public void playSequentialTransition(){
+    animations.runAnimation();
+  }
+
+  public void updatePenColor(Color penTest) {
+    this.avatar.updateColor(penTest);
+  }
 }
