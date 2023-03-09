@@ -3,6 +3,11 @@ package slogo.Model.AvatarManager;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * @author Alec Liu The AvatarInitilizerStrategy is a helper class for Avatar to load in parameters
+ * from config files. It helps to sort each parameter into the correct map for the Avatar, and it
+ * catches misformatted files.
+ */
 public class AvatarInitializerStrategy {
 
   private static final String STRING_TYPE = "String";
@@ -24,7 +29,8 @@ public class AvatarInitializerStrategy {
 
   /**
    * Add a String parameter to the String map
-   * @param key parameter name
+   *
+   * @param key   parameter name
    * @param value parameter value
    */
   private void addStringParameter(String key, String value) {
@@ -33,7 +39,8 @@ public class AvatarInitializerStrategy {
 
   /**
    * Add a Boolean parameter to the Boolean map
-   * @param key parameter name
+   *
+   * @param key   parameter name
    * @param value parameter value
    */
   private void addBooleanParameter(String key, String value) {
@@ -42,7 +49,8 @@ public class AvatarInitializerStrategy {
 
   /**
    * Add a Double parameter to the Double map
-   * @param key parameter name
+   *
+   * @param key   parameter name
    * @param value parameter value
    */
   private void addDoubleParameter(String key, String value) {
@@ -57,9 +65,10 @@ public class AvatarInitializerStrategy {
   }
 
   /**
-   * Genericallly add a parameter to the correct map
-   * @param type parameter type
-   * @param key parameter name
+   * Generically add a parameter to the correct map
+   *
+   * @param type  parameter type
+   * @param key   parameter name
    * @param value parameter value
    */
   void addParameter(String type, String key, String value) {

@@ -5,9 +5,9 @@ import java.util.List;
 
 /**
  * @author Alec Liu The ChangeLog object is built specifically for the View pipeline (not for the
- * Controller). When commands are modified in the Model, ChangeLogs are created to store information
- * about which command and what information should be updated. ChangeLogs are translated into
- * Commands by the ViewPayload object.
+ * Controller). When commands are modified in the Model, ChangeLogs are created to temporarily store
+ * information about which command and what information should be updated. ChangeLogs are translated
+ * into Commands by the ViewPayload object.
  */
 public class ChangeLog {
 
