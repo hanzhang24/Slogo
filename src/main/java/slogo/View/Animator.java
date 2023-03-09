@@ -7,7 +7,6 @@ import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
-import javafx.scene.image.ImageView;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -23,18 +22,37 @@ public class Animator {
   public static final int DEFAULT_SPEED = 60;
 
   private Animation checked;
+
+
+  /**
+   * Animation Class that handles the animations that are created. The constructor intializies the
+   * speed to the DEFAULT_SPEED of 60, avatar just create
+   * @param gameAvatar This parameter is the PenView object that needs to be moved,
+   */
   public Animator(PenView gameAvatar){
     animationSpeed = DEFAULT_SPEED;
     avatar = gameAvatar;
     action = new SequentialTransition(avatar.getImage());
   }
 
-  // create sequence of animations
+  /**
+   * Method call for any outside class to create the animation required to translate the
+   * avatar to the endX and endY
+   * @param endX is the final X coordinate the turtle should be at from the Model's perspective
+   * @param endY is the final Y coordinate the turtle should be at from the View's perspective
+   */
   public void makeTranslation (double endX, double endY) {
     PathTransition pt = createNewPathTransition(endX, endY);
     checkBounds(pt, endX, endY);
     action.getChildren().add(checked);
   }
+
+  /**
+   * Private Method inside the class to
+   * @param endX
+   * @param endY
+   * @return
+   */
   private PathTransition createNewPathTransition(double endX, double endY) {
     double XStart = avatar.getXCor();
     double YStart = avatar.getYCor();

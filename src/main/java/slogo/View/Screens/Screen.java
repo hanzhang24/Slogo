@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 
 public abstract class Screen {
@@ -29,20 +28,43 @@ public abstract class Screen {
   private Pane root;
   private Scene scene;
 
+
+  /**
+   * Abstract class for Screen that sets up ResourceBundles
+   * @param language is the default branch
+   */
   public Screen(String language) {
     LabelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
     ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + REFLECTION_RESOURCES);
     PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
   }
 
+  /**
+   * Method for creating screen to setUp scenes, allows for flexibility when reassigning css stylesheets
+   * @param width width of the Scene in pixels
+   * @param height height of the Scenes in pixels
+   * @return the Scene that represents the Screen
+   */
   public abstract Scene makeScene(int width, int height);
 
+  /**
+   * Allows
+   * @param property
+   * @param LabelResources
+   * @return
+   */
   protected Label makeLabel (String property, ResourceBundle LabelResources) {
     Label label = new Label(LabelResources.getString(property));
     return label;
   }
 
 
+  /**
+   *
+   * @param property
+   * @param PanelResources
+   * @return
+   */
   // get button actions for each panel from resource file
   protected List<String> getPanelButtons (String property, ResourceBundle PanelResources) {
     return Arrays.asList(PanelResources.getString(property).split(","));
