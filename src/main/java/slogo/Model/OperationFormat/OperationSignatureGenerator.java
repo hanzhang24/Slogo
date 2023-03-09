@@ -25,7 +25,7 @@ public class OperationSignatureGenerator {
    * @return new operation signature
    */
   int generateOperationSignature() {
-    return randomNumberGenerator.nextInt(10000);
+    return randomNumberGenerator.nextInt(10000, 99999);
   }
 
 }
