@@ -9,13 +9,16 @@ public class SetPenColorCommand extends Command {
     }
 
     public NodeValue execute() throws Exception {
-        checkContext();
-        double r = getChild(0).execute().getNumeric();
-        double g = getChild(1).execute().getNumeric();
-        double b = getChild(2).execute().getNumeric();
+//        checkContext();
 
-        model.setAvatarPenColor(r, g, b);
+        throw new Exception("Set pen color index not implemented in model API");
 
-        return new NodeValue(1);
+//        double r = getChild(0).execute().getNumeric();
+//        double g = getChild(1).execute().getNumeric();
+//        double b = getChild(2).execute().getNumeric();
+//
+//        model.setAvatarPenColor(r, g, b);
+
+//        return new NodeValue(1);
     }
 }

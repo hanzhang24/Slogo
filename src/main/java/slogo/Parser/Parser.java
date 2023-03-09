@@ -73,28 +73,41 @@ public class Parser {
 
         String commandName = tokenizer.getCurToken();
         if (!commandManager.isSimpleDefinedCommand(commandName)) {
-            if (commandManager.isCreateFunctionCommand(commandName)) {
+            if (commandManager.isCreateFunctionCommand(commandName))
                 throw new Exception("Repeated function creation not supported");
-            } else
-                throw new Exception("Command " + commandName + " not found");
+            else throw new Exception("Command " + commandName + " not found");
         }
-        Node command = commandManager.getSimpleDefinedCommand(commandName);
+        boolean supportsArbitraryNumArgs = commandManager.getSimpleDefinedCommand(commandName).getSupportsArbitraryNumArgs();
         tokenizer.toNextToken();
 
-        while(!tokenizer.isEndOfInput() && TypeChecker.getType(tokenizer.getCurToken()) != TokenType.REPEATER_GROUP_END) {
-            Node child = parseExpression();
-            command.addChild(child);
+        Node result = null;
+
+        if (supportsArbitraryNumArgs) {
+            result = commandManager.getSimpleDefinedCommand(commandName);
+            while(!tokenizer.isEndOfInput() && TypeChecker.getType(tokenizer.getCurToken()) != TokenType.REPEATER_GROUP_END) {
+                Node child = parseExpression();
+                result.addChild(child);
+            }
+        } else {
+            result = new Group();
+            while(!tokenizer.isEndOfInput() && TypeChecker.getType(tokenizer.getCurToken()) != TokenType.REPEATER_GROUP_END) {
+                Command curCommand = commandManager.getSimpleDefinedCommand(commandName);
+                for (int i = 0; i < curCommand.getNumArguments(); i++) {
+                    if (tokenizer.isEndOfInput())
+                        throw new Exception("Encountered unexpected end of input in parsing repeater group");
+                    else if (TypeChecker.getType(tokenizer.getCurToken()) == TokenType.REPEATER_GROUP_END)
+                        throw new Exception("Not enough arguments for " + commandName + ", encountered ) instead");
+                    Node child = parseExpression();
+                    curCommand.addChild(child);
+                }
+                result.addChild(curCommand);
+            }
         }
 
-        if (tokenizer.isEndOfInput()) {
-            throw new Exception("Reached end of input before )");
-        } else if (!command.hasCompatibleNumChildren()) {
-            throw new Exception(command.getChildren().size() + " is not a compatible number of arguments for repeating " + commandName);
-        }
-        assert(TypeChecker.getType(tokenizer.getCurToken()) != TokenType.REPEATER_GROUP_END);
+        if (tokenizer.isEndOfInput()) throw new Exception("Reached end of input before )");
         tokenizer.toNextToken();
 
-        return command;
+        return result;
     }
     private Node parseCreateCommand() throws Exception {
 

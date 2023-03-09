@@ -20,13 +20,13 @@ public class Variable extends Node {
     }
 
     public boolean hasCompatibleNumChildren() {
-        return this.getChildren().size() == 1;
+        return this.getChildren().size() == 0;
     }
-    public NodeValue getValue() {
+    public NodeValue getValue() throws Exception {
         checkContext();
         return new NodeValue(model.getUserVariable(this.name));
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         return getValue();
     }
 }

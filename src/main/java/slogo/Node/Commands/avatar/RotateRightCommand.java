@@ -8,7 +8,7 @@ public class RotateRightCommand extends Command {
     public RotateRightCommand() {
         this.setNumArguments(1);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double rotation = getChild(0).execute().getNumeric();

@@ -5,11 +5,7 @@ import slogo.Node.NodeValue;
 import java.util.List;
 
 public class Group extends Node {
-
-    public boolean hasCompatibleNumChildren() {
-        return true;
-    }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             NodeValue result = new NodeValue(0);
@@ -21,5 +17,9 @@ public class Group extends Node {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    public boolean hasCompatibleNumChildren() {
+        return true;
     }
 }

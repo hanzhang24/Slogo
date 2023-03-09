@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class Node {
     protected List<Node> children = new ArrayList<Node>();
-    protected boolean hasContext = false;
+    private boolean hasContext = false, plural = false;
     protected Model model;
     public void initContext(Model model) {
         this.hasContext = true;
@@ -16,12 +16,13 @@ public abstract class Node {
         for (Node child: children)
             child.initContext(model);
     }
-    protected void checkContext() {
+    protected void checkContext() throws Exception {
         if (!this.hasContext) {
-            throw new NullPointerException("Model not attached to node");
+            throw new Exception("Model not attached to node");
+        } else if (!hasCompatibleNumChildren()) {
+            throw new Exception(this.getClass() + " did not get an appropriate num of children, got " + getChildren().size() + " children");
         }
     }
-
     public Node deepClone() throws Exception {
         Node selfNode = this.getClass().newInstance();
         for (Node child: this.getChildren()) {
@@ -35,6 +36,9 @@ public abstract class Node {
     public List<Node> getChildren() {
         return this.children;
     }
+
+    public boolean getPlural() {return plural;}
+    protected void setPlural(boolean bool) {this.plural = bool;}
 
     public abstract boolean hasCompatibleNumChildren();
     public void addChild(Node node) {

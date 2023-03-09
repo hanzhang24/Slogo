@@ -7,7 +7,7 @@ public class HideTurtleCommand extends Command {
     public HideTurtleCommand() {
         this.setNumArguments(0);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             model.setAvatarVisible(false);

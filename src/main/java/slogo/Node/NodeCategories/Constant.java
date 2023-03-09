@@ -20,7 +20,7 @@ public class Constant extends Node {
     }
 
     public boolean hasCompatibleNumChildren() {
-        return this.getChildren().size() == 1;
+        return this.getChildren().size() == 0;
     }
 
     public NodeValue execute() {

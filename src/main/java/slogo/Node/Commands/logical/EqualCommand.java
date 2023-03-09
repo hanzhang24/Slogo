@@ -8,12 +8,7 @@ public class EqualCommand extends Command {
     public EqualCommand(){
         this.setNumArguments(2);
     }
-
-    @Override
-    public boolean hasCompatibleNumChildren() {
-        return getChildren().size() >= 2;
-    }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double arg_1 = getChild(0).execute().getNumeric();

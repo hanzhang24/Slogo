@@ -6,19 +6,18 @@ import slogo.Node.NodeValue;
 
 public class OrCommand extends Command {
     public OrCommand(){
+
         this.setNumArguments(2);
+        this.setSupportsArbitraryNumArgs(true);
     }
 
-    @Override
-    public boolean hasCompatibleNumChildren() {
-        return getChildren().size() >= 2;
-    }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             boolean result = false;
 
-            for (int i = 0; i < this.getNumArguments(); i++) {
+            int size = getChildren().size();
+            for (int i = 0; i < size; i++) {
                 double arg = getChild(i).execute().getNumeric();
                 boolean arg_bool = Precision.asBoolean(arg);
                 result |= arg_bool;

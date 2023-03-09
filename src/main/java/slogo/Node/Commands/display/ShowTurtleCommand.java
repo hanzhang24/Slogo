@@ -7,7 +7,7 @@ public class ShowTurtleCommand extends Command {
     public ShowTurtleCommand() {
         this.setNumArguments(0);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             model.setAvatarVisible(true);
