@@ -3,12 +3,8 @@ package slogo.View.Screens;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.layout.HBox;
-<<<<<<< src/main/java/slogo/View/Screens/GameScreen.java
 import javafx.scene.layout.Pane;
-=======
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
->>>>>>> src/main/java/slogo/View/Screens/GameScreen.java
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
 import slogo.View.Containers.SliderView;
