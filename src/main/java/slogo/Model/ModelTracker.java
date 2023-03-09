@@ -1,11 +1,5 @@
 /**
- * TODO: implement strategy pattern for avatar initialization,
- *       implement external and internal ID tracking,
- *       change setID to also create an Avatar if needed and add a corresponding command to payload
- *       adopt new ID into ALL avatar payload objects
- *       expose new API methods to get current ID and avatar list size (may need new exceptions too)
- *       make sure that the ID's being generated are all external ID's for the payload
- *       finishing unit testing
+ * TODO: clean up code, increase testing and doc, address history logging issues
  */
 package slogo.Model;
 
@@ -21,9 +15,10 @@ import slogo.Payload.ViewPayloadManager.ChangeLog;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
 /**
- * @author Alec Liu The ModelTracker class is the default implementation of the model. It manages
- * storage and access to Avatar parameters and user variable, and throws exceptions for unexpected
- * behavior.
+ * @author Alec Liu The ModelTracker class is the default implementation of the model. It primarily
+ * manages access to the Model through a fixed process, and keeps temporary changes while the Model
+ * is being actively modified. This class defers to other classes to help get and set Model
+ * infromation, or to encode Model information to prevent collisions.
  */
 public class ModelTracker implements Model {
 
@@ -337,9 +332,13 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarPosition(double x, double y) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("X"), getCurrentAvatarID()), x + "");
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Y"), getCurrentAvatarID()), y + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Position"), avatarGroupManager.getCurrentAvatarID(), x, y));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("X"), getCurrentAvatarID()),
+        x + "");
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Y"), getCurrentAvatarID()),
+        y + "");
+    viewPayload.addCommand(
+        new ChangeLog(KEY_CODES.getString("Position"), avatarGroupManager.getCurrentAvatarID(), x,
+            y));
   }
 
   /**
@@ -350,8 +349,11 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarRotation(double rotation) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Rotation"), avatarGroupManager.getCurrentAvatarID()), rotation + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Rotation"), avatarGroupManager.getCurrentAvatarID(), rotation));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Rotation"),
+        avatarGroupManager.getCurrentAvatarID()), rotation + "");
+    viewPayload.addCommand(
+        new ChangeLog(KEY_CODES.getString("Rotation"), avatarGroupManager.getCurrentAvatarID(),
+            rotation));
   }
 
   /**
@@ -368,8 +370,11 @@ public class ModelTracker implements Model {
     int castedGreen = (int) green;
     int castedBlue = (int) blue;
     String convertedColor = castedRed + " " + castedGreen + " " + castedBlue;
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("PenColor"), avatarGroupManager.getCurrentAvatarID()), convertedColor);
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("PenColor"), avatarGroupManager.getCurrentAvatarID(), convertedColor));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("PenColor"),
+        avatarGroupManager.getCurrentAvatarID()), convertedColor);
+    viewPayload.addCommand(
+        new ChangeLog(KEY_CODES.getString("PenColor"), avatarGroupManager.getCurrentAvatarID(),
+            convertedColor));
   }
 
   /**
@@ -380,8 +385,11 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarPenDown(boolean isPenDown) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("IsPenDown"), avatarGroupManager.getCurrentAvatarID()), isPenDown + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("IsPenDown"), avatarGroupManager.getCurrentAvatarID(), isPenDown + ""));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("IsPenDown"),
+        avatarGroupManager.getCurrentAvatarID()), isPenDown + "");
+    viewPayload.addCommand(
+        new ChangeLog(KEY_CODES.getString("IsPenDown"), avatarGroupManager.getCurrentAvatarID(),
+            isPenDown + ""));
   }
 
   /**
@@ -392,8 +400,11 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarVisible(boolean visible) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Visible"), avatarGroupManager.getCurrentAvatarID()), visible + "");
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("Visible"), avatarGroupManager.getCurrentAvatarID(), visible + ""));
+    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Visible"),
+        avatarGroupManager.getCurrentAvatarID()), visible + "");
+    viewPayload.addCommand(
+        new ChangeLog(KEY_CODES.getString("Visible"), avatarGroupManager.getCurrentAvatarID(),
+            visible + ""));
   }
 
   /**
@@ -443,9 +454,11 @@ public class ModelTracker implements Model {
   public void setActiveAvatars(List<Integer> externalIDs) {
     checkCurrentOperationConfigured();
     List<Avatar> newAvatarList = avatarGroupManager.setActiveAvatars(externalIDs);
-    for(Avatar newAvatar : newAvatarList){
-      viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("CreateAvatar"), newAvatar.getExternalID(), newAvatar.getNumericDefault() + "",
-          newAvatar.getBooleanDefault() + ""));
+    for (Avatar newAvatar : newAvatarList) {
+      viewPayload.addCommand(
+          new ChangeLog(KEY_CODES.getString("CreateAvatar"), newAvatar.getExternalID(),
+              newAvatar.getNumericDefault() + "",
+              newAvatar.getBooleanDefault() + ""));
     }
   }
 

@@ -1,5 +1,10 @@
 package slogo.Model.OperationFormat;
 
+/**
+ * @author Alec Liu The OperationFormatter class is a helper class to the Model, generating encoded
+ * keys for avatar parameters to prevent collisions with user variables of the same name. This class
+ * also contains methods to decode information.
+ */
 public class OperationFormatter {
 
   private OperationSignatureGenerator operationSignatureGenerator;
@@ -14,10 +19,11 @@ public class OperationFormatter {
 
   /**
    * Detects if a given key has been encoded
+   *
    * @param key access key
    * @return if it is encoded
    */
-  public boolean isEncodedKey(String key){
+  public boolean isEncodedKey(String key) {
     return key.contains(currentOperationSignature + "");
   }
 
@@ -29,7 +35,9 @@ public class OperationFormatter {
   }
 
   /**
-   * Encodes an avatar key to prevent collisions using the parameter name, id, and operation signature
+   * Encodes an avatar key to prevent collisions using the parameter name, id, and operation
+   * signature
+   *
    * @param parameter parameter name
    * @param currentID avatar external ID
    * @return encoded key
@@ -41,6 +49,7 @@ public class OperationFormatter {
 
   /**
    * Extracts avatar external ID from an encoded key
+   *
    * @param key encoded key
    * @return avatar external ID
    */
@@ -51,6 +60,7 @@ public class OperationFormatter {
 
   /**
    * Extracts avatar parameters from encoded key
+   *
    * @param key encoded key
    * @return avatar parameter
    */

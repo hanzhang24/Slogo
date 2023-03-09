@@ -6,8 +6,9 @@ import slogo.View.Screens.GameScreen;
 import java.util.List;
 
 /**
- * @author Alec Liu The Command class is a parent class for each View command. These Commands are
- * generically run in the ViewController by calling command.execute().
+ * @author Alec Liu The View Command class is a parent class for each View command. These Commands
+ * are generically run in the ViewController by calling command.execute(). See each subclass for
+ * specific details on implementation.
  */
 public abstract class ViewCommand {
 

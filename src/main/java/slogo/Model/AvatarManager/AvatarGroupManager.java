@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import slogo.Model.AvatarManager.Avatar;
-import slogo.Payload.ViewPayloadManager.ChangeLog;
 
+/**
+ * @author Alec Liu The AvatarGroupManager class is a helper class to the Model which stores the
+ * collection of Avatars. This class tracks "active turtles", the current turtle being modified, and
+ * internally translates external IDs to internal indicies.
+ */
 public class AvatarGroupManager {
 
   private static final String EXCEPTIONS_PATH = "Model.AvatarExceptions";
