@@ -3,11 +3,8 @@
  */
 package slogo.Model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
+
 import slogo.Model.AvatarManager.Avatar;
 import slogo.Model.AvatarManager.AvatarGroupManager;
 import slogo.Model.OperationFormat.OperationFormatter;
@@ -22,7 +19,7 @@ import slogo.Payload.ViewPayloadManager.ViewPayload;
  */
 public class ModelTracker implements Model {
 
-  private static final String EXCEPTIONS_PATH = "Model.Exceptions";
+  private static final String EXCEPTIONS_PATH = "Model.ModelExceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private static final String KEY_CODES_PATH = "Model.KeyCodes";
   private static final ResourceBundle KEY_CODES = ResourceBundle.getBundle(KEY_CODES_PATH);
@@ -46,6 +43,8 @@ public class ModelTracker implements Model {
    */
   public ModelTracker(String defaultParametersFilename) {
     avatarGroupManager = new AvatarGroupManager(defaultParametersFilename);
+    avatarGroupManager.setActiveAvatars(new ArrayList<Integer>(Arrays.asList(1)));
+    this.setCurrentAvatarID(1);
     initializePeripheralStructures();
   }
 
