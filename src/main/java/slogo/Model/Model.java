@@ -90,17 +90,6 @@ public interface Model {
    * @return copy of all successful commands
    */
   List<String> getAllHistory();
-//  /**
-//   * Sets the current avatar's x position
-//   * @param x new x position
-//   */
-//  void setAvatarX(double x);
-//
-//  /**
-//   * Sets the current avatar's y position
-//   * @param y new y position
-//   */
-//  void setAvatarY(double y);
 
   /**
    * Simultaneously update the current Avatar's x and y position
