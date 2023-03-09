@@ -185,6 +185,6 @@ public class GameScreen extends Screen implements ModelView{
   }
 
   public void updatePenColor(Color penTest) {
-    this.color = penTest;
+    this.avatar.updateColor(penTest);
   }
 }

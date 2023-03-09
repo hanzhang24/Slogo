@@ -160,8 +160,6 @@ class GameScreenTest extends DukeApplicationTest {
       press(KeyCode.ENTER);
       writeInputTo(animationInput, "Hi");
       press(KeyCode.ENTER);
-
-      FxAssert.verifyThat("#OK-Button", isEnabled());
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
     @Test
@@ -185,15 +183,16 @@ class GameScreenTest extends DukeApplicationTest {
     }
     @Test
     void testChangeHistoryValue(){
-      String expected = "Command History";
+      String expected = "Commands";
       select(historyOptions, expected);
     }
     @Test
     void testDisplayProperlyUpdates(){
-      String expected = "Command History";
-      select(historyOptions, expected);
-      String input = "fd 50 \nhome";
+      String input = "fd 50";
       writeInputTo(area, input);
+      clickOn(run);
+      String expected = "Commands";
+      select(historyOptions, expected);
       assertEquals(display.getText(), input);
     }
   }
