@@ -9,8 +9,8 @@ public class UpdateUserLibrary extends ViewCommand {
    *
    * @param parameters list of parameters
    */
-  public UpdateUserLibrary(List<String> parameters) {
-    super(parameters);
+  public UpdateUserLibrary(List<String> parameters, int externalID) {
+    super(parameters, externalID);
   }
 
   /**

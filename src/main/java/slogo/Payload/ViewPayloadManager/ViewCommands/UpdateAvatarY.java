@@ -7,8 +7,8 @@ import java.util.List;
  */
 public class UpdateAvatarY extends ViewCommand {
 
-  public UpdateAvatarY(List<String> parameters) {
-    super(parameters);
+  public UpdateAvatarY(List<String> parameters, int externalID) {
+    super(parameters, externalID);
   }
 
   @Override

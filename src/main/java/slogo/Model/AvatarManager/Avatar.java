@@ -79,8 +79,18 @@ public class Avatar {
    * @return numeric default
    */
   public double getNumericDefault() {
-    return numericParameters.get("Default");
+    return numericParameters.get("NumericDefault");
   }
+
+  /**
+   * Gets the default value for boolean parameters
+   *
+   * @return numeric default
+   */
+  public boolean getBooleanDefault() {
+    return booleanParameters.get("BooleanDefault");
+  }
+
 
   /**
    * Gets the String associated with a given key

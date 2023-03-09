@@ -12,6 +12,7 @@ import java.util.List;
 public abstract class ViewCommand {
   private static final String EXCEPTIONS_PATH = "Payload.Exceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
+  protected int externalID;
   GameScreen gameScreen;
   List<String> parameters;
 
@@ -20,14 +21,15 @@ public abstract class ViewCommand {
    *
    * @param parameters list of parameters
    */
-  public ViewCommand(List<String> parameters) {
+  public ViewCommand(List<String> parameters, int externalID) {
     this.parameters = parameters;
+    this.externalID = externalID;
   }
 
   /**
    * Method to set GameScreen. Called by the ViewController
    *
-   * @param gameScreen
+   * @param gameScreen sets the Game Screen to modify
    */
   public void setGameScreen(GameScreen gameScreen) {
     this.gameScreen = gameScreen;

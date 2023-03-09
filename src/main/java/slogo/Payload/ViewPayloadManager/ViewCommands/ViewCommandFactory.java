@@ -12,8 +12,8 @@ public class ViewCommandFactory {
   public ViewCommand createViewCommand(ChangeLog changeLog){
     try {
       Class<?> command = Class.forName(COMMANDS_PATH + changeLog.getName());
-      Constructor<?> constructor = command.getDeclaredConstructor(List.class);
-      return (ViewCommand) constructor.newInstance(changeLog.getParametersList());
+      Constructor<?> constructor = command.getDeclaredConstructor(List.class, int.class);
+      return (ViewCommand) constructor.newInstance(changeLog.getParametersList(), changeLog.getExternalID());
     } catch (Exception e) {
       throw new RuntimeException(EXCEPTIONS.getString("UnknownCommandCodeError"));
     }

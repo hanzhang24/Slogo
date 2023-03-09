@@ -3,8 +3,8 @@ package slogo.Payload.ViewPayloadManager.ViewCommands;
 import java.util.List;
 
 public class UpdateHistory extends ViewCommand {
-  public UpdateHistory(List<String> parameters) {
-    super(parameters);
+  public UpdateHistory(List<String> parameters, int externalID) {
+    super(parameters, externalID);
   }
 
   @Override

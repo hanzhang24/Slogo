@@ -47,7 +47,7 @@ public class ViewPayloadTest {
   void testChangeLogTypes() {
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("X")));
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("X"), ""));
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("X"), randomGenerator.nextDouble()));
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("X"), 0, randomGenerator.nextDouble()));
     List<Double> vals = new ArrayList<>();
     vals.add(randomGenerator.nextDouble());
     viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("X"), vals));
@@ -76,7 +76,8 @@ public class ViewPayloadTest {
 
   @Test
   void testInvalidParameters() {
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("X"), new ArrayList<>()));
+    List<Double> emptyList = new ArrayList<>();
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("X"), emptyList));
     for (ViewCommand vc : viewPayload) {
       Exception exception = assertThrows(RuntimeException.class,
           vc::run);

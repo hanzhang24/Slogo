@@ -4,8 +4,8 @@ import java.util.List;
 
 public class UpdateReturnValues extends ViewCommand {
 
-  public UpdateReturnValues(List<String> parameters) {
-    super(parameters);
+  public UpdateReturnValues(List<String> parameters, int externalID) {
+    super(parameters, externalID);
   }
 
   @Override

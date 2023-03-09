@@ -9,8 +9,8 @@ public class UpdateAvatarPenColor extends ViewCommand {
   private static final int RED_INDEX = 0;
   private static final int GREEN_INDEX = 1;
   private static final int BLUE_INDEX = 2;
-  public UpdateAvatarPenColor(List<String> parameters) {
-    super(parameters);
+  public UpdateAvatarPenColor(List<String> parameters, int externalID) {
+    super(parameters, externalID);
   }
 
   @Override
@@ -21,6 +21,8 @@ public class UpdateAvatarPenColor extends ViewCommand {
       parsedColor[i] = Integer.parseInt(parsedString[i]);
     }
     gameScreen.updateAvatarPenColor(parsedColor[RED_INDEX], parsedColor[GREEN_INDEX], parsedColor[BLUE_INDEX]);
+    // gameScreen.updateAvatarPenColor(externalID, parsedColor[RED_INDEX], parsedColor[GREEN_INDEX], parsedColor[BLUE_INDEX]);
+
   }
 
   @Override
