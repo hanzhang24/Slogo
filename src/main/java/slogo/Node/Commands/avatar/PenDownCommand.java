@@ -5,12 +5,11 @@ import slogo.Node.NodeValue;
 
 public class PenDownCommand extends Command {
     public PenDownCommand() {
-        this.setNumParameters(0);
+        this.setNumArguments(0);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
-            // TODO: This will need be modified when model is changed
             model.setAvatarPenDown(true);
 
             return new NodeValue(1);

@@ -6,9 +6,9 @@ import slogo.Node.NodeValue;
 
 public class GotoCommand extends Command {
     public GotoCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double x = getChild(0).execute().getNumeric(), y = getChild(1).execute().getNumeric();

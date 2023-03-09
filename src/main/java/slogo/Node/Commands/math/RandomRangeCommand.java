@@ -9,9 +9,9 @@ import java.util.Random;
 public class RandomRangeCommand extends Command {
 
     public RandomRangeCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
 

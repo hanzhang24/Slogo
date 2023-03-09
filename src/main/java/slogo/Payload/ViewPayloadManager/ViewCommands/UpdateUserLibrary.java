@@ -9,8 +9,8 @@ public class UpdateUserLibrary extends ViewCommand {
    *
    * @param parameters list of parameters
    */
-  public UpdateUserLibrary(List<String> parameters) {
-    super(parameters);
+  public UpdateUserLibrary(List<String> parameters, int externalID) {
+    super(parameters, externalID);
   }
 
   /**
@@ -19,15 +19,5 @@ public class UpdateUserLibrary extends ViewCommand {
   @Override
   void executeSpecificCommand() {
     gameScreen.addToUserLibrary(parameters.get(0));
-  }
-
-  /**
-   * Return the name of the command
-   *
-   * @return command name
-   */
-  @Override
-  public String getDescription() {
-    return "Update User Library";
   }
 }

@@ -6,7 +6,7 @@ import slogo.Node.NodeValue;
 
 public class SetVariableCommand extends Command {
     public SetVariableCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
     public NodeValue execute() throws Exception {
         checkContext();

@@ -7,9 +7,9 @@ import java.util.Random;
 
 public class RandomCommand extends Command {
     public RandomCommand() {
-        this.setNumParameters(1);
+        this.setNumArguments(1);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             Random rand = new Random();

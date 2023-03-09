@@ -5,9 +5,9 @@ import slogo.Node.NodeValue;
 
 public class PenUpCommand extends Command {
     public PenUpCommand() {
-        this.setNumParameters(0);
+        this.setNumArguments(0);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             model.setAvatarPenDown(false);

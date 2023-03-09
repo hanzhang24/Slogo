@@ -7,9 +7,9 @@ import slogo.Node.NodeValue;
 
 public class TowardsCommand extends Command {
     public TowardsCommand() {
-        this.setNumParameters(2);
+        this.setNumArguments(2);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double targetX = getChild(0).execute().getNumeric();
@@ -23,13 +23,15 @@ public class TowardsCommand extends Command {
             Vector delta = dest.subtract(current);
 
             double targetRotationResidual = Geometry.getResidualRotationDeg(delta.getRotationDeg());
-            double currentRotation = model.getAvatarRotation();
 
+            double currentRotation = model.getAvatarRotation();
             double currentBaseRotation = Geometry.getFullRotationDeg(currentRotation);
 
             double targetRotation = targetRotationResidual + currentBaseRotation;
 
             double deltaRotation = targetRotation - currentRotation;
+
+            if (deltaRotation < 0) deltaRotation += 360;
 
             model.setAvatarRotation(targetRotation);
 

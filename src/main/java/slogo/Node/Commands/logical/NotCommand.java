@@ -7,9 +7,9 @@ import slogo.Node.NodeValue;
 public class NotCommand extends Command {
 
     public NotCommand(){
-        this.setNumParameters(1);
+        this.setNumArguments(1);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             double arg = getChild(0).execute().getNumeric();

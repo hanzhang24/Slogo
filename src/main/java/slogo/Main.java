@@ -23,7 +23,7 @@ public class Main extends Application {
     @Override
     public void start (Stage stage) {
         ScreenController screenController = new ScreenController(stage);
-        SplashScreen splashScreen = new SplashScreen(stage, DEFAULT_LANGUAGE, LANGUAGE_OPTIONS, screenController);
+        SplashScreen splashScreen = new SplashScreen(DEFAULT_LANGUAGE, LANGUAGE_OPTIONS, screenController);
         stage.setScene(splashScreen.makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
         stage.setTitle(TITLE);
         stage.show();
