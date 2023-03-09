@@ -10,7 +10,6 @@ import slogo.Parser.Parser;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class Controller {
     private Model model;
     private ViewController viewController;

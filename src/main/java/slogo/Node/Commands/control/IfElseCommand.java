@@ -13,9 +13,7 @@ public class IfElseCommand extends Command {
         checkContext();
         boolean conditional = Precision.asBoolean(getChild(0).execute().getNumeric());
 
-        if (conditional) {
-            return getChild(1).execute();
-        } else
-            return getChild(2).execute();
+        if (conditional) return getChild(1).execute();
+        else return getChild(2).execute();
     }
 }

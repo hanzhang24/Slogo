@@ -18,11 +18,15 @@ public class Variable extends Node {
     public String getName() {
         return this.name;
     }
-    public NodeValue getValue() {
+
+    public boolean hasCompatibleNumChildren() {
+        return this.getChildren().size() == 0;
+    }
+    public NodeValue getValue() throws Exception {
         checkContext();
         return new NodeValue(model.getUserVariable(this.name));
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         return getValue();
     }
 }

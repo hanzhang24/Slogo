@@ -1,4 +1,4 @@
-package slogo.Model;
+package slogo.Model.AvatarManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,11 +13,9 @@ public class Avatar {
 
   private static final String DEFAULT_PARAMETERS_BASE_PATH = "Model.";
   private static final String REGEX = ",";
-  private static final String STRING_TYPE = "String";
-  private static final String DOUBLE_TYPE = "Double";
-  private static final String BOOLEAN_TYPE = "Boolean";
   private static final int TYPE_INDEX = 0;
   private static final int VALUE_INDEX = 1;
+  private int externalID;
   private ResourceBundle defaultParametersBundle;
   private ResourceBundle exceptionResourceBundle;
   private Map<String, Double> numericParameters;
@@ -30,7 +28,9 @@ public class Avatar {
    * @param defaultParametersFilename filename for the default parameters
    * @param exceptionResourceBundle   resource bundle for exception messages
    */
-  Avatar(String defaultParametersFilename, ResourceBundle exceptionResourceBundle) {
+  public Avatar(int externalID, String defaultParametersFilename,
+      ResourceBundle exceptionResourceBundle) {
+    this.externalID = externalID;
     this.defaultParametersBundle = ResourceBundle.getBundle(
         DEFAULT_PARAMETERS_BASE_PATH + defaultParametersFilename);
     this.exceptionResourceBundle = exceptionResourceBundle;
@@ -44,29 +44,23 @@ public class Avatar {
    * Add all default parameters and values to the default parameter maps
    */
   private void addDefaultParameters() throws NumberFormatException {
+    AvatarInitializerStrategy avatarInitializerStrategy = new AvatarInitializerStrategy(
+        numericParameters, stringParameters, booleanParameters, exceptionResourceBundle);
     for (String key : defaultParametersBundle.keySet()) {
       String[] parsedParameters = defaultParametersBundle.getString(key).split(REGEX);
       String type = parsedParameters[TYPE_INDEX];
       String value = parsedParameters[VALUE_INDEX];
-
-      switch (type) {
-        case STRING_TYPE -> stringParameters.put(key, value);
-        case BOOLEAN_TYPE ->
-            booleanParameters.put(key, Boolean.parseBoolean(value)); // no supported exception
-        case DOUBLE_TYPE -> {
-          try {
-            numericParameters.put(key, Double.parseDouble(value));
-          } catch (NumberFormatException numberFormatException) {
-            throw new NumberFormatException(
-                String.format(exceptionResourceBundle.getString("ConfigurationParsingError"),
-                    key)
-            );
-          }
-        }
-        default -> throw new RuntimeException(
-            exceptionResourceBundle.getString("UnsupportedDefaultTypeError"));
-      }
+      avatarInitializerStrategy.addParameter(type, key, value);
     }
+  }
+
+  /**
+   * Gets the external ID of the Avatar
+   *
+   * @return external ID
+   */
+  public int getExternalID() {
+    return externalID;
   }
 
   /**
@@ -85,8 +79,18 @@ public class Avatar {
    * @return numeric default
    */
   public double getNumericDefault() {
-    return numericParameters.get("Default");
+    return numericParameters.get("NumericDefault");
   }
+
+  /**
+   * Gets the default value for boolean parameters
+   *
+   * @return numeric default
+   */
+  public boolean getBooleanDefault() {
+    return booleanParameters.get("BooleanDefault");
+  }
+
 
   /**
    * Gets the String associated with a given key
@@ -109,8 +113,8 @@ public class Avatar {
   }
 
   /**
-   * Adds a updated default parameter to the correct map. Assumes that each default parameter is the
-   * correct type
+   * Adds an updated default parameter to the correct map. Assumes that each default parameter is
+   * the correct type
    *
    * @param key   name of the parameter
    * @param value value of the parameter

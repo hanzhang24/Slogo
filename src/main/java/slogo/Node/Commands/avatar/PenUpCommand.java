@@ -7,7 +7,7 @@ public class PenUpCommand extends Command {
     public PenUpCommand() {
         this.setNumArguments(0);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             model.setAvatarPenDown(false);

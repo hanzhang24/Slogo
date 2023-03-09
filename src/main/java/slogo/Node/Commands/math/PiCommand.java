@@ -8,7 +8,7 @@ public class PiCommand extends Command {
     public PiCommand() {
         this.setNumArguments(0);
     }
-    public NodeValue execute() {
+    public NodeValue execute() throws Exception {
         checkContext();
         try {
             return new NodeValue(Math.PI);
