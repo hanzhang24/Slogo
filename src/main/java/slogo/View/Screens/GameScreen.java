@@ -9,6 +9,7 @@ import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
@@ -59,7 +60,7 @@ public class GameScreen extends Screen implements ModelView{
     createCanvas();
     MakeTurtle();
     createCommandBox();
-    createButtions();
+    createButtons();
     createHistoryView();
 
     setScene(new Scene(all, width, height));
@@ -70,11 +71,13 @@ public class GameScreen extends Screen implements ModelView{
 
   private void createHistoryView() {
     historyView = new HistoryView();
-    getRoot().getChildren().add(historyView.getHistoryContainer());
-    GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
+    VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()), getLabelResources());
+    container.setId("History-Container");
+    getRoot().getChildren().add(container);
+    GridPane.setConstraints(container, 1, 0);
   }
 
-  private void createButtions() {
+  private void createButtons() {
     HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
     container.setId("Animation-Panel");
 
