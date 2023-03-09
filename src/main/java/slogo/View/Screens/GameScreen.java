@@ -26,7 +26,10 @@ import javafx.scene.shape.Line;
 
 public class GameScreen extends Screen implements ModelView{
 
-  public static final String GAMESCREEN_STYLESHEET = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/" + "GameScreen.css");
+  private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
+  private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
+  private static final String STYLESHEET = "GameScreen.css";
+
 
   private  Color color;
   private PenView avatar;
@@ -35,21 +38,15 @@ public class GameScreen extends Screen implements ModelView{
   private HistoryView historyView;
   private DrawBoardView canvas;
   private Group all;
-  private ResourceBundle LabelResources;
-  private ResourceBundle ReflectionResources;
-  private ResourceBundle PanelResources;
-  private static final String REFLECTION_RESOURCES = "ReflectionActions";
-  private static final String PANEL_RESOURCES = "PanelActions";
 
-  public GameScreen(Stage stage, String language, Color color) {
-    super(stage, language);
-    this.root = new GridPane();
+
+
+
+  public GameScreen(String language, Color color) {
+    super(language);
+    setRoot(new GridPane());
     this.color = color;
     all = new Group();
-
-    LabelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
-    ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + REFLECTION_RESOURCES);
-    PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
   }
 
   public double getAnimationSpeed() {
@@ -65,15 +62,15 @@ public class GameScreen extends Screen implements ModelView{
     createButtions();
     createHistoryView();
 
-    this.scene = new Scene(all, width, height);
-    scene.getStylesheets().add(getClass().getResource(GAMESCREEN_STYLESHEET).toExternalForm());
+    setScene(new Scene(all, width, height));
+    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
 
-    return scene;
+    return getScene();
   }
 
   private void createHistoryView() {
     historyView = new HistoryView();
-    root.getChildren().add(historyView.getHistoryContainer());
+    getRoot().getChildren().add(historyView.getHistoryContainer());
     GridPane.setConstraints(historyView.getHistoryContainer(), 1,0);
   }
 
@@ -82,26 +79,29 @@ public class GameScreen extends Screen implements ModelView{
     actions.add("Step");
     actions.add("Pause");
     actions.add("Reset");
-    HBox container = makeInputPanel(actions, this, LabelResources, ReflectionResources);
+    actions.add("Run");
+    actions.add("Clear");
+
+    HBox container = makeInputPanel(actions, this, getLabelResources(), getReflectionResources());
     container.setId("Animation-Panel");
 
     SliderView animationInputs  = new SliderView(animations);
     container.getChildren().add(animationInputs.getSliderContainer());
-    root.getChildren().add(container);
+    getRoot().getChildren().add(container);
     GridPane.setConstraints(container, 0, 1);
 
   }
 
   private void createCommandBox() {
     commandBoxView = new CommandBoxView(animations);
-    root.getChildren().add(commandBoxView.getCommandContainer());
+    getRoot().getChildren().add(commandBoxView.getCommandContainer());
     GridPane.setConstraints(commandBoxView.getCommandContainer(), 0, 2);
   }
 
   private void createCanvas() {
     canvas = new DrawBoardView();
     canvas.setColor(this.color);
-    root.getChildren().add(canvas.getContainer());
+    getRoot().getChildren().add(canvas.getContainer());
     GridPane.setConstraints(canvas.getContainer(), 0, 0);
   }
 
@@ -113,10 +113,10 @@ public class GameScreen extends Screen implements ModelView{
   }
 
   private void setUpGridPane() {
-    root = new GridPane();
-    root.getStyleClass().add("grid-pane");
-    root.setId("Pane");
-    all.getChildren().add(root);
+    setRoot(new GridPane());
+    getRoot().getStyleClass().add("grid-pane");
+    getRoot().setId("Pane");
+    all.getChildren().add(getRoot());
   }
 
   public void updateAvatarIsPenDown(boolean penStatus) {
@@ -189,4 +189,6 @@ public class GameScreen extends Screen implements ModelView{
   public void step(){
     animations.step();
   }
+  public void run(){}
+  public void clear(){}
 }
