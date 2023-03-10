@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 
 public abstract class Screen {
@@ -27,13 +28,15 @@ public abstract class Screen {
 
   private Pane root;
   private Scene scene;
+  private Stage stage;
 
 
   /**
    * Abstract class for Screen that sets up ResourceBundles
    * @param language is the default branch
    */
-  public Screen(String language) {
+  public Screen(String language, Stage stage) {
+    this.stage = stage;
     LabelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
     ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + REFLECTION_RESOURCES);
     PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
@@ -134,6 +137,12 @@ public abstract class Screen {
   }
   protected void setResources(ResourceBundle resources) {
     this.LabelResources = resources;
+  }
+  public Stage getStage() {
+    return stage;
+  }
+  public void setStage(Stage stage) {
+    this.stage = stage;
   }
 
 

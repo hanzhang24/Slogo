@@ -1,11 +1,14 @@
 package slogo.View.Screens;
 
+import java.io.File;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.PathTransition;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
 import slogo.View.Containers.SliderView;
@@ -35,9 +38,12 @@ public class GameScreen extends Screen implements ModelView{
   private DrawBoardView canvas;
   private Group all;
 
-  public GameScreen(String language, Color color) {
-    super(language);
+  private FileChooser fileChooser;
+
+  public GameScreen(Stage stage, String language, Color color) {
+    super(language, stage);
     LayoutResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + GAME_SCREEN_LAYOUT);
+    fileChooser = new FileChooser();
     setRoot(new GridPane());
     this.color = color;
     all = new Group();
@@ -55,11 +61,22 @@ public class GameScreen extends Screen implements ModelView{
     createCommandBox();
     createButtons();
     createHistoryView();
+    makeColorPicker();
 
     setScene(new Scene(all, width, height));
     getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
 
     return getScene();
+  }
+
+  private void makeColorPicker() {
+    ColorPicker colorPicker = new ColorPicker();
+    colorPicker.setId("Color-Selector");
+    colorPicker.setOnAction(handler -> {
+      color = colorPicker.getValue();
+      canvas.setColor(color);
+    });
+    all.getChildren().add(colorPicker);
   }
 
   private void createHistoryView() {
@@ -111,6 +128,14 @@ public class GameScreen extends Screen implements ModelView{
     getRoot().getStyleClass().add("grid-pane");
     getRoot().setId("Pane");
     all.getChildren().add(getRoot());
+  }
+
+  public void changeAvatar() {
+    all.getChildren().remove(avatar.getImage());
+    File selectedFile = fileChooser.showOpenDialog(getStage());
+    Image image = new Image(selectedFile.toURI().toString());
+    ImageView imageView = new ImageView(image);
+    all.getChildren().add(avatar.setImage(imageView));
   }
 
   public void updateAvatarIsPenDown(boolean penStatus) {
