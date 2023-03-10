@@ -59,3 +59,14 @@ public void handlerName(){
 * Bug fixes for avatar creation
 * Update ModelView interface with IDs, and reimplement game screen
 * Create an interface called InputCollector that returns a Sting to run in the Command Box
+* Fix the bug where rotations and translations don't occure in the correct order.
+* README
+
+## Friday Goals
+* Return value box
+* Help dialog box and XML
+* Loading and saving files
+* Fix bug with translation and rotation animations together
+* Multiple Turtle support
+* JavaDoc and Testing overall
+* README
