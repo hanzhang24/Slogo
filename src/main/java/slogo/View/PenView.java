@@ -13,12 +13,9 @@ public abstract class PenView {
   private double YCor;
   private double rot;
   private boolean penActive;
-
   private boolean visible;
-
   private Color color;
 
-  //TODO checkout what kind of variable this should be
   public static final String IMAGE_PATH = "/View/Images/";
 
   public PenView() {
@@ -27,13 +24,14 @@ public abstract class PenView {
     rot = 90;
   }
 
-//  public Group getView() {
-//    Group group = new Group();
-//    group.getChildren().add(image);
-//    group.getChildren().add(line);
-//    return group;
-//  }
 
+  public void defaultPos() {
+    //TODO fix magic numbers
+    image.setRotate(90); // to orient turtle facing right - Alec :)))
+    image.setFitWidth(50);
+    image.setFitHeight(50);
+    setCoordinates(250,250);
+  }
   public void updatePen(boolean penActive) {
     this.penActive = penActive;
   }
@@ -45,8 +43,6 @@ public abstract class PenView {
   public void updatePosXY(double newX, double newY) {
     this.XCor = newX;
     this.YCor = newY;
-//    image.setX(newX + 275);
-//    image.setY(-1 * newY + 275);
   }
   public void updateRot(double newRot) { rot = (-1 * newRot + 90); } // to keep the orientation consistent - Alec :))))
   public double getXCor(){return XCor;}
@@ -58,7 +54,11 @@ public abstract class PenView {
   public ImageView getImage() {
     return image;
   }
-  protected void setImage(ImageView newImage) {image = newImage;}
+  public ImageView setImage(ImageView newImage) {
+    image = newImage;
+    defaultPos();
+    return image;
+  }
   public void setCoordinates(double X, double Y) {
     XCor = X;
     YCor = Y;

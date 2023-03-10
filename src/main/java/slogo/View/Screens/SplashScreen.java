@@ -45,8 +45,8 @@ public class SplashScreen extends Screen {
 
 
 
-    public SplashScreen(String language, ObservableList<String> languageOptions, ScreenController screenController) {
-        super(language);
+    public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions, ScreenController screenController) {
+        super(language, stage);
         this.languageOptions = languageOptions;
         this.screenController = screenController;
 
