@@ -32,7 +32,7 @@ class GameScreenTest extends DukeApplicationTest {
   @Override
   public void start(Stage stage) throws ClassNotFoundException {
 
-    thisScreen = new GameScreen("English", Color.BLACK);
+    thisScreen = new GameScreen(stage, "English", Color.BLACK);
     stage.setScene(thisScreen.makeScene(750, 750));
     Controller modelController = new Controller();
     ViewController viewController = new ViewController(thisScreen);
