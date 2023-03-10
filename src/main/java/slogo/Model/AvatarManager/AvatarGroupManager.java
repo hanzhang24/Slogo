@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
  * internally translates external IDs to internal indicies.
  */
 public class AvatarGroupManager {
+
   private static final String EXCEPTIONS_PATH = "Model.AvatarExceptions";
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private static final int START_ID = 1;
@@ -159,6 +160,16 @@ public class AvatarGroupManager {
       avatarList.add(newAvatar);
       return newAvatar;
     }
+  }
+
+  /**
+   * Removes a list of avatars from the true avatar list. Called when an operation fails, helping to
+   * revert to previous Model state.
+   *
+   * @param avatarRemovalList list of avatars to remove
+   */
+  public void removeAvatars(List<Avatar> avatarRemovalList) {
+    avatarList.removeAll(avatarRemovalList);
   }
 
   /**

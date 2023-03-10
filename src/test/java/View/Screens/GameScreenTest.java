@@ -1,61 +1,41 @@
 package View.Screens;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 
-import java.awt.*;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Slider;
-import javax.swing.text.View;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxAssert;
 import slogo.Controller.Controller;
 import slogo.Controller.ViewController;
-import slogo.ScreenController;
 import slogo.View.Screens.GameScreen;
 import util.DukeApplicationTest;
 
 
 class GameScreenTest extends DukeApplicationTest {
 
-  private static final String TITLE = "SLogo Team 6";
-  private static final Dimension DEFAULT_SIZE = new Dimension(1000, 1000);
-  private static final String DEFAULT_LANGUAGE = "English";
-  private static final ObservableList<String> LANGUAGE_OPTIONS =
-      FXCollections.observableArrayList(
-          "English",
-          "Spanish"
-      );
 
   private GameScreen thisScreen;
   private Node run;
   private TextArea area;
   private Button clear;
 
-  private Controller modelController;
-  private ViewController viewController;
-
   @Override
   public void start(Stage stage) throws ClassNotFoundException {
-    //TODO replace with the ScreenController
-    thisScreen = new GameScreen(stage, "English", Color.BLACK);
+
+    thisScreen = new GameScreen("English", Color.BLACK);
     stage.setScene(thisScreen.makeScene(750, 750));
-    modelController = new Controller();
-    viewController = new ViewController(thisScreen);
+    Controller modelController = new Controller();
+    ViewController viewController = new ViewController(thisScreen);
     modelController.setViewController(viewController);
     thisScreen.getCommandBoxView().setController(modelController);
     stage.show();
@@ -83,7 +63,7 @@ class GameScreenTest extends DukeApplicationTest {
 
   @Test
   void testUpdatePenStatus() {
-    Boolean test = false;
+    boolean test = false;
     thisScreen.updateAvatarIsPenDown(test);
     assertEquals(test, thisScreen.getAvatar().getPenActive());
     Color PenTest = Color.RED;
@@ -130,7 +110,6 @@ class GameScreenTest extends DukeApplicationTest {
     private Slider animationSlider;
     private TextArea animationInput;
 
-
     @BeforeEach
     void setUp() {
       animationSlider = lookup("#Animation-Slider").query();
@@ -156,18 +135,18 @@ class GameScreenTest extends DukeApplicationTest {
     }
     @Test
     void testInvalidAnimationStringInput(){
-      writeInputTo(animationInput, "20");
-      press(KeyCode.ENTER);
       writeInputTo(animationInput, "Hi");
       press(KeyCode.ENTER);
+      String message = getDialogMessage();
+      assertEquals("Invalid Input, must be a number", message);
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
     @Test
     void testInvalidNegativeInput(){
-      writeInputTo(animationInput, "20");
-      press(KeyCode.ENTER);
       writeInputTo(animationInput, "-10");
       press(KeyCode.ENTER);
+      String message = getDialogMessage();
+      assertEquals("Input must be from 1-100", message);
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
   }
