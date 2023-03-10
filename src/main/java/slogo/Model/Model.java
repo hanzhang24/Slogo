@@ -70,12 +70,13 @@ public interface Model {
   boolean getAvatarVisible();
 
   /**
-   * Gets the value of the variable with the specified key
+   * Gets the value of the variable with the specified key. Throws an exception in nonexistent
+   * variable names.
    *
    * @return the variable's value
    */
 
-  double getUserVariable(String key);
+  double getUserVariable(String key) throws RuntimeException;
 
   /**
    * Gets all user variables in the Model. Should not be called while there is an active operation
@@ -145,12 +146,14 @@ public interface Model {
 
   /**
    * Gets the list of active avatar external IDs
+   *
    * @return list of active avatar external IDs
    */
   List<Integer> getActiveAvatars();
 
   /**
    * Sets the list of Avatar IDs to be active. Any previously active avatars are removed
+   *
    * @param externalIDs list of new active avatarIDs
    */
   void setActiveAvatars(List<Integer> externalIDs);

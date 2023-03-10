@@ -74,14 +74,15 @@ public class HistoryView extends ContainerView {
         throw new RuntimeException(e);
       }
     }
-
   public void displayCommands(){
+    historyDisplay.clear();
     historyDisplay.setText(storedHistory);
   }
 
   public void displayHelp() { historyDisplay.setText(help);}
 
   public void displayLibrary(){
+    historyDisplay.clear();
     historyDisplay.setText(storedLibrary);
   }
 
@@ -90,7 +91,7 @@ public class HistoryView extends ContainerView {
   }
 
   public void updateCommandHistory(String userInput) {
-    storedHistory = storedHistory + "\n" + userInput;
+    storedHistory = storedHistory + userInput;
     historyDisplay.setText(storedLibrary);
   }
   public void updateLibraryHistory(String userInput) {

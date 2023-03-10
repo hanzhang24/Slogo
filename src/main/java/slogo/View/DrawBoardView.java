@@ -21,9 +21,6 @@ public class DrawBoardView {
     canvas = new Canvas(500, 500);
     gc = canvas.getGraphicsContext2D();
     HBox.getChildren().add(canvas);
-//    gc.strokeLine(250,0,250,500);
-//    gc.strokeLine(0,250,500,250);
-//    gc.fillRect(450,250, 100,10);
   }
   public Pane getContainer(){
     return HBox;
