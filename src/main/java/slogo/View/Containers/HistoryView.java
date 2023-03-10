@@ -16,12 +16,13 @@ public class HistoryView extends ContainerView {
 
   private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
   private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-
+  private static final String HISTORY_RESOURCES = "HistoryParams";
   private static final String HISTORY_REFLECTION = "ReflectionActions";
   private static final String STYLESHEET = "HistoryView.css";
   private ComboBox<String> Options;
 
   private ResourceBundle ReflectionResources;
+  private ResourceBundle HistoryResources;
 
   private String storedHistory;
   private String storedLibrary;
@@ -31,6 +32,7 @@ public class HistoryView extends ContainerView {
 
   public HistoryView(){
     ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + HISTORY_REFLECTION);
+    HistoryResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + HISTORY_RESOURCES);
   }
 
   public VBox make(List<String> options, ResourceBundle LabelResources) {
@@ -91,8 +93,14 @@ public class HistoryView extends ContainerView {
   }
 
   public void updateCommandHistory(String userInput) {
-    storedHistory = storedHistory + userInput;
-    historyDisplay.setText(storedLibrary);
+    if(storedHistory == null){
+      storedHistory = userInput;
+      storedHistory = storedHistory.concat(HistoryResources.getString("Seperator"));
+    }else{
+      storedHistory = storedHistory.concat(userInput);
+      storedHistory = storedHistory.concat(HistoryResources.getString("Seperator"));
+    }
+    historyDisplay.setText(storedHistory);
   }
   public void updateLibraryHistory(String userInput) {
     storedLibrary = storedLibrary + userInput;
