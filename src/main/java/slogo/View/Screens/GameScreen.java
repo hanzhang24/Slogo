@@ -2,6 +2,7 @@ package slogo.View.Screens;
 
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.PathTransition;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -102,7 +103,7 @@ public class GameScreen extends Screen implements ModelView{
     avatar = new Turtle();
     avatar.getImage().toBack();
     all.getChildren().add(avatar.getImage());
-    animations = new Animator(avatar);
+    animations = new Animator(avatar, canvas);
   }
 
   private void setUpGridPane() {
@@ -122,16 +123,9 @@ public class GameScreen extends Screen implements ModelView{
     avatar.updateColor(newColor);
   }
   public void updateAvatarPosXY(double newX, double newY) {
-    newX = newX + 250;
-    newY = -1*newY + 250; // converts to View coordinates
-    double OldXCor = avatar.getXCor();
-    double OldYCor = avatar.getYCor();
+
     animations.makeTranslation(newX, newY);
-    avatar.setCoordinates(newX, newY);
-    if(avatar.getPenActive()){
-//      all.getChildren().add(new Line(xCor + 25, yCor + 25, newX + 300,  newY + 300));
-        canvas.draw(OldXCor, OldYCor, avatar.getXCor(), avatar.getYCor());
-    }
+
   }
   public void updateAvatarRot(double newRot) {
     double oldRot = avatar.getRot();

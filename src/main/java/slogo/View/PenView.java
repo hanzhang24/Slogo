@@ -9,6 +9,8 @@ import javafx.scene.shape.Line;
 public abstract class PenView {
   private ImageView image;
 
+  private double modelX;
+  private double modelY;
   private double XCor;
   private double YCor;
   private double rot;
@@ -26,13 +28,6 @@ public abstract class PenView {
     visible = true;
     rot = 90;
   }
-
-//  public Group getView() {
-//    Group group = new Group();
-//    group.getChildren().add(image);
-//    group.getChildren().add(line);
-//    return group;
-//  }
 
   public void updatePen(boolean penActive) {
     this.penActive = penActive;
@@ -65,7 +60,17 @@ public abstract class PenView {
     image.setX(X-25);
     image.setY(Y-25);
   }
+  public void setModelCoordinates(double X, double Y){
+    modelX = X;
+    modelY = Y;
+  }
 
+  public double getModelX() {
+    return modelX;
+  }
+  public double getModelY(){
+    return modelY;
+  }
   public void changeVisible() {
     visible = !visible;
     image.setVisible(visible);
