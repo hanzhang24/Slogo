@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.PathTransition;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -28,8 +29,9 @@ public class GameScreen extends Screen implements ModelView{
 
   private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
   private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-  private static final String STYLESHEET = "GameScreen.css";
   private static final String GAME_SCREEN_LAYOUT = "GameScreenLayout";
+
+  private String stylesheet = "Day.css";
 
   private ResourceBundle LayoutResources;
 
@@ -65,9 +67,10 @@ public class GameScreen extends Screen implements ModelView{
     createButtons();
     createHistoryView();
     makeColorPicker();
+    makeColorSchemePicker();
 
     setScene(new Scene(all, width, height));
-    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet).toExternalForm());
 
     return getScene();
   }
@@ -82,12 +85,28 @@ public class GameScreen extends Screen implements ModelView{
     all.getChildren().add(colorPicker);
   }
 
+  private void makeColorSchemePicker() {
+    List<String> options = getPanelButtons("ColorSchemesPanel", getPanelResources());
+    String id = "Color-Scheme-Box";
+    ComboBox ColorSchemePicker = makeDropDown(options, id);
+    ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
+    all.getChildren().add(ColorSchemePicker);
+  }
+
+  private void updateScheme(Object value) {
+    getScene().getStylesheets().clear();
+    stylesheet = value.toString() + ".css";
+    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet).toExternalForm());
+    getStage().setScene(getScene());
+  }
+
   private void createHistoryView() {
     historyView = new HistoryView();
     VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()), getLabelResources());
     container.setId("History-Container");
     String[] indexes = LayoutResources.getString("HistoryView").split(",");
     setIndexes(indexes, container);
+
   }
 
   private void setIndexes(String[] indexes, Pane node) {
