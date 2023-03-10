@@ -11,6 +11,11 @@ public class Turtle extends PenView {
   public Turtle(){
     ImageView image = new ImageView(new Image(getClass().getResourceAsStream(TURTLE_URL)));
     setImage(image);
-    defaultPos();
+    image.setRotate(90); // to orient turtle facing right - Alec :)))
+    image.setFitWidth(TURTLE_SIZE);
+    image.setFitHeight(TURTLE_SIZE);
+    //TODO fix magic numbers
+    setCoordinates(250,250);
+    setModelCoordinates(0,0);
   }
 }
