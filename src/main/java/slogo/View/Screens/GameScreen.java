@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -63,11 +64,22 @@ public class GameScreen extends Screen implements ModelView{
     createCommandBox();
     createButtons();
     createHistoryView();
+    makeColorPicker();
 
     setScene(new Scene(all, width, height));
     getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
 
     return getScene();
+  }
+
+  private void makeColorPicker() {
+    ColorPicker colorPicker = new ColorPicker();
+    colorPicker.setId("Color-Selector");
+    colorPicker.setOnAction(handler -> {
+      color = colorPicker.getValue();
+      canvas.setColor(color);
+    });
+    all.getChildren().add(colorPicker);
   }
 
   private void createHistoryView() {
