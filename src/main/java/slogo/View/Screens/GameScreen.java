@@ -71,8 +71,6 @@ public class GameScreen extends Screen implements ModelView{
 
   private void setIndexes(String[] indexes, Pane node) {
     getRoot().getChildren().add(node);
-    System.out.println(indexes[0]);
-    System.out.println(indexes[1]);
     GridPane.setConstraints(node, Integer.parseInt(indexes[0]),Integer.parseInt(
         indexes[1]));
   }
