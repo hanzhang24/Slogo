@@ -14,7 +14,8 @@ import slogo.Payload.ViewPayloadManager.ChangeLog;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
 /**
- * @author Alec Liu The ModelTracker class is the default implementation of the model. It primarily
+ * @author Alec Liu
+ * The ModelTracker class is the default implementation of the model. It primarily
  * manages access to the Model through a fixed process, and keeps temporary changes while the Model
  * is being actively modified. This class defers to other classes to help get and set Model
  * infromation, or to encode Model information to prevent collisions.

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewCommand>
+  <name>equal?|==</name>
+  <syntax>== expr1 expr2</syntax>
+  <numparameters>2</numparameters>
+  <params>expr1 = first number; expr2 = second number</params>
+  <returns>Returns 1 if expr1 and expr2 are equal, and returns 0 if not</returns>
+  <description>Compares the values of two expressions</description>
+  <type>Logical Command</type>
+</viewCommand>

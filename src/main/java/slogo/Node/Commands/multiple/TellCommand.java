@@ -12,7 +12,7 @@ import java.util.List;
 public class TellCommand extends Command {
 
     public TellCommand() {
-        this.setNumArguments(2);
+        this.setNumArguments(1);
         this.setPlural(true);
     }
 

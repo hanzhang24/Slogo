@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewCommand>
+  <name>Heading</name>
+  <syntax>heading</syntax>
+  <numparameters>0</numparameters>
+  <params>N/A</params>
+  <returns>Current direction in degrees</returns>
+  <description>Return the current avatar's direction in degrees</description>
+  <type>Query Command</type>
+</viewCommand>
