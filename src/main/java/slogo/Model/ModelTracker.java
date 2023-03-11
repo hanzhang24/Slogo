@@ -26,6 +26,8 @@ public class ModelTracker implements Model {
   private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
   private static final String KEY_CODES_PATH = "Model.KeyCodes";
   private static final ResourceBundle KEY_CODES = ResourceBundle.getBundle(KEY_CODES_PATH);
+  private static final String DEFAULT_PARAMETERS_FILENAME = "DefaultParameters";
+  private static final String COLOR_REGEX = " ";
   private AvatarGroupManager avatarGroupManager;
   private OperationFormatter operationFormatter;
   private OperationWorkspace operationWorkspace;
@@ -37,7 +39,7 @@ public class ModelTracker implements Model {
    * Class constructor - default
    */
   public ModelTracker() {
-    avatarGroupManager = new AvatarGroupManager("DefaultParameters");
+    avatarGroupManager = new AvatarGroupManager(DEFAULT_PARAMETERS_FILENAME);
     initializePeripheralStructures();
   }
 
@@ -238,7 +240,7 @@ public class ModelTracker implements Model {
    * @return RGB values
    */
   private int[] parseColors(String color) {
-    String[] parsedString = color.split(" ");
+    String[] parsedString = color.split(COLOR_REGEX);
     int[] parsedColors = new int[parsedString.length];
     for (int i = 0; i < parsedColors.length; i++) {
       parsedColors[i] = Integer.parseInt(parsedString[i]);
@@ -390,7 +392,7 @@ public class ModelTracker implements Model {
     int castedRed = (int) red;
     int castedGreen = (int) green;
     int castedBlue = (int) blue;
-    String convertedColor = castedRed + " " + castedGreen + " " + castedBlue;
+    String convertedColor = castedRed + COLOR_REGEX + castedGreen + COLOR_REGEX + castedBlue;
     operationWorkspace.setChange(operationFormatter.encodeString(KEY_CODES.getString("PenColor"),
         avatarGroupManager.getCurrentAvatarID()), convertedColor);
     viewPayload.addCommand(
