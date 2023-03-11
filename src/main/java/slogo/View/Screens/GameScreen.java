@@ -41,13 +41,13 @@ import slogo.View.PopUp;
 public class GameScreen extends Screen implements ModelView {
 
   private Color color;
-  private PenView avatar;
+  private List<PenView> avatars;
   private Animator animations;
   private CommandBoxView commandBoxView;
   private HistoryView historyView;
   private DrawBoardView canvas;
-
-  private FileChooser fileChooser;
+  private final Group all;
+  private final FileChooser fileChooser;
 
   public GameScreen(Stage stage, String language, Color color) {
     super(language, stage);
@@ -56,6 +56,8 @@ public class GameScreen extends Screen implements ModelView {
     setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
     fileChooser = new FileChooser();
     this.color = color;
+    all = new Group();
+    avatars = new ArrayList<>();
   }
 
   public Scene makeScene(int width, int height) {
@@ -123,11 +125,15 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(ColorSchemePicker);
   }
 
-  private void updateScheme(Object value) {
-    getScene().getStylesheets().clear();
-    setStylesheet(value.toString() + ".css");
-    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
-    getStage().setScene(getScene());
+  /**
+   * Create both the Turtle and Animation needed to manage the Turtle
+   */
+  private void MakeTurtle() {
+    Turtle newTurtle = new Turtle();
+    newTurtle.getImage().toBack();
+    avatars.add(newTurtle);
+    all.getChildren().add(newTurtle.getImage());
+    animations = new Animator(avatars, canvas);
   }
 
   private void createHistoryView() {
@@ -142,19 +148,23 @@ public class GameScreen extends Screen implements ModelView {
    * Allows us to Change the image of the Avatar
    */
   public void changeAvatar() {
-    getAllNodes().getChildren().remove(avatar.getImage());
+    for(PenView avatar: avatars){
+      all.getChildren().remove(avatar.getImage());
+    }
     File selectedFile = fileChooser.showOpenDialog(getStage());
     Image image = new Image(selectedFile.toURI().toString());
     ImageView imageView = new ImageView(image);
-    getAllNodes().getChildren().add(avatar.setImage(imageView));
+    for(PenView avatar: avatars){
+      all.getChildren().add(avatar.setImage(imageView));
+    }
   }
 
   /**
    * Set the AvatarPenDown to whatever state is required
    * @param penStatus if the pen is down
    */
-  public void updateAvatarIsPenDown(boolean penStatus) {
-    avatar.updatePen(penStatus);
+  public void updateAvatarIsPenDown(int ExternalID, boolean penStatus) {
+    getAvatar(ExternalID).updatePen(penStatus);
   }
 
   /**
@@ -164,9 +174,9 @@ public class GameScreen extends Screen implements ModelView {
    * @param blue  blue color value
    */
   @Override
-  public void updateAvatarPenColor(int red, int green, int blue) {
+  public void updateAvatarPenColor(int ExternalID, int red, int green, int blue) {
     Color newColor = Color.rgb(red, green, blue);
-    avatar.updateColor(newColor);
+    getAvatar(ExternalID).updateColor(newColor);
   }
 
   /**
@@ -174,21 +184,21 @@ public class GameScreen extends Screen implements ModelView {
    * @param newX New x coordinate
    * @param newY New y coordinate
    */
-  public void updateAvatarPosXY(double newX, double newY) {
-    animations.makeTranslation(newX, newY);
+  public void updateAvatarPosXY(int ExternalID, double newX, double newY) {
+    animations.makeTranslation(ExternalID, newX, newY);
   }
 
   /**
    * Creates an Animation to rotate the Avatar
    * @param newRot new rotation that needs to be relative
    */
-  public void updateAvatarRot(double newRot) {
-    double oldRot = avatar.getRot();
+  public void updateAvatarRot(int ExternalID, double newRot) {
+    double oldRot = getAvatar(ExternalID).getRot();
     double saved = newRot;
-    newRot = -1 * newRot + 90;
-    newRot = (newRot - oldRot);
-    animations.makeRotation(newRot);
-    avatar.updateRot(saved);
+    newRot = -1*newRot + 90;
+    newRot = (newRot-oldRot);
+    animations.makeRotation(ExternalID, newRot);
+    getAvatar(ExternalID).updateRot(saved);
   }
 
   public double getAnimationSpeed() {
@@ -196,8 +206,8 @@ public class GameScreen extends Screen implements ModelView {
   }
 
   @Override
-  public void updateAvatarVisible(boolean state) {
-    avatar.changeVisible();
+  public void updateAvatarVisible(int ExternalID, boolean state) {
+    getAvatar(ExternalID).changeVisible();
   }
 
   /**
@@ -234,6 +244,15 @@ public class GameScreen extends Screen implements ModelView {
     historyView.updateLibraryHistory(functionDescription);
   }
 
+  @Override
+  public void createNewAvatar(int externalID, double numericDefault, boolean booleanDefault,
+      double[] colorDefault) {
+    PenView avatar = new Turtle(externalID, numericDefault, booleanDefault, colorDefault);
+    avatars.add(avatar);
+    all.getChildren().add(avatar.getImage());
+    animations.updateAvatars(avatar);
+  }
+
   /**
    * Getter method to access the CommandBoxView
    * @return the CommandBoxView
@@ -246,10 +265,14 @@ public class GameScreen extends Screen implements ModelView {
    * Getter method to access the GameScreen's Avatar
    * @return the GameScreen's current Avatar
    */
-  public PenView getAvatar(){
-    return avatar;
+  public PenView getAvatar(int ExternalID){
+    for(PenView avatar: avatars){
+      if(avatar.getID() == ExternalID){
+        return avatar;
+      }
+    }
+    return null;
   }
-
   /**
    * Clear the screen, and run the Animation from the beginning
    */
@@ -300,8 +323,8 @@ public class GameScreen extends Screen implements ModelView {
    * Updates the PenColor on the Frontend
    * @param penColor new PenColor that will be displayed
    */
-  public void updatePenColor(Color penColor) {
-    this.avatar.updateColor(penColor);
+  public void updatePenColor(int ExternalID, Color penColor) {
+    getAvatar(ExternalID).updateColor(penColor);
   }
 
   // TODO: refactor the following section to be in the right class, have no hard-coded values, add the actual help button

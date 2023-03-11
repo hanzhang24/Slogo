@@ -1,8 +1,8 @@
 package slogo.View;
 
+import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
@@ -14,7 +14,7 @@ import javafx.util.Duration;
 
 public class Animator {
   private SequentialTransition action;
-  private PenView avatar;
+  private List<PenView> avatars;
   private double animationSpeed;
 
   private Timeline boundaryChecker;
@@ -29,10 +29,10 @@ public class Animator {
    * speed to the DEFAULT_SPEED of 60, avatar just create
    * @param gameAvatar This parameter is the PenView object that needs to be moved,
    */
-  public Animator(PenView gameAvatar, DrawBoardView drawboard){
+  public Animator(List<PenView> gameAvatar, DrawBoardView drawboard){
     animationSpeed = DEFAULT_SPEED;
-    avatar = gameAvatar;
-    action = new SequentialTransition(avatar.getImage());
+    avatars = gameAvatar;
+    action = new SequentialTransition();
     canvas = drawboard;
   }
 
@@ -42,7 +42,7 @@ public class Animator {
    * @param newX is the final X coordinate the turtle should be at from the Model's perspective
    * @param newY is the final Y coordinate the turtle should be at from the View's perspective
    */
-  public void makeTranslation (double newX, double newY) {
+  public void makeTranslation (int ExternalID, double newX, double newY) {
     //    newX = ((newX + 250) % 500);
 //    if(newX < 0){
 //      newX += 500;
@@ -51,6 +51,8 @@ public class Animator {
 //    if(newY < 0){
 //      newY += 500;
 //    }
+    PenView avatar = getAvatar(ExternalID);
+
     double oldModelXCoord = avatar.getModelX();
     double oldModelYCoord = avatar.getModelY();
 //    double newViewX = newX + 250;
@@ -93,7 +95,7 @@ public class Animator {
         inBounds = false;
       }
       if(inBounds){
-        PathTransition pt = createNewPathTransition(travelingX, travelingY);
+        PathTransition pt = createNewPathTransition(avatar, travelingX, travelingY);
         action.getChildren().add(pt);
         if(avatar.getPenActive()){
           canvas.draw(travelingX - deltaX, travelingY - deltaY, travelingX, travelingY);
@@ -108,17 +110,24 @@ public class Animator {
       avatar.setCoordinates(travelingX, travelingY);
     }
     avatar.setModelCoordinates(newX, newY);
-//
-//    PathTransition pt = createNewPathTransition(newX, newY);
+
   }
 
+  private PenView getAvatar(int ExternalID){
+    for(PenView avatar: avatars){
+      if(avatar.getID() == ExternalID){
+        return avatar;
+      }
+    }
+    return null;
+  }
   /**
-   * Private Method inside the class to
-   * @param endX
-   * @param endY
-   * @return
+   * Private Method inside the class to create a newPathTransition
+   * @param endX end X Coordinate
+   * @param endY end Y Coordinate
+   * @return PathTransition from avatar's starting point to ending point
    */
-  private PathTransition createNewPathTransition(double endX, double endY) {
+  private PathTransition createNewPathTransition(PenView avatar, double endX, double endY) {
     double XStart = avatar.getXCor();
     double YStart = avatar.getYCor();
     double XLength = endX - XStart;
@@ -136,8 +145,8 @@ public class Animator {
     action.play();
   }
 
-  public Animation makeRotation (Double newRot){
-    RotateTransition rt = new RotateTransition(Duration.seconds(1), avatar.getImage());
+  public Animation makeRotation (int externalID, Double newRot){
+    RotateTransition rt = new RotateTransition(Duration.seconds(FRAMES_PER_SECOND/animationSpeed), getAvatar(externalID).getImage());
     rt.setByAngle(newRot);
     action.getChildren().add(rt);
     return action;
@@ -154,5 +163,8 @@ public class Animator {
   public void pause() {
   }
   public void step() {
+  }
+  public void updateAvatars(PenView avatar){
+    avatars.add(avatar);
   }
 }
