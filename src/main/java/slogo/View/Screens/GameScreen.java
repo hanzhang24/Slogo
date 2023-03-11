@@ -15,10 +15,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -54,10 +54,18 @@ public class GameScreen extends Screen implements ModelView {
   private CommandBoxView commandBoxView;
   private HistoryView historyView;
   private DrawBoardView canvas;
-  private Group all;
+  private final Group all;
 
-  private FileChooser fileChooser;
+  private final FileChooser fileChooser;
 
+  /**
+   * Constructor for GameScreen, which is the class that represents the screen that contains everything
+   * required to display to the user for SLogo. This class is essentially a GripPane with
+   * objects that aren't inside the GridPane such as PenView are stacked on top.
+   * @param stage the stage that the screen will be displayed on
+   * @param language The language that the GameScreen is displayed in.
+   * @param color the initial color of the trail that will be displayed in the GameScreen
+   */
   public GameScreen(Stage stage, String language, Color color) {
     super(language, stage);
     LayoutResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + GAME_SCREEN_LAYOUT);
@@ -67,10 +75,20 @@ public class GameScreen extends Screen implements ModelView {
     all = new Group();
   }
 
+  /**
+   * Return the animation speed of the current animation
+   * @return a double that represents the current animation speed
+   */
   public double getAnimationSpeed() {
     return animations.getAnimationSpeed();
   }
 
+  /**
+   * Overrides the default makeScene in Screen abstract
+   * @param width width of the Scene in pixels
+   * @param height height of the Scenes in pixels
+   * @return gives the Scene which contains all the view Objects that need to be displayed
+   */
   @Override
   public Scene makeScene(int width, int height) {
     setUpGridPane();
@@ -89,6 +107,9 @@ public class GameScreen extends Screen implements ModelView {
     return getScene();
   }
 
+  /**
+   * Sets up the ColorPicker to be added to the view
+   */
   private void makeColorPicker() {
     ColorPicker colorPicker = new ColorPicker();
     colorPicker.setId("Color-Selector");
@@ -123,15 +144,22 @@ public class GameScreen extends Screen implements ModelView {
     container.setId("History-Container");
     String[] indexes = LayoutResources.getString("HistoryView").split(",");
     setIndexes(indexes, container);
-
   }
 
-  private void setIndexes(String[] indexes, Pane node) {
-    getRoot().getChildren().add(node);
-    GridPane.setConstraints(node, Integer.parseInt(indexes[0]), Integer.parseInt(
+  /**
+   * Dictates where in the GripPane the Panes should be
+   * @param indexes the indices given by the Properties sheet
+   * @param pane The Pane that contains whatever View Class that needs to be added to GameScreen
+   */
+  private void setIndexes(String[] indexes, Pane pane) {
+    getRoot().getChildren().add(pane);
+    GridPane.setConstraints(pane, Integer.parseInt(indexes[0]),Integer.parseInt(
         indexes[1]));
   }
 
+  /**
+   * Creates the Buttons that display Animation control options and the Animation Speeds
+   */
   private void createButtons() {
     HBox container = makeInputPanel(
         getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this,
@@ -144,12 +172,18 @@ public class GameScreen extends Screen implements ModelView {
     setIndexes(indexes, container);
   }
 
+  /**
+   * Create the CommandBox to display in the GridPane
+   */
   private void createCommandBox() {
     commandBoxView = new CommandBoxView(animations);
     String[] indexes = LayoutResources.getString("CommandBox").split(",");
     setIndexes(indexes, commandBoxView.getCommandContainer());
   }
 
+  /**
+   * Create the Canvas to display in the GridPane
+   */
   private void createCanvas() {
     canvas = new DrawBoardView();
     canvas.setColor(this.color);
@@ -157,6 +191,9 @@ public class GameScreen extends Screen implements ModelView {
     setIndexes(indexes, canvas.getContainer());
   }
 
+  /**
+   * Create both the Turtle and Animation needed to manage the Turtle
+   */
   private void MakeTurtle() {
     avatar = new Turtle();
     avatar.getImage().toBack();
@@ -164,6 +201,9 @@ public class GameScreen extends Screen implements ModelView {
     animations = new Animator(avatar, canvas);
   }
 
+  /**
+   * Creates the GridPane that contains everything
+   */
   private void setUpGridPane() {
     setRoot(new GridPane());
     getRoot().getStyleClass().add("grid-pane");
@@ -171,6 +211,9 @@ public class GameScreen extends Screen implements ModelView {
     all.getChildren().add(getRoot());
   }
 
+  /**
+   * Allows us to Change the image of the Avatar
+   */
   public void changeAvatar() {
     all.getChildren().remove(avatar.getImage());
     File selectedFile = fileChooser.showOpenDialog(getStage());
@@ -179,94 +222,159 @@ public class GameScreen extends Screen implements ModelView {
     all.getChildren().add(avatar.setImage(imageView));
   }
 
+  /**
+   * Set the AvatarPenDown to whatever state is required
+   * @param penStatus if the pen is down
+   */
   public void updateAvatarIsPenDown(boolean penStatus) {
     avatar.updatePen(penStatus);
   }
 
+  /**
+   * Implements the method updateAvatarPenColor from ModelView InterFace, Updates the Avatar Pen Colo using RGB values
+   * @param red   red color value
+   * @param green green color value
+   * @param blue  blue color value
+   */
   @Override
   public void updateAvatarPenColor(int red, int green, int blue) {
     Color newColor = Color.rgb(red, green, blue);
     avatar.updateColor(newColor);
   }
 
+  /**
+   * Creates an animation to make a Translation to update the Avatar's X and Y coordinates
+   * @param newX New x coordinate
+   * @param newY New y coordinate
+   */
   public void updateAvatarPosXY(double newX, double newY) {
-
     animations.makeTranslation(newX, newY);
-
   }
 
+  /**
+   * Creates an Animation to rotate the Avatar
+   * @param newRot new rotation that needs to be relative
+   */
   public void updateAvatarRot(double newRot) {
     double oldRot = avatar.getRot();
     double saved = newRot;
     newRot = -1 * newRot + 90;
     newRot = (newRot - oldRot);
     animations.makeRotation(newRot);
-    animations.runAnimation();
     avatar.updateRot(saved);
   }
 
+  /**
+   * Update if the Avatar is visible or not
+   * @param state if the avatar is visible
+   */
   @Override
   public void updateAvatarVisible(boolean state) {
     avatar.changeVisible();
   }
 
+  /**
+   * Clear the canvas of any drawn lines
+   */
   @Override
   public void clearScreen() {
     canvas.clear();
   }
 
+  /**
+   * Update the HistoryView's display to reflect new Commands made
+   * @param userInput user inputted command added from previous successful run
+   */
   @Override
   public void updateDisplayedHistory(String userInput) {
     historyView.updateCommandHistory(userInput);
   }
 
+  /**
+   * Display the returnValues from the commands run
+   * @param returnValues sequential list of returns values as Strings
+   */
   @Override
   public void displayReturnValues(List<String> returnValues) {
   }
 
+  /**
+   * Add the commands to the UserLibrary
+   * @param functionDescription function content
+   */
   @Override
   public void addToUserLibrary(String functionDescription) {
     historyView.updateLibraryHistory(functionDescription);
   }
 
-  public CommandBoxView getCommandBoxView() {
+  /**
+   * Getter method to access the CommandBoxView
+   * @return the CommandBoxView
+   */
+  public CommandBoxView getCommandBoxView(){
     return commandBoxView;
   }
 
-  public PenView getAvatar() {
+  /**
+   * Getter method to access the GameScreen's Avatar
+   * @return the GameScreen's current Avatar
+   */
+  public PenView getAvatar(){
     return avatar;
   }
 
-  private void reset() {
+  /**
+   * Clear the screen, and run the Animation from the beginning
+   */
+  public void reset(){
     clearScreen();
-  }
-
-  private void pause() {
-    animations.pause();
-  }
-
-  private void step() {
-    animations.step();
-  }
-
-  public void run() {
-    commandBoxView.sendText();
-  }
-
-  public void clear() {
-    commandBoxView.clear();
-  }
-
-  public void initializeSequentialTransition() {
-    animations.resetAnimations();
-  }
-
-  public void playSequentialTransition() {
     animations.runAnimation();
   }
 
-  public void updatePenColor(Color penTest) {
-    this.avatar.updateColor(penTest);
+  /**
+   * Pause the Animation
+   */
+  public void pause(){
+    animations.pause();
+  }
+
+  /**
+   * Step through the Animation
+   */
+  public void step(){
+    animations.step();
+  }
+
+  /**
+   * Run the commands from the TextBox
+   */
+  public void run(){ commandBoxView.sendText(); }
+
+  /**
+   * Clear the CommandBoxView text area
+   */
+  public void clear(){ commandBoxView.clear(); }
+
+  /**
+   * Clears the animations in preparation of new Steps
+   */
+  public void initializeSequentialTransition(){
+    animations.resetAnimations();
+  }
+
+  /**
+   * Plays the Animation in GameScreen after the ViewController is done running every ViewCommand
+   */
+  public void playSequentialTransition(){
+    animations.runAnimation();
+  }
+
+  /**
+   * Updates the PenColor on the Frontend
+   * @param penColor new PenColor that will be displayed
+   */
+  public void updatePenColor(Color penColor) {
+    this.avatar.updateColor(penColor);
   }
 
   // TODO: refactor the following section to be in the right class, have no hard-coded values, add the actual help button
