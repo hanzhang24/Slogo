@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import slogo.Parser.XMLParser;
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
+import slogo.View.Containers.ReturnValueView;
 import slogo.View.Containers.SliderView;
 import slogo.View.PenView;
 import slogo.View.Avatars.Turtle;
@@ -47,6 +48,7 @@ public class GameScreen extends Screen implements ModelView {
   private HistoryView historyView;
   private DrawBoardView canvas;
   private final FileChooser fileChooser;
+  private ReturnValueView returnBox;
 
   public GameScreen(Stage stage, String language, Color color) {
     super(language, stage);
@@ -69,11 +71,18 @@ public class GameScreen extends Screen implements ModelView {
     createColorPicker();
     createColorSchemePicker();
 
+    createReturnBox();
+
     setPositions(getRoot());
     setScene(new Scene(getAllNodes(), width, height));
     getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
 
     return getScene();
+  }
+
+  private void createReturnBox() {
+    returnBox = new ReturnValueView();
+    getRoot().getChildren().add(returnBox.getReturnContainer());
   }
 
   private void createCanvas() {
@@ -227,6 +236,7 @@ public class GameScreen extends Screen implements ModelView {
    */
   @Override
   public void displayReturnValues(List<String> returnValues) {
+    returnBox.setReturnValue(returnValues);
   }
 
   /**

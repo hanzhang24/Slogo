@@ -64,6 +64,7 @@ public class HistoryView extends ContainerView {
   private TextArea makeScreen() {
     historyDisplay = new TextArea();
     historyDisplay.setId("History-Display");
+    historyDisplay.setEditable(false);
     return historyDisplay;
   }
 
