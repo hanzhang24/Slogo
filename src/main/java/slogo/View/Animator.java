@@ -21,7 +21,6 @@ public class Animator {
   public static final int FRAMES_PER_SECOND = 60;
   public static final int DEFAULT_SPEED = 60;
 
-  private Animation checked;
   private DrawBoardView canvas;
 
 
@@ -135,35 +134,6 @@ public class Animator {
   }
   public void runAnimation(){
     action.play();
-  }
-
-  private void checkAnimation(PathTransition pt, double endX, double endY) {
-    if (avatar.getXCor() > 500) {
-      System.out.println("reset to 0");
-      System.out.println(avatar.getXCor());
-      System.out.println(avatar.getImage().getX());
-      PathTransition firstHalf = createNewPathTransition(500, avatar.getYCor());
-      avatar.setCoordinates(0, avatar.getYCor());
-      PathTransition secondHalf = createNewPathTransition(endX%500, endY);
-      avatar.setCoordinates(endX%500, avatar.getYCor());
-      checked = new SequentialTransition(firstHalf, secondHalf);
-      System.out.println(avatar.getXCor());
-    }
-    if (avatar.getYCor() > 500) {
-      avatar.setCoordinates(avatar.getXCor(), 0);
-      pt.stop();
-    }
-    if(avatar.getXCor() < 0){
-      avatar.setCoordinates(500, avatar.getYCor());
-      pt.stop();
-    }
-    if(avatar.getYCor() < 0){
-      avatar.setCoordinates(avatar.getXCor(), 500);
-      pt.stop();
-    }
-    else{
-      checked = pt;
-    }
   }
 
   public Animation makeRotation (Double newRot){
