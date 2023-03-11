@@ -59,12 +59,3 @@
     -fx-border-style: solid;
 }
 
-.ball {
-    -fx-fill: ball_color;
-}
-
-/* set background to provide highlight */
-.highlight {
-    -fx-background-color: #CCFF99;
-}
-

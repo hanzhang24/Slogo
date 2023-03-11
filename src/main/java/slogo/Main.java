@@ -12,10 +12,10 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-    private static final String TITLE = "SLogo Team 7";
-    private static final Dimension DEFAULT_SIZE = new Dimension(1000, 1000);
-    private static final String DEFAULT_LANGUAGE = "English";
-    private static final ObservableList<String> LANGUAGE_OPTIONS =
+    private final String TITLE = "SLogo Team 7";
+    private final Dimension DEFAULT_SIZE = new Dimension(1000, 1000);
+    private final String DEFAULT_LANGUAGE = "English";
+    private final ObservableList<String> LANGUAGE_OPTIONS =
             FXCollections.observableArrayList(
                     "English",
                     "Spanish"
@@ -23,8 +23,7 @@ public class Main extends Application {
 
     @Override
     public void start (Stage stage) {
-        ScreenController screenController = new ScreenController(stage);
-        SplashScreen splashScreen = new SplashScreen(stage, DEFAULT_LANGUAGE, LANGUAGE_OPTIONS, screenController);
+        SplashScreen splashScreen = new SplashScreen(stage, DEFAULT_LANGUAGE, LANGUAGE_OPTIONS);
         stage.setScene(splashScreen.makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
         stage.setTitle(TITLE);
         stage.show();
