@@ -14,8 +14,7 @@ import slogo.Payload.ViewPayloadManager.ChangeLog;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
 /**
- * @author Alec Liu
- * The ModelTracker class is the default implementation of the model. It primarily
+ * @author Alec Liu The ModelTracker class is the default implementation of the model. It primarily
  * manages access to the Model through a fixed process, and keeps temporary changes while the Model
  * is being actively modified. This class defers to other classes to help get and set Model
  * infromation, or to encode Model information to prevent collisions.
@@ -28,6 +27,7 @@ public class ModelTracker implements Model {
   private static final ResourceBundle KEY_CODES = ResourceBundle.getBundle(KEY_CODES_PATH);
   private static final String DEFAULT_PARAMETERS_FILENAME = "DefaultParameters";
   private static final String COLOR_REGEX = " ";
+  private static final double UNSET_USER_VARIABLE_VALUE = 0.0;
   private AvatarGroupManager avatarGroupManager;
   private OperationFormatter operationFormatter;
   private OperationWorkspace operationWorkspace;
@@ -138,7 +138,7 @@ public class ModelTracker implements Model {
    * @param avatarRemovalList list of avatars to remove
    */
   private void undoCreations(List<Avatar> avatarRemovalList) {
-    if(avatarRemovalList != null){
+    if (avatarRemovalList != null) {
       avatarGroupManager.removeAvatars(avatarRemovalList);
     }
   }
@@ -302,25 +302,10 @@ public class ModelTracker implements Model {
       if (operationWorkspace.containsKey(key)) {
         return Double.parseDouble(operationWorkspace.getChange(key));
       } else {
-        return fetchUserVariableFromSource(key);
+        return userVariables.getOrDefault(key, UNSET_USER_VARIABLE_VALUE);
       }
     } else {
-      return fetchUserVariableFromSource(key);
-    }
-  }
-
-  /**
-   * Attempts to retrieve a user variable from the original source map. Throws an error if the
-   * variable does not exist.
-   *
-   * @param key variable name
-   * @return value of the variable
-   */
-  private Double fetchUserVariableFromSource(String key) throws RuntimeException {
-    if (userVariables.containsKey(key)) {
-      return userVariables.get(key);
-    } else {
-      throw new RuntimeException(EXCEPTIONS.getString("NonexistentUserVariable"));
+      return userVariables.getOrDefault(key, UNSET_USER_VARIABLE_VALUE);
     }
   }
 
