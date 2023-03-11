@@ -1,38 +1,20 @@
 package slogo.View.Screens;
 
-import java.util.ArrayList;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Node;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.ScreenController;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class SplashScreen extends Screen {
-
-    private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
-    private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-    private static final String STYLESHEET = "SplashScreen.css";
-//
-//    private ResourceBundle LabelResources;
-//    private ResourceBundle ReflectionResources;
-//    private ResourceBundle PanelResources;
-
     private String chosenLanguage;
     private Color chosenColor;
     private ColorPicker colorPicker;
@@ -41,39 +23,40 @@ public class SplashScreen extends Screen {
     ObservableList<String> languageOptions;
     private ScreenController screenController;
 
-    private Scene scene;
-
-
-
-    public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions, ScreenController screenController) {
+    public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions) {
         super(language, stage);
+        setScreenLayout("SplashScreenLayout");
+        setStylesheet("SplashScreen.css");
+        setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
         this.languageOptions = languageOptions;
-        this.screenController = screenController;
-
+        this.screenController = new ScreenController(stage);
     }
 
     public Scene makeScene(int width, int height) {
-        GridPane root = new GridPane();
-        root.getStyleClass().add("grid-pane");
-        root.setId("Pane");
+        String[] indexes;
+        setPane(new GridPane());
 
-        Label title = makeLabel("Group", getLabelResources());
-        Node inputPanel = makeInputPanel(getPanelButtons("NavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
+        Label title = makeLabel("Title", getLabelResources());
+        getRoot().getChildren().add(title);
+
+        Node startButton = makeInputPanel(getPanelButtons("NavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
+        getRoot().getChildren().add(startButton);
+        startButton.setId("startButton");
+
 
         colorPicker = new ColorPicker();
-        colorPicker.setId("Color-Selector");
+        colorPicker.setId("colorPicker");
+        getRoot().getChildren().add(colorPicker);
 
         languagePicker = new ComboBox(languageOptions);
-        languagePicker.setId("Language-Box");
+        languagePicker.setId("languagePicker");
+        getRoot().getChildren().add(languagePicker);
 
-        root.add(inputPanel, 0, 30);
-        root.add(title, 0, 25);
-        root.add(colorPicker, 0, 27);
-        root.add(languagePicker, 0, 26);
+        setPositions(getRoot());
 
-        scene = new Scene(root, width, height);
-        scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
-        return scene;
+        setScene(new Scene(getAllNodes(), width, height));
+        getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
+        return getScene();
     }
 
     public void nextPage() throws ClassNotFoundException {
