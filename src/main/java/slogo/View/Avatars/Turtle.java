@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 
 public class Turtle extends PenView {
 
-  private static final String TURTLE_URL = IMAGE_PATH + "avatar.png";
+  private static final String TURTLE_URL = IMAGE_PATH + "turtle.png";
   private static final double TURTLE_SIZE = 50;
 
   public Turtle(){
