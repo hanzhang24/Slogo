@@ -1,0 +1,1 @@
+dotimes [ :i 5 ] [ repeat 5 [ repeat 8 [fd + 20 * :i 10 rt 45 ] rt 72 ] ]
