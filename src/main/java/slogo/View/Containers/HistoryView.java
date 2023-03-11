@@ -104,6 +104,13 @@ public class HistoryView extends ContainerView {
     historyDisplay.setText(storedHistory);
   }
   public void updateLibraryHistory(String userInput) {
-    storedLibrary = storedLibrary + userInput;
+    if(storedLibrary == null){
+      storedLibrary = userInput;
+      storedLibrary = storedHistory.concat(HistoryResources.getString("Seperator"));
+    }else{
+      storedLibrary = storedHistory.concat(userInput);
+      storedLibrary = storedHistory.concat(HistoryResources.getString("Seperator"));
+    }
+    historyDisplay.setText(storedLibrary);
   }
 }
