@@ -1,32 +1,20 @@
 package slogo.View.Screens;
 
-import java.util.ArrayList;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Node;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.ScreenController;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class SplashScreen extends Screen {
-
-    private final String STYLESHEET = "SplashScreen.css";
-
     private String chosenLanguage;
     private Color chosenColor;
     private ColorPicker colorPicker;
@@ -37,6 +25,9 @@ public class SplashScreen extends Screen {
 
     public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions) {
         super(language, stage);
+        setScreenLayout("GameScreenLayout");
+        setStylesheet("SplashScreen.css");
+        setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
         this.languageOptions = languageOptions;
         this.screenController = new ScreenController(stage);
     }
@@ -46,6 +37,8 @@ public class SplashScreen extends Screen {
 
         Label title = makeLabel("Group", getLabelResources());
         getAllObjects().getChildren().add(title);
+        String[] indexes = getLayoutResources().getString("Title").split(",");
+        setIndexes(indexes, title);
 
         Node inputPanel = makeInputPanel(getPanelButtons("NavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
         getAllObjects().getChildren().add(inputPanel);
@@ -59,7 +52,7 @@ public class SplashScreen extends Screen {
         getAllObjects().getChildren().add(languagePicker);
 
         setScene(new Scene(getAllObjects(), width, height));
-        getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + STYLESHEET).toExternalForm());
+        getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
         return getScene();
     }
 

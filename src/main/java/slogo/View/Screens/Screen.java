@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -24,9 +25,13 @@ public abstract class Screen {
   private final String REFLECTION_RESOURCES = "ReflectionActions";
   private final String PANEL_RESOURCES = "PanelActions";
 
+  private String screenLayout;
+  private String Stylesheet;
+
   private ResourceBundle LabelResources;
   private ResourceBundle ReflectionResources;
   private ResourceBundle PanelResources;
+  private ResourceBundle LayoutResources;
 
   private Pane root;
   private Scene scene;
@@ -42,14 +47,14 @@ public abstract class Screen {
     ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + REFLECTION_RESOURCES);
     PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
   }
+
   protected void setPane(Pane pane) {
     root = pane;
     root.getStyleClass().add("grid-pane");
     root.setId("Pane");
     allObjects.getChildren().add(root);
   }
-
-  protected void setIndexes(String[] indexes, Pane node) {
+  protected void setIndexes(String[] indexes, Node node) {
     getRoot().getChildren().add(node);
     GridPane.setConstraints(node, Integer.parseInt(indexes[0]),Integer.parseInt(
             indexes[1]));
@@ -156,5 +161,27 @@ public abstract class Screen {
   public String getDEFAULT_RESOURCE_FOLDER() {
     return DEFAULT_RESOURCE_FOLDER;
   }
+  public String getScreenLayout() {
+    return screenLayout;
+  }
+  public void setScreenLayout(String screenLayout) {
+    this.screenLayout = screenLayout;
+  }
+  public String getStylesheet() {
+    return Stylesheet;
+  }
+  public void setStylesheet(String STYLESHEET) {
+    this.Stylesheet = STYLESHEET;
+  }
+  public ResourceBundle getLayoutResources() {
+    return LayoutResources;
+  }
+  public void setLayoutResources(ResourceBundle layoutResources) {
+    LayoutResources = layoutResources;
+  }
+  public String getDEFAULT_RESOURCE_PACKAGE() {
+    return DEFAULT_RESOURCE_PACKAGE;
+  }
+
 
 }

@@ -9,7 +9,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -20,17 +19,11 @@ import slogo.View.PenView;
 import slogo.View.Avatars.Turtle;
 import slogo.View.Containers.CommandBoxView;
 import slogo.View.DrawBoardView;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 public class GameScreen extends Screen implements ModelView{
-
-  private final String GAME_SCREEN_LAYOUT = "GameScreenLayout";
-
-  private String stylesheet = "Day.css";
-  private ResourceBundle LayoutResources;
 
   private Color color;
   private PenView avatar;
@@ -43,7 +36,9 @@ public class GameScreen extends Screen implements ModelView{
 
   public GameScreen(Stage stage, String language, Color color) {
     super(language, stage);
-    LayoutResources = ResourceBundle.getBundle(getDEFAULT_RESOURCE_FOLDER() + GAME_SCREEN_LAYOUT);
+    setScreenLayout("GameScreenLayout");
+    setStylesheet("Day.css");
+    setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
     fileChooser = new FileChooser();
     this.color = color;
   }
@@ -60,7 +55,7 @@ public class GameScreen extends Screen implements ModelView{
     makeColorSchemePicker();
 
     setScene(new Scene(getAllObjects(), width, height));
-    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + stylesheet).toExternalForm());
+    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
 
     return getScene();
   }
@@ -85,8 +80,8 @@ public class GameScreen extends Screen implements ModelView{
 
   private void updateScheme(Object value) {
     getScene().getStylesheets().clear();
-    stylesheet = value.toString() + ".css";
-    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + stylesheet).toExternalForm());
+    setStylesheet(value.toString() + ".css");
+    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
     getStage().setScene(getScene());
   }
 
@@ -94,7 +89,7 @@ public class GameScreen extends Screen implements ModelView{
     historyView = new HistoryView();
     VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()), getLabelResources());
     container.setId("History-Container");
-    String[] indexes = LayoutResources.getString("HistoryView").split(",");
+    String[] indexes = getLayoutResources().getString("HistoryView").split(",");
     setIndexes(indexes, container);
 
   }
@@ -105,20 +100,20 @@ public class GameScreen extends Screen implements ModelView{
 
     SliderView animationInputs  = new SliderView(animations);
     container.getChildren().add(animationInputs.getSliderContainer());
-    String[] indexes = LayoutResources.getString("ButtonPanel").split(",");
+    String[] indexes = getLayoutResources().getString("ButtonPanel").split(",");
     setIndexes(indexes, container);
   }
 
   private void createCommandBox() {
     commandBoxView = new CommandBoxView(animations);
-    String[] indexes = LayoutResources.getString("CommandBox").split(",");
+    String[] indexes = getLayoutResources().getString("CommandBox").split(",");
     setIndexes(indexes, commandBoxView.getCommandContainer());
   }
 
   private void createCanvas() {
     canvas = new DrawBoardView();
     canvas.setColor(this.color);
-    String[] indexes = LayoutResources.getString("Canvas").split(",");
+    String[] indexes = getLayoutResources().getString("Canvas").split(",");
     setIndexes(indexes, canvas.getContainer());
   }
 
