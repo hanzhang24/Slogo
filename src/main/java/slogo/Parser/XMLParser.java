@@ -29,11 +29,11 @@ public class XMLParser {
                     String name = element.getNodeName();
                     String value = element.getTextContent();
                     map.put(name, value);
-                    System.out.println(name);
+                    // System.out.println(name);
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
             //TODO add pop-up error message
         }
     }
@@ -45,6 +45,8 @@ public class XMLParser {
     public String getName() {
         return map.get("name");
     }
+
+    public String getSyntax() {return map.get("syntax");}
 
     public String getFunctionClass() {
         return map.get("function-class");

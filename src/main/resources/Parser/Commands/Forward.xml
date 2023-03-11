@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewCommand>
+  <name>Forward|fd</name>
+  <syntax>fd [distance]</syntax>
+  <numparameters>1</numparameters>
+  <params>distance</params>
+  <returns>Distance moved as a number</returns>
+  <description>Moves the avatar forward by [distance] in the direction it is facing</description>
+  <type>Avatar Command</type>
+</viewCommand>

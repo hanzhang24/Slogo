@@ -1,9 +1,19 @@
 package slogo.View.Screens;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.animation.PathTransition;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import slogo.Parser.XMLParser;
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
 import slogo.View.Containers.SliderView;
@@ -24,11 +35,13 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import slogo.View.PopUp;
 
-public class GameScreen extends Screen implements ModelView{
+public class GameScreen extends Screen implements ModelView {
 
   private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
-  private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
+  private static final String DEFAULT_RESOURCE_FOLDER =
+      "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
   private static final String GAME_SCREEN_LAYOUT = "GameScreenLayout";
 
   private String stylesheet = "Day.css";
@@ -88,8 +101,8 @@ public class GameScreen extends Screen implements ModelView{
     makeColorSchemePicker();
 
     setScene(new Scene(all, width, height));
-    getScene().getStylesheets().add(
-        Objects.requireNonNull(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet)).toExternalForm());
+    getScene().getStylesheets()
+        .add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet).toExternalForm());
 
     return getScene();
   }
@@ -111,20 +124,23 @@ public class GameScreen extends Screen implements ModelView{
     List<String> options = getPanelButtons("ColorSchemesPanel", getPanelResources());
     String id = "Color-Scheme-Box";
     ComboBox ColorSchemePicker = makeDropDown(options, id);
-    ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
+    ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(
+        ((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
     all.getChildren().add(ColorSchemePicker);
   }
 
   private void updateScheme(Object value) {
     getScene().getStylesheets().clear();
     stylesheet = value.toString() + ".css";
-    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet).toExternalForm());
+    getScene().getStylesheets()
+        .add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet).toExternalForm());
     getStage().setScene(getScene());
   }
 
   private void createHistoryView() {
     historyView = new HistoryView();
-    VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()), getLabelResources());
+    VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()),
+        getLabelResources());
     container.setId("History-Container");
     String[] indexes = LayoutResources.getString("HistoryView").split(",");
     setIndexes(indexes, container);
@@ -145,10 +161,12 @@ public class GameScreen extends Screen implements ModelView{
    * Creates the Buttons that display Animation control options and the Animation Speeds
    */
   private void createButtons() {
-    HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
+    HBox container = makeInputPanel(
+        getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this,
+        getLabelResources(), getReflectionResources());
     container.setId("Animation-Panel");
 
-    SliderView animationInputs  = new SliderView(animations);
+    SliderView animationInputs = new SliderView(animations);
     container.getChildren().add(animationInputs.getSliderContainer());
     String[] indexes = LayoutResources.getString("ButtonPanel").split(",");
     setIndexes(indexes, container);
@@ -240,8 +258,8 @@ public class GameScreen extends Screen implements ModelView{
   public void updateAvatarRot(double newRot) {
     double oldRot = avatar.getRot();
     double saved = newRot;
-    newRot = -1*newRot + 90;
-    newRot = (newRot-oldRot);
+    newRot = -1 * newRot + 90;
+    newRot = (newRot - oldRot);
     animations.makeRotation(newRot);
     avatar.updateRot(saved);
   }
@@ -357,5 +375,85 @@ public class GameScreen extends Screen implements ModelView{
    */
   public void updatePenColor(Color penColor) {
     this.avatar.updateColor(penColor);
+  }
+
+  // TODO: refactor the following section to be in the right class, have no hard-coded values, add the actual help button
+
+  /**
+   * Handler function to display help dialog box
+   */
+  public void displayHelp() {
+    String pathName = "Parser.Commands.English";
+    ResourceBundle resourceBundle = ResourceBundle.getBundle(pathName);
+    Enumeration<String> allCommands = resourceBundle.getKeys();
+    List<String> allCommandKeys = formatKeysAsString(allCommands);
+    ChoiceDialog choiceDialog = new ChoiceDialog("Select a command...", allCommandKeys);
+    choiceDialog.setTitle("Help");
+    choiceDialog.setHeaderText("Command Documentation");
+
+    Optional<String> result = choiceDialog.showAndWait();
+    if (result.isPresent()) {
+      fetchAndDisplayDocumentation((String) choiceDialog.getSelectedItem());
+    }
+  }
+
+  /**
+   * Formats the valid command names as a list of Strings to display in the ChoiceDialog
+   *
+   * @param allCommands keys of every supported command
+   * @return list of formatted Strings including every valid command
+   */
+  private static List<String> formatKeysAsString(Enumeration<String> allCommands) {
+    List<String> allCommandKeys = new ArrayList<>();
+    while (allCommands.hasMoreElements()) {
+      String command = allCommands.nextElement();
+      if (command.contains(".")) {
+        String[] parsed = command.split("\\.");
+        command = parsed[parsed.length - 1];
+      }
+      allCommandKeys.add(command);
+    }
+    Collections.sort(allCommandKeys);
+    return allCommandKeys;
+  }
+
+  /**
+   * Fetches the correct XML file for a command and displays its contents in a dialog box
+   *
+   * @param commandName name of the requested command
+   */
+  private void fetchAndDisplayDocumentation(String commandName) {
+    if (commandName.equals("Select a command...")) {
+      return;
+    }
+    String USER_DIRECTORY = System.getProperty("user.dir");
+    try {
+      XMLParser xmlParser = new XMLParser(
+          USER_DIRECTORY + "/src/main/resources/Parser/Commands/" + commandName + ".xml");
+      Alert alert = formatDocumentationDialog(xmlParser);
+      alert.showAndWait();
+    } catch (Exception e) {
+      new PopUp("Sorry, the documentation for this command has not been added yet... coming soon!");
+    }
+
+  }
+
+  /**
+   * Using the given XML parser, build an Alert to display all information
+   *
+   * @param xmlParser configured XML parser for the specific command
+   * @return configured alert
+   */
+  private static Alert formatDocumentationDialog(XMLParser xmlParser) {
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle("Command Documentation");
+    alert.setHeaderText("Learn More:");
+    String body = String.format(
+        "Name:    %s\nSyntax:    %s\nNumber of Parameters:    %s\nParams:    %s\nReturns:    %s\nDescription:    %s\nClassification:    %s",
+        xmlParser.getName(), xmlParser.getSyntax(), xmlParser.getNumParameters(),
+        xmlParser.getParams(), xmlParser.getReturns(), xmlParser.getDescription(),
+        xmlParser.getType());
+    alert.setContentText(body);
+    return alert;
   }
 }
