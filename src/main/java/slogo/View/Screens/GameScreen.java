@@ -28,10 +28,11 @@ public class GameScreen extends Screen implements ModelView{
 
   private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
   private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-  private static final String STYLESHEET = "GameScreen.css";
   private static final String GAME_SCREEN_LAYOUT = "GameScreenLayout";
 
-  private final ResourceBundle LayoutResources;
+  private String stylesheet = "Day.css";
+
+  private ResourceBundle LayoutResources;
 
   private Color color;
   private PenView avatar;
@@ -83,6 +84,7 @@ public class GameScreen extends Screen implements ModelView{
     createButtons();
     createHistoryView();
     makeColorPicker();
+    makeColorSchemePicker();
 
     setScene(new Scene(all, width, height));
     getScene().getStylesheets().add(
@@ -104,15 +106,28 @@ public class GameScreen extends Screen implements ModelView{
     all.getChildren().add(colorPicker);
   }
 
-  /**
-   * Sets up the HistoryView to be added to the View
-   */
+  private void makeColorSchemePicker() {
+    List<String> options = getPanelButtons("ColorSchemesPanel", getPanelResources());
+    String id = "Color-Scheme-Box";
+    ComboBox ColorSchemePicker = makeDropDown(options, id);
+    ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
+    all.getChildren().add(ColorSchemePicker);
+  }
+
+  private void updateScheme(Object value) {
+    getScene().getStylesheets().clear();
+    stylesheet = value.toString() + ".css";
+    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet).toExternalForm());
+    getStage().setScene(getScene());
+  }
+
   private void createHistoryView() {
     historyView = new HistoryView();
     VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()), getLabelResources());
     container.setId("History-Container");
     String[] indexes = LayoutResources.getString("HistoryView").split(",");
     setIndexes(indexes, container);
+
   }
 
   /**

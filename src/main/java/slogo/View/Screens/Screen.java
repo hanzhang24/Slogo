@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -20,7 +21,6 @@ public abstract class Screen {
   private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
   private static final String REFLECTION_RESOURCES = "ReflectionActions";
   private static final String PANEL_RESOURCES = "PanelActions";
-  private static final String STYLESHEET = "GameScreen.css";
 
   private ResourceBundle LabelResources;
   private ResourceBundle ReflectionResources;
@@ -80,7 +80,6 @@ public abstract class Screen {
     }
     return result;
   }
-
   // makes a button using either an image or a label
   private Button makeButton (Screen screen, String property, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
     // represent all supported image suffixes
@@ -99,6 +98,18 @@ public abstract class Screen {
     });
     result.setId(property);
     return result;
+  }
+  protected ComboBox makeDropDown(List<String> items, String id) {
+    ComboBox box = new ComboBox();
+    box.setId(id);
+    for(String s:items) {
+      box.getItems().add(s);
+    }
+
+    for (int i = 0; i < items.size(); i++) {
+       box.getItems().set(i, getLabelResources().getString(items.get(i)));
+    }
+    return box;
   }
 
 
