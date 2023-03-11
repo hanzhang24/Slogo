@@ -3,7 +3,7 @@ package slogo.View.Screens;
 import java.io.File;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.animation.PathTransition;
+
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
@@ -27,8 +27,6 @@ import javafx.scene.paint.Color;
 
 public class GameScreen extends Screen implements ModelView{
 
-  private final String DEFAULT_RESOURCE_PACKAGE = "View.";
-  private final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
   private final String GAME_SCREEN_LAYOUT = "GameScreenLayout";
 
   private String stylesheet = "Day.css";
@@ -40,21 +38,19 @@ public class GameScreen extends Screen implements ModelView{
   private CommandBoxView commandBoxView;
   private HistoryView historyView;
   private DrawBoardView canvas;
-  private Group all;
 
   private FileChooser fileChooser;
 
   public GameScreen(Stage stage, String language, Color color) {
     super(language, stage);
-    LayoutResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + GAME_SCREEN_LAYOUT);
+    LayoutResources = ResourceBundle.getBundle(getDEFAULT_RESOURCE_FOLDER() + GAME_SCREEN_LAYOUT);
     fileChooser = new FileChooser();
-    setRoot(new GridPane());
     this.color = color;
-    all = new Group();
   }
 
   public Scene makeScene(int width, int height) {
-    setUpGridPane();
+    setPane(new GridPane());
+
     createCanvas();
     MakeTurtle();
     createCommandBox();
@@ -63,8 +59,8 @@ public class GameScreen extends Screen implements ModelView{
     makeColorPicker();
     makeColorSchemePicker();
 
-    setScene(new Scene(all, width, height));
-    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet).toExternalForm());
+    setScene(new Scene(getAllObjects(), width, height));
+    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + stylesheet).toExternalForm());
 
     return getScene();
   }
@@ -76,7 +72,7 @@ public class GameScreen extends Screen implements ModelView{
       color = colorPicker.getValue();
       canvas.setColor(color);
     });
-    all.getChildren().add(colorPicker);
+    getAllObjects().getChildren().add(colorPicker);
   }
 
   private void makeColorSchemePicker() {
@@ -84,13 +80,13 @@ public class GameScreen extends Screen implements ModelView{
     String id = "Color-Scheme-Box";
     ComboBox ColorSchemePicker = makeDropDown(options, id);
     ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
-    all.getChildren().add(ColorSchemePicker);
+    getAllObjects().getChildren().add(ColorSchemePicker);
   }
 
   private void updateScheme(Object value) {
     getScene().getStylesheets().clear();
     stylesheet = value.toString() + ".css";
-    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet).toExternalForm());
+    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + stylesheet).toExternalForm());
     getStage().setScene(getScene());
   }
 
@@ -101,12 +97,6 @@ public class GameScreen extends Screen implements ModelView{
     String[] indexes = LayoutResources.getString("HistoryView").split(",");
     setIndexes(indexes, container);
 
-  }
-
-  private void setIndexes(String[] indexes, Pane node) {
-    getRoot().getChildren().add(node);
-    GridPane.setConstraints(node, Integer.parseInt(indexes[0]),Integer.parseInt(
-        indexes[1]));
   }
 
   private void createButtons() {
@@ -135,23 +125,16 @@ public class GameScreen extends Screen implements ModelView{
   private void MakeTurtle() {
     avatar = new Turtle();
     avatar.getImage().toBack();
-    all.getChildren().add(avatar.getImage());
+    getAllObjects().getChildren().add(avatar.getImage());
     animations = new Animator(avatar, canvas);
   }
 
-  private void setUpGridPane() {
-    setRoot(new GridPane());
-    getRoot().getStyleClass().add("grid-pane");
-    getRoot().setId("Pane");
-    all.getChildren().add(getRoot());
-  }
-
   public void changeAvatar() {
-    all.getChildren().remove(avatar.getImage());
+    getAllObjects().getChildren().remove(avatar.getImage());
     File selectedFile = fileChooser.showOpenDialog(getStage());
     Image image = new Image(selectedFile.toURI().toString());
     ImageView imageView = new ImageView(image);
-    all.getChildren().add(avatar.setImage(imageView));
+    getAllObjects().getChildren().add(avatar.setImage(imageView));
   }
 
   public void updateAvatarIsPenDown(boolean penStatus) {

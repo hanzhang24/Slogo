@@ -35,10 +35,4 @@ public class ScreenController {
     gameScreen.getCommandBoxView().setController(modelController);
   }
 
-  public GameScreen getGameScreen() {
-    return gameScreen;
-  }
-  public void setGameScreen(GameScreen screen){
-    gameScreen = screen;
-  }
 }

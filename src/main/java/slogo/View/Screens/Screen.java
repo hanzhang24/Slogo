@@ -6,10 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -29,16 +31,29 @@ public abstract class Screen {
   private Pane root;
   private Scene scene;
   private Stage stage;
+  private Group allObjects;
 
 
 
   public Screen(String language, Stage stage) {
     this.stage = stage;
+    allObjects = new Group();
     LabelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
     ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + REFLECTION_RESOURCES);
     PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
   }
+  protected void setPane(Pane pane) {
+    root = pane;
+    root.getStyleClass().add("grid-pane");
+    root.setId("Pane");
+    allObjects.getChildren().add(root);
+  }
 
+  protected void setIndexes(String[] indexes, Pane node) {
+    getRoot().getChildren().add(node);
+    GridPane.setConstraints(node, Integer.parseInt(indexes[0]),Integer.parseInt(
+            indexes[1]));
+  }
   protected Label makeLabel (String property, ResourceBundle LabelResources) {
     Label label = new Label(LabelResources.getString(property));
     return label;
@@ -53,6 +68,18 @@ public abstract class Screen {
       result.getChildren().add(makeButton(screen, a, LabelResources, ReflectionResources));
     }
     return result;
+  }
+  protected ComboBox makeDropDown(List<String> items, String id) {
+    ComboBox box = new ComboBox();
+    box.setId(id);
+    for(String s:items) {
+      box.getItems().add(s);
+    }
+
+    for (int i = 0; i < items.size(); i++) {
+       box.getItems().set(i, getLabelResources().getString(items.get(i)));
+    }
+    return box;
   }
   private Button makeButton (Screen screen, String property, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
     // represent all supported image suffixes
@@ -72,18 +99,6 @@ public abstract class Screen {
     });
     result.setId(property);
     return result;
-  }
-  protected ComboBox makeDropDown(List<String> items, String id) {
-    ComboBox box = new ComboBox();
-    box.setId(id);
-    for(String s:items) {
-      box.getItems().add(s);
-    }
-
-    for (int i = 0; i < items.size(); i++) {
-       box.getItems().set(i, getLabelResources().getString(items.get(i)));
-    }
-    return box;
   }
 
 
@@ -131,6 +146,15 @@ public abstract class Screen {
   }
   public void setStage(Stage stage) {
     this.stage = stage;
+  }
+  public Group getAllObjects() {
+    return allObjects;
+  }
+  public void setAllObjects(Group allObjects) {
+    this.allObjects = allObjects;
+  }
+  public String getDEFAULT_RESOURCE_FOLDER() {
+    return DEFAULT_RESOURCE_FOLDER;
   }
 
 }

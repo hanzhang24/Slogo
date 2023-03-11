@@ -25,9 +25,7 @@ import java.util.ResourceBundle;
 
 public class SplashScreen extends Screen {
 
-    private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
-    private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-    private static final String STYLESHEET = "SplashScreen.css";
+    private final String STYLESHEET = "SplashScreen.css";
 
     private String chosenLanguage;
     private Color chosenColor;
@@ -44,27 +42,24 @@ public class SplashScreen extends Screen {
     }
 
     public Scene makeScene(int width, int height) {
-        GridPane root = new GridPane();
-        root.getStyleClass().add("grid-pane");
-        root.setId("Pane");
+        setPane(new GridPane());
 
         Label title = makeLabel("Group", getLabelResources());
+        getAllObjects().getChildren().add(title);
+
         Node inputPanel = makeInputPanel(getPanelButtons("NavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
+        getAllObjects().getChildren().add(inputPanel);
 
         colorPicker = new ColorPicker();
         colorPicker.setId("Color-Selector");
+        getAllObjects().getChildren().add(colorPicker);
 
         languagePicker = new ComboBox(languageOptions);
         languagePicker.setId("Language-Box");
+        getAllObjects().getChildren().add(languagePicker);
 
-        //GET RID OF MAGIC NUMBERS
-        root.add(inputPanel, 0, 30);
-        root.add(title, 0, 25);
-        root.add(colorPicker, 0, 27);
-        root.add(languagePicker, 0, 26);
-
-        setScene(new Scene(root, width, height));
-        getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+        setScene(new Scene(getAllObjects(), width, height));
+        getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + STYLESHEET).toExternalForm());
         return getScene();
     }
 
