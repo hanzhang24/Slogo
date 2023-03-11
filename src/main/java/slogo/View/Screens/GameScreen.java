@@ -42,11 +42,11 @@ public class GameScreen extends Screen implements ModelView {
 
   private Color color;
   private List<PenView> avatars;
+  private PenView avatar;
   private Animator animations;
   private CommandBoxView commandBoxView;
   private HistoryView historyView;
   private DrawBoardView canvas;
-  private final Group all;
   private final FileChooser fileChooser;
 
   public GameScreen(Stage stage, String language, Color color) {
@@ -56,7 +56,6 @@ public class GameScreen extends Screen implements ModelView {
     setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
     fileChooser = new FileChooser();
     this.color = color;
-    all = new Group();
     avatars = new ArrayList<>();
   }
 
@@ -89,7 +88,7 @@ public class GameScreen extends Screen implements ModelView {
     avatar = new Turtle();
     avatar.getImage().toBack();
     getAllNodes().getChildren().add(avatar.getImage());
-    animations = new Animator(avatar, canvas);
+//    animations = new Animator(avatar, canvas);
   }
 
   private void createCommandBox() {
@@ -125,6 +124,14 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(ColorSchemePicker);
   }
 
+  private void updateScheme(Object value) {
+    getScene().getStylesheets().clear();
+    setStylesheet(value.toString() + ".css");
+    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
+    getStage().setScene(getScene());
+  }
+
+
   /**
    * Create both the Turtle and Animation needed to manage the Turtle
    */
@@ -132,7 +139,7 @@ public class GameScreen extends Screen implements ModelView {
     Turtle newTurtle = new Turtle();
     newTurtle.getImage().toBack();
     avatars.add(newTurtle);
-    all.getChildren().add(newTurtle.getImage());
+    getAllNodes().getChildren().add(newTurtle.getImage());
     animations = new Animator(avatars, canvas);
   }
 
@@ -149,13 +156,13 @@ public class GameScreen extends Screen implements ModelView {
    */
   public void changeAvatar() {
     for(PenView avatar: avatars){
-      all.getChildren().remove(avatar.getImage());
+      getAllNodes().getChildren().remove(avatar.getImage());
     }
     File selectedFile = fileChooser.showOpenDialog(getStage());
     Image image = new Image(selectedFile.toURI().toString());
     ImageView imageView = new ImageView(image);
     for(PenView avatar: avatars){
-      all.getChildren().add(avatar.setImage(imageView));
+      getAllNodes().getChildren().add(avatar.setImage(imageView));
     }
   }
 
@@ -249,7 +256,7 @@ public class GameScreen extends Screen implements ModelView {
       double[] colorDefault) {
     PenView avatar = new Turtle(externalID, numericDefault, booleanDefault, colorDefault);
     avatars.add(avatar);
-    all.getChildren().add(avatar.getImage());
+    getAllNodes().getChildren().add(avatar.getImage());
     animations.updateAvatars(avatar);
   }
 

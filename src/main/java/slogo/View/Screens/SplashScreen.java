@@ -14,6 +14,12 @@ import slogo.ScreenController;
 import java.util.ResourceBundle;
 
 
+/**
+ * @description: Splash Screen is the first scene presented to the client.
+ * It gives them the option to set the language and color of the screen before
+ * continuing on to the actual simulation.
+ * @author aryankothari
+ */
 public class SplashScreen extends Screen {
     private String chosenLanguage;
     private Color chosenColor;
@@ -32,6 +38,13 @@ public class SplashScreen extends Screen {
         this.screenController = new ScreenController(stage);
     }
 
+    /**
+     * makeScreen brings together all the different nodes on the screen and displays them
+     * @author aryankothari
+     * @param width
+     * @param height
+     * @return
+     */
     public Scene makeScene(int width, int height) {
         String[] indexes;
         setPane(new GridPane());
@@ -59,6 +72,12 @@ public class SplashScreen extends Screen {
         return getScene();
     }
 
+    /**
+     * nextPage() gets run when the user clicks the "Start" button. It loads the color and language to the
+     * instance variables and then passes them over to the screenController, which then is responsible for
+     * switching the screen
+     * @throws ClassNotFoundException
+     */
     public void nextPage() throws ClassNotFoundException {
         try {
             chosenLanguage = languagePicker.getValue().toString();
