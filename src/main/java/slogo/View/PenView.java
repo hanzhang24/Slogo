@@ -14,6 +14,7 @@ public abstract class PenView {
   private double XCor;
   private double YCor;
   private double rot;
+  private int ID;
   private boolean penActive;
   private boolean visible;
   private Color color;
@@ -81,5 +82,11 @@ public abstract class PenView {
   public void changeVisible() {
     visible = !visible;
     image.setVisible(visible);
+  }
+  public int getID(){
+    return ID;
+  }
+  protected void setID(int newID){
+    this.ID = newID;
   }
 }
