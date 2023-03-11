@@ -70,6 +70,7 @@ operations, define variables and commands, and customize UI colors and simulatio
               to the middle
                 * Instead, the avatar may travel multiple times across the screen, backtracking its
                   movement away from the true (0,0) center
+            * Boundary 
 * Known Bugs:
     * TODO
 * Features implemented:

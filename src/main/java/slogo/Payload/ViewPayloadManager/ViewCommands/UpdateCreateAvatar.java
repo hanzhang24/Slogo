@@ -12,7 +12,7 @@ public class UpdateCreateAvatar extends ViewCommand {
     double numericDefault = Double.parseDouble(parameters.get(0));
     boolean booleanDefault = Boolean.parseBoolean(parameters.get(1));
     double[] colorDefault = new double[]{numericDefault, numericDefault, numericDefault};
-    // gameScreen.createAvatar(externalID, numericDefault, booleanDefault, colorDefault);
+    gameScreen.createNewAvatar(externalID, numericDefault, booleanDefault, colorDefault);
     // this could vary here, where I can pass you all the info
   }
 
