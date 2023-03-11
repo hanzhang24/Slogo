@@ -29,7 +29,7 @@ public class CommandBoxView extends ContainerView {
       controller.runInput(input);
       animations.resetAnimations();
     } catch (Exception e) {
-      // e.printStackTrace();
+      e.printStackTrace();
       new PopUp(e.getMessage());
     }
   }
