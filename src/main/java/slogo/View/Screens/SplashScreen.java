@@ -25,7 +25,7 @@ public class SplashScreen extends Screen {
 
     public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions) {
         super(language, stage);
-        setScreenLayout("GameScreenLayout");
+        setScreenLayout("SplashScreenLayout");
         setStylesheet("SplashScreen.css");
         setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
         this.languageOptions = languageOptions;
@@ -33,23 +33,34 @@ public class SplashScreen extends Screen {
     }
 
     public Scene makeScene(int width, int height) {
+        String[] indexes;
         setPane(new GridPane());
 
-        Label title = makeLabel("Group", getLabelResources());
+        Label title = makeLabel("Title", getLabelResources());
         getAllObjects().getChildren().add(title);
-        String[] indexes = getLayoutResources().getString("Title").split(",");
+        indexes = getLayoutResources().getString("Title").split(",");
         setIndexes(indexes, title);
 
-        Node inputPanel = makeInputPanel(getPanelButtons("NavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
-        getAllObjects().getChildren().add(inputPanel);
+        Node startButton = makeInputPanel(getPanelButtons("NavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
+        getAllObjects().getChildren().add(startButton);
+        indexes = getLayoutResources().getString("goCommand").split(",");
+        setIndexes(indexes, startButton);
+
 
         colorPicker = new ColorPicker();
-        colorPicker.setId("Color-Selector");
+        colorPicker.setId("ColorPicker");
         getAllObjects().getChildren().add(colorPicker);
+        indexes = getLayoutResources().getString("colorPicker").split(",");
+        setIndexes(indexes, colorPicker);
 
         languagePicker = new ComboBox(languageOptions);
         languagePicker.setId("Language-Box");
         getAllObjects().getChildren().add(languagePicker);
+        indexes = getLayoutResources().getString("languagePicker").split(",");
+        setIndexes(indexes, languagePicker);
+
+
+//        setPositions(getAllObjects());
 
         setScene(new Scene(getAllObjects(), width, height));
         getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
