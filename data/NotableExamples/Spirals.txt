@@ -1,0 +1,1 @@
+repeat 1800 [fd 10 rt + :repcount  0.1]
