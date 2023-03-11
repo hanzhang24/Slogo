@@ -91,6 +91,7 @@ operations, define variables and commands, and customize UI colors and simulatio
         * History of successful commands
         * User defined commands
         * Descriptive dialog error messages
+        * Can open additional independent windows
 * Features unimplemented:
     * TODO
 * Noteworthy Features:
@@ -98,6 +99,7 @@ operations, define variables and commands, and customize UI colors and simulatio
         * Implements backup functionality that recovers previous state when an error occurs
         * Generates unique keys to protect key backend parameters and prevent collisions with
           user-defined variables
+    * View
 
 ### Assignment Impressions
 
