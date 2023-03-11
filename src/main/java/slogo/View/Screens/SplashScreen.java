@@ -37,28 +37,22 @@ public class SplashScreen extends Screen {
         setPane(new GridPane());
 
         Label title = makeLabel("Title", getLabelResources());
-        getAllNodes().getChildren().add(title);
-        indexes = getLayoutResources().getString("Title").split(",");
-        setIndexes(indexes, title);
+        getRoot().getChildren().add(title);
 
         Node startButton = makeInputPanel(getPanelButtons("NavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
-        getAllNodes().getChildren().add(startButton);
+        getRoot().getChildren().add(startButton);
         startButton.setId("startButton");
-        indexes = getLayoutResources().getString("startButton").split(",");
-        setIndexes(indexes, startButton);
 
 
         colorPicker = new ColorPicker();
-        colorPicker.setId("ColorPicker");
-        getAllNodes().getChildren().add(colorPicker);
-        indexes = getLayoutResources().getString("colorPicker").split(",");
-        setIndexes(indexes, colorPicker);
+        colorPicker.setId("colorPicker");
+        getRoot().getChildren().add(colorPicker);
 
         languagePicker = new ComboBox(languageOptions);
-        languagePicker.setId("Language-Box");
-        getAllNodes().getChildren().add(languagePicker);
-        indexes = getLayoutResources().getString("languagePicker").split(",");
-        setIndexes(indexes, languagePicker);
+        languagePicker.setId("languagePicker");
+        getRoot().getChildren().add(languagePicker);
+
+        setPositions(getRoot());
 
         setScene(new Scene(getAllNodes(), width, height));
         getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());

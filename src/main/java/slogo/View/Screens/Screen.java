@@ -58,7 +58,6 @@ public abstract class Screen {
     String[] indexes;
     for (Node n : pane.getChildren()) {
       indexes = getLayoutResources().getString(n.getId()).split(",");
-      getRoot().getChildren().add(n);
       GridPane.setConstraints(n, Integer.parseInt(indexes[0]),Integer.parseInt(
               indexes[1]));
     }
@@ -69,6 +68,7 @@ public abstract class Screen {
     GridPane.setConstraints(node, Integer.parseInt(indexes[0]),Integer.parseInt(
             indexes[1]));
   }
+
   protected Label makeLabel (String property, ResourceBundle LabelResources) {
     Label label = new Label(LabelResources.getString(property));
     label.setId(property);

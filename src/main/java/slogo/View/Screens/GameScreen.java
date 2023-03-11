@@ -63,6 +63,8 @@ public class GameScreen extends Screen implements ModelView{
   private void createCanvas() {
     canvas = new DrawBoardView();
     canvas.setColor(this.color);
+
+//    getRoot().getChildren().add(canvas.getContainer());
     String[] indexes = getLayoutResources().getString("Canvas").split(",");
     setIndexes(indexes, canvas.getContainer());
   }
@@ -76,6 +78,7 @@ public class GameScreen extends Screen implements ModelView{
 
   private void createCommandBox() {
     commandBoxView = new CommandBoxView(animations);
+//    getRoot().getChildren().add(commandBoxView.getCommandContainer());
     String[] indexes = getLayoutResources().getString("CommandBox").split(",");
     setIndexes(indexes, commandBoxView.getCommandContainer());
   }
@@ -86,17 +89,14 @@ public class GameScreen extends Screen implements ModelView{
 
     SliderView animationInputs  = new SliderView(animations);
     container.getChildren().add(animationInputs.getSliderContainer());
+//    getRoot().getChildren().add(container);
     String[] indexes = getLayoutResources().getString("ButtonPanel").split(",");
     setIndexes(indexes, container);
   }
 
-
-
-
-
   private void makeColorPicker() {
     ColorPicker colorPicker = new ColorPicker();
-    colorPicker.setId("Color-Selector");
+    colorPicker.setId("ColorPicker");
     colorPicker.setOnAction(handler -> {
       color = colorPicker.getValue();
       canvas.setColor(color);
@@ -108,6 +108,7 @@ public class GameScreen extends Screen implements ModelView{
     List<String> options = getPanelButtons("ColorSchemesPanel", getPanelResources());
     String id = "Color-Scheme-Box";
     ComboBox ColorSchemePicker = makeDropDown(options, id);
+//    ColorSchemePicker.setId("ColorSchemePicker");
     ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
     getAllNodes().getChildren().add(ColorSchemePicker);
   }
