@@ -142,7 +142,9 @@ public class AvatarGroupManager {
         Avatar newAvatar = addAvatar(i);
         newAvatarList.add(newAvatar);
       }
-      activeAvatarIDs.add(i);
+    }
+    for(Integer integer : externalIDs){
+      activeAvatarIDs.add(integer);
     }
     return Collections.unmodifiableList(newAvatarList);
   }

@@ -25,6 +25,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import slogo.Main;
 import slogo.Parser.XMLParser;
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
@@ -39,10 +40,23 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import slogo.View.PopUp;
 
+/**
+ * GameScreen is responsible for bringing together all the visual components of the simulation. It sets up the nodes,
+ * as well as handles all the events when a button or object is clicked.
+ * @author aryankothari, hanzhang
+ */
+
 public class GameScreen extends Screen implements ModelView {
+
+  private String Parser_FILE = "Parser.Commands.English";
+  private String Help_FILE = "Help";
+
+  private ResourceBundle parserResources;
+  private ResourceBundle helpResources;
 
   private Color color;
   private List<PenView> avatars;
+  private PenView avatar;
   private Animator animations;
   private CommandBoxView commandBoxView;
   private HistoryView historyView;
@@ -52,6 +66,8 @@ public class GameScreen extends Screen implements ModelView {
 
   public GameScreen(Stage stage, String language, Color color) {
     super(language, stage);
+    parserResources = ResourceBundle.getBundle(Parser_FILE);
+    helpResources = ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + Help_FILE);
     setScreenLayout("GameScreenLayout");
     setStylesheet("Day.css");
     setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
@@ -60,6 +76,12 @@ public class GameScreen extends Screen implements ModelView {
     avatars = new ArrayList<>();
   }
 
+  /**
+   * sets up the game screen and pushes it to the scene
+   * @param width
+   * @param height
+   * @return
+   */
   public Scene makeScene(int width, int height) {
     setPane(new GridPane());
 
@@ -92,6 +114,9 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(canvas.getContainer());
   }
 
+  /**
+   * creates avatar
+   */
   private void createTurtle() {
     Turtle newTurtle = new Turtle();
 //    newTurtle.getImage().toBack();
@@ -100,10 +125,18 @@ public class GameScreen extends Screen implements ModelView {
     animations = new Animator(avatars, canvas);
   }
 
+  /**
+   * creates box that allows user to enter commands
+   */
+
   private void createCommandBox() {
     commandBoxView = new CommandBoxView(animations);
     getRoot().getChildren().add(commandBoxView.getCommandContainer());
   }
+
+  /**
+   * initiaties all the buttons that are seen in the game sceen
+   */
 
   private void createButtons() {
     HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
@@ -114,6 +147,9 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(container);
   }
 
+  /**
+   * creates color picker for user to change color of pen
+   */
   private void createColorPicker() {
     ColorPicker colorPicker = new ColorPicker();
     colorPicker.setId("ColorPicker");
@@ -124,6 +160,10 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(colorPicker);
   }
 
+  /**
+   * allows user to shift from day to night mode
+   */
+
   private void createColorSchemePicker() {
     List<String> options = getPanelButtons("ColorSchemesPanel", getPanelResources());
     String id = "Color-Scheme-Box";
@@ -133,12 +173,20 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(ColorSchemePicker);
   }
 
+  /**
+   * updates the stylesheet applied to the page, used when switching from day to night mode
+   * @param value
+   */
   private void updateScheme(Object value) {
     getScene().getStylesheets().clear();
     setStylesheet(value.toString() + ".css");
     getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
     getStage().setScene(getScene());
   }
+
+  /**
+   * presents history of past commands
+   */
   private void createHistoryView() {
     historyView = new HistoryView();
     VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()),
@@ -337,13 +385,11 @@ public class GameScreen extends Screen implements ModelView {
    * Handler function to display help dialog box
    */
   public void displayHelp() {
-    String pathName = "Parser.Commands.English";
-    ResourceBundle resourceBundle = ResourceBundle.getBundle(pathName);
-    Enumeration<String> allCommands = resourceBundle.getKeys();
+    Enumeration<String> allCommands = parserResources.getKeys();
     List<String> allCommandKeys = formatKeysAsString(allCommands);
-    ChoiceDialog choiceDialog = new ChoiceDialog("Select a command...", allCommandKeys);
-    choiceDialog.setTitle("Help");
-    choiceDialog.setHeaderText("Command Documentation");
+    ChoiceDialog choiceDialog = new ChoiceDialog(helpResources.getString("Prompt"), allCommandKeys);
+    choiceDialog.setTitle(helpResources.getString("Title"));
+    choiceDialog.setHeaderText(helpResources.getString("Header"));
 
     Optional<String> result = choiceDialog.showAndWait();
     if (result.isPresent()) {
@@ -377,7 +423,7 @@ public class GameScreen extends Screen implements ModelView {
    * @param commandName name of the requested command
    */
   private void fetchAndDisplayDocumentation(String commandName) {
-    if (commandName.equals("Select a command...")) {
+    if (commandName.equals(helpResources.getString("Prompt"))) {
       return;
     }
     String USER_DIRECTORY = System.getProperty("user.dir");
@@ -387,7 +433,7 @@ public class GameScreen extends Screen implements ModelView {
       Alert alert = formatDocumentationDialog(xmlParser);
       alert.showAndWait();
     } catch (Exception e) {
-      new PopUp("Sorry, the documentation for this command has not been added yet... coming soon!");
+      new PopUp(helpResources.getString("Error"));
     }
 
   }
@@ -398,10 +444,10 @@ public class GameScreen extends Screen implements ModelView {
    * @param xmlParser configured XML parser for the specific command
    * @return configured alert
    */
-  private static Alert formatDocumentationDialog(XMLParser xmlParser) {
+  private Alert formatDocumentationDialog(XMLParser xmlParser) {
     Alert alert = new Alert(AlertType.INFORMATION);
-    alert.setTitle("Command Documentation");
-    alert.setHeaderText("Learn More:");
+    alert.setTitle(helpResources.getString("Header"));
+    alert.setHeaderText(helpResources.getString("Learn"));
     String body = String.format(
         "Name:    %s\nSyntax:    %s\nNumber of Parameters:    %s\nParams:    %s\nReturns:    %s\nDescription:    %s\nClassification:    %s",
         xmlParser.getName(), xmlParser.getSyntax(), xmlParser.getNumParameters(),
@@ -409,5 +455,10 @@ public class GameScreen extends Screen implements ModelView {
         xmlParser.getType());
     alert.setContentText(body);
     return alert;
+  }
+
+  public void openNewWindow(){
+    Main main = new Main();
+    main.start(new Stage());
   }
 }
