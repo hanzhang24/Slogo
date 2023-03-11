@@ -42,6 +42,17 @@ operations, define variables and commands, and customize UI colors and simulatio
 ### Notes/Assumptions
 
 * Assumptions or Simplifications:
+    * Command
+        * Assumes that all commands in a syntactic tree structure will act on the same Model object
+        * Assumes that they will not be asked to take on an arbitrary number of arguments, with the exception of the case
+          of having already declared the intent for an arbitrary number of parameters via () notation
+        * Does not take keyword arguments, only position arguments (e.g. cannot say foo(a = 1, b = 2) and foo(b = 2, a = 1))
+          which would be equivalent in other languages, but here the ordering of 1, 2 will matter
+        * Does not need to locally scope variables
+        * Does not support recursive structures for creation of custom commands (though the option is open)
+    * Parser
+        * Parsing will assume spaces between all valid tokens
+        * All input will be ascii characters
     * Model
         * Interactions with the Controller ("Operations")
             * Assumes that Controller filters mistyped commands
