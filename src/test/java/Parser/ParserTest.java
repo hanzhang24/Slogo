@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ParserTest {
 
     @Test
-    void testForwardParse() throws ClassNotFoundException {
+    void testForwardParse() throws Exception {
 
         CommandManager commandManager = new CommandManager();
         Model model = new ModelTracker();

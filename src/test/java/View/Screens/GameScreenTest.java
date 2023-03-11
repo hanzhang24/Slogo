@@ -87,7 +87,7 @@ class GameScreenTest extends DukeApplicationTest {
     thisScreen.updateAvatarIsPenDown(test);
     assertEquals(test, thisScreen.getAvatar().getPenActive());
     Color PenTest = Color.RED;
-    thisScreen.updatePenColor(PenTest);
+//    thisScreen.updatePenColor(PenTest);
     assertEquals(PenTest, thisScreen.getAvatar().getColor());
   }
   @Nested
