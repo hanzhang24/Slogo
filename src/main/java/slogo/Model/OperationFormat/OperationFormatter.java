@@ -8,6 +8,7 @@ package slogo.Model.OperationFormat;
  */
 public class OperationFormatter {
 
+  private static final String REGEX = "_";
   private OperationSignatureGenerator operationSignatureGenerator;
   private int currentOperationSignature;
 
@@ -55,7 +56,7 @@ public class OperationFormatter {
    * @return avatar external ID
    */
   public int decodeID(String key) {
-    String[] splitKey = key.split("_");
+    String[] splitKey = key.split(REGEX);
     return Integer.parseInt(splitKey[1].substring(3));
   }
 
@@ -66,7 +67,7 @@ public class OperationFormatter {
    * @return avatar parameter
    */
   public String decodeParameter(String key) {
-    String[] splitKey = key.split("_");
+    String[] splitKey = key.split(REGEX);
     return splitKey[2];
   }
 }
