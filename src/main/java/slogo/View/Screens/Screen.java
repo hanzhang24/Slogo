@@ -51,7 +51,7 @@ public abstract class Screen {
   public abstract Scene makeScene(int width, int height);
 
   /**
-   * Allows
+   * Allows for
    * @param property
    * @param LabelResources
    * @return
