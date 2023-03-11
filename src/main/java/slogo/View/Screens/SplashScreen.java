@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import slogo.ScreenController;
 
 import java.util.ResourceBundle;
+import slogo.View.PopUp;
 
 
 /**
@@ -28,6 +29,8 @@ public class SplashScreen extends Screen {
 
     ObservableList<String> languageOptions;
     private ScreenController screenController;
+    private final String ERROR_RESOURCES = "SplashScreenError";
+    private final ResourceBundle ErrorBundle;
 
     public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions) {
         super(language, stage);
@@ -36,6 +39,7 @@ public class SplashScreen extends Screen {
         setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
         this.languageOptions = languageOptions;
         this.screenController = new ScreenController(stage);
+        this.ErrorBundle = ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + ERROR_RESOURCES);
     }
 
     /**
@@ -82,7 +86,8 @@ public class SplashScreen extends Screen {
         try {
             chosenLanguage = languagePicker.getValue().toString();
         } catch (NullPointerException e) {
-            throw new NullPointerException("You have not selected an Language");
+            new PopUp(ErrorBundle.getString("languageError"));
+            return;
         }
         chosenColor = colorPicker.getValue();
         screenController.launchGame(chosenColor, chosenLanguage);

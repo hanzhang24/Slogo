@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.PathTransition;
+import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -89,10 +90,11 @@ public class GameScreen extends Screen implements ModelView {
   }
 
   private void createTurtle() {
-    avatar = new Turtle();
-    avatar.getImage().toBack();
-    getAllNodes().getChildren().add(avatar.getImage());
-//    animations = new Animator(avatar, canvas);
+    Turtle newTurtle = new Turtle();
+//    newTurtle.getImage().toBack();
+    avatars.add(newTurtle);
+    getAllNodes().getChildren().add(newTurtle.getImage());
+    animations = new Animator(avatars, canvas);
   }
 
   private void createCommandBox() {
@@ -134,19 +136,6 @@ public class GameScreen extends Screen implements ModelView {
     getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
     getStage().setScene(getScene());
   }
-
-
-  /**
-   * Create both the Turtle and Animation needed to manage the Turtle
-   */
-  private void MakeTurtle() {
-    Turtle newTurtle = new Turtle();
-    newTurtle.getImage().toBack();
-    avatars.add(newTurtle);
-    getAllNodes().getChildren().add(newTurtle.getImage());
-    animations = new Animator(avatars, canvas);
-  }
-
   private void createHistoryView() {
     historyView = new HistoryView();
     VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()),
