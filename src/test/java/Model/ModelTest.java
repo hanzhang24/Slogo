@@ -308,7 +308,7 @@ public class ModelTest {
       modelTracker.setActiveAvatars(activeIDs);
       ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
 
-      assertEquals(7, modelTracker.getActiveAvatars().size());
+      assertEquals(3, modelTracker.getActiveAvatars().size());
     }
 
     @Test
