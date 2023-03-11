@@ -19,7 +19,8 @@ operations, define variables and commands, and customize UI colors and simulatio
 ### Attributions
 
 * Resources used for learning (including AI assistance)
-    * TODO
+    * ChatGPT
+    * Design patterns in Java (https://refactoring.guru/design-patterns/java)
 * Resources used directly (including AI assistance)
     * Image for Square Resource (https://stackoverflow.com/questions/38430856/devide-square-into-four-clickable-triangles)
     * Image for Turtle (https://www.pngitem.com/middle/JbTxoi_turtle-black-and-white-turtle-svg-hd-png/)
