@@ -11,7 +11,7 @@ public class Precision {
 
     public static boolean lessEqual(double a, double b) {
         if (!Precision.initialized) {Precision.init();}
-        return a < b - precision;
+        return !(a > b + precision);
     }
     public static double asDouble(boolean bool) {
         if (!Precision.initialized) {Precision.init();}
@@ -33,7 +33,7 @@ public class Precision {
 
     public static boolean asBoolean(double value) {
         if (!Precision.initialized) {Precision.init();}
-        return Math.abs(value) <= precision;
+        return Math.abs(value) > precision;
     }
     private static void init() {
         ResourceBundle resource = ResourceBundle.getBundle(resourcePath+"."+resourcePackage);
