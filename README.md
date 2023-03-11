@@ -30,7 +30,7 @@ operations, define variables and commands, and customize UI colors and simulatio
 * Data files needed:
     * Refer to src/main/resources to see required resource files to run
 * Interesting data files:
-    * TODO
+    * Spirals.txt
 * Key/Mouse inputs:
     * Keyboard
         * Type commands into the input box
@@ -44,12 +44,17 @@ operations, define variables and commands, and customize UI colors and simulatio
 * Assumptions or Simplifications:
     * Command
         * Assumes that all commands in a syntactic tree structure will act on the same Model object
-        * Assumes that they will not be asked to take on an arbitrary number of arguments, with the exception of the case
-          of having already declared the intent for an arbitrary number of parameters via () notation
-        * Does not take keyword arguments, only position arguments (e.g. cannot say foo(a = 1, b = 2) and foo(b = 2, a = 1))
-          which would be equivalent in other languages, but here the ordering of 1, 2 will matter
+        * Assumes that they will not be asked to take on an arbitrary number of arguments, with the
+          exception of the case
+          of having already declared the intent for an arbitrary number of parameters via ()
+          notation
+        * Does not take keyword arguments, only position arguments (e.g. cannot say foo(a = 1, b =
+            2) and foo(b = 2, a = 1))
+               which would be equivalent in other languages, but here the ordering of 1, 2 will
+               matter
         * Does not need to locally scope variables
-        * Does not support recursive structures for creation of custom commands (though the option is open)
+        * Does not support recursive structures for creation of custom commands (though the option
+          is open)
     * Parser
         * Parsing will assume spaces between all valid tokens
         * All input will be ascii characters
@@ -81,9 +86,13 @@ operations, define variables and commands, and customize UI colors and simulatio
               to the middle
                 * Instead, the avatar may travel multiple times across the screen, backtracking its
                   movement away from the true (0,0) center
-            * Boundary 
 * Known Bugs:
-    * TODO
+    * Upon returning to home, avatars will traverse the screen multiple times if they are at large
+      magnitude x or y coordinates.
+        * Similarly, the rotation may spin many times to return to true zero.
+    * Interrupting an animation by submitting another command may result in the avatar being
+      displayed at the wrong heading
+        * The avatar still moves in the right direction, but it may be displayed at an offset.
 * Features implemented:
     * Wide suite of user actions
         * Avatar actions
@@ -93,6 +102,7 @@ operations, define variables and commands, and customize UI colors and simulatio
         * User defined variables
         * Control structures
         * User defined commands
+        * Controlling multiple avatars with a single command
     * View customization
         * Pen color selection
         * Color pallet selection
@@ -105,13 +115,19 @@ operations, define variables and commands, and customize UI colors and simulatio
         * Descriptive dialog error messages
         * Can open additional independent windows
 * Features unimplemented:
-    * TODO
+    * Loading and saving to custom configuration files
+    * Full documentation for each command
+    * Speech-to-text functionality
+    * Setting background of canvas
+    * Arbitrary number of parameter inputs
 * Noteworthy Features:
     * Model
         * Implements backup functionality that recovers previous state when an error occurs
         * Generates unique keys to protect key backend parameters and prevent collisions with
           user-defined variables
     * View
+        * Avatar movement wraps around boundary edges to the opposite side
+        * Images can be animated
 
 ### Assignment Impressions
 
