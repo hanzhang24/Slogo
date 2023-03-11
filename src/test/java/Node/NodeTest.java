@@ -15,6 +15,7 @@ public class NodeTest {
         Node constantNode2 = new Constant(1.23);
         assertEquals(constantNode.execute().getNumeric(), 0);
         assertEquals(constantNode2.execute().getNumeric(), 1.23);
+
     }
 
     @Test

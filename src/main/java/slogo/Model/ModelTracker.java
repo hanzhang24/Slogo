@@ -8,6 +8,8 @@ import java.util.*;
 import slogo.Model.AvatarManager.Avatar;
 import slogo.Model.AvatarManager.AvatarGroupManager;
 import slogo.Model.OperationFormat.OperationFormatter;
+import slogo.Model.UpdateManager.History;
+import slogo.Model.UpdateManager.OperationWorkspace;
 import slogo.Payload.ViewPayloadManager.ChangeLog;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
@@ -25,9 +27,9 @@ public class ModelTracker implements Model {
   private static final ResourceBundle KEY_CODES = ResourceBundle.getBundle(KEY_CODES_PATH);
   private AvatarGroupManager avatarGroupManager;
   private OperationFormatter operationFormatter;
+  private OperationWorkspace operationWorkspace;
   private History history;
   private Map<String, Double> userVariables;
-  private Map<String, String> workspace;
   private ViewPayload viewPayload;
 
   /**
@@ -43,8 +45,6 @@ public class ModelTracker implements Model {
    */
   public ModelTracker(String defaultParametersFilename) {
     avatarGroupManager = new AvatarGroupManager(defaultParametersFilename);
-    avatarGroupManager.setActiveAvatars(new ArrayList<Integer>(Arrays.asList(1)));
-    this.setCurrentAvatarID(1);
     initializePeripheralStructures();
   }
 
@@ -54,7 +54,7 @@ public class ModelTracker implements Model {
   private void initializePeripheralStructures() {
     userVariables = new HashMap<>();
     history = new History();
-    workspace = null;
+    operationWorkspace = new OperationWorkspace();
     operationFormatter = new OperationFormatter();
   }
 
@@ -65,7 +65,7 @@ public class ModelTracker implements Model {
   public void startOp() {
     checkPreviousOperationClosed();
     viewPayload = new ViewPayload();
-    workspace = new HashMap<>();
+    operationWorkspace.setupWorkspace();
     operationFormatter.generateNewSignature();
   }
 
@@ -75,24 +75,24 @@ public class ModelTracker implements Model {
    */
   public ViewPayload endOp(String userInput, List<Double> returnValues) throws RuntimeException {
     checkCurrentOperationConfigured();
-    pushWorkspaceUpdates();
+    pushWorkspaceUpdates(operationWorkspace.getStagedChangesWorkspace());
     logSupplementalInformation(userInput, returnValues);
-
     return viewPayload;
   }
 
   /**
-   * Pushes all updates to model parameters and user variables in the workspace back to the Model
+   * Pushes all updates to model parameters and user variables in the workspace back to the Model,
+   * then refreshes the Operation Workspace.
    */
-  private void pushWorkspaceUpdates() {
-    for (String key : workspace.keySet()) {
+  private void pushWorkspaceUpdates(Map<String, String> stagedChangesWorkspace) {
+    for (String key : stagedChangesWorkspace.keySet()) {
       if (operationFormatter.isEncodedKey(key)) { // belongs to an avatar
         updateAvatar(key);
       } else {
-        userVariables.put(key, Double.parseDouble(workspace.get(key)));
+        userVariables.put(key, Double.parseDouble(operationWorkspace.getChange(key)));
       }
     }
-    workspace = null;
+    operationWorkspace.refreshWorkspace();
   }
 
   /**
@@ -102,7 +102,7 @@ public class ModelTracker implements Model {
    */
   private void updateAvatar(String key) {
     avatarGroupManager.setAvatarValue(operationFormatter.decodeID(key),
-        operationFormatter.decodeParameter(key), workspace.get(key));
+        operationFormatter.decodeParameter(key), operationWorkspace.getChange(key));
   }
 
   /**
@@ -123,25 +123,28 @@ public class ModelTracker implements Model {
    * rejected
    */
   public void bail() {
+    undoCreations(operationWorkspace.getStagedAvatarCreationWorkspace());
+
     viewPayload = null;
-    workspace = null;
+    operationWorkspace.refreshWorkspace();
   }
 
   /**
-   * Gets if there is an active operation running
+   * Deletes created Avatars in the event that the overall operation fails
    *
-   * @return if there is an active operation
+   * @param avatarRemovalList list of avatars to remove
    */
-  private boolean activeOpRunning() {
-    return workspace != null;
+  private void undoCreations(List<Avatar> avatarRemovalList) {
+    if(avatarRemovalList != null){
+      avatarGroupManager.removeAvatars(avatarRemovalList);
+    }
   }
-
 
   /**
    * Protects against cases when startOp() was not called before working with the Model
    */
   private void checkCurrentOperationConfigured() {
-    if (!activeOpRunning()) {
+    if (!operationWorkspace.activeOpRunning()) {
       throw new RuntimeException(EXCEPTIONS.getString("StartOpNotCalledError"));
     }
   }
@@ -150,7 +153,7 @@ public class ModelTracker implements Model {
    * Protects against cases when endOp() was not called before closing the previous operation
    */
   private void checkPreviousOperationClosed() {
-    if (activeOpRunning()) {
+    if (operationWorkspace.activeOpRunning()) {
       throw new RuntimeException(EXCEPTIONS.getString("EndOpNotCalledError"));
     }
   }
@@ -162,11 +165,11 @@ public class ModelTracker implements Model {
    * @return value of the parameter
    */
   private double getAvatarParameter(String avatarKeyCode) {
-    if (activeOpRunning()) {
+    if (operationWorkspace.activeOpRunning()) {
       String formattedKey = operationFormatter.encodeString(avatarKeyCode,
           avatarGroupManager.getCurrentAvatarID());
-      if (workspace.containsKey(formattedKey)) {
-        return Double.parseDouble(workspace.get(formattedKey));
+      if (operationWorkspace.containsKey(formattedKey)) {
+        return Double.parseDouble(operationWorkspace.getChange(formattedKey));
       } else {
         return avatarGroupManager.getAvatarDouble(avatarKeyCode);
       }
@@ -212,11 +215,11 @@ public class ModelTracker implements Model {
    */
   @Override
   public int[] getAvatarPenColor() {
-    if (activeOpRunning()) {
+    if (operationWorkspace.activeOpRunning()) {
       String formattedKey = operationFormatter.encodeString(KEY_CODES.getString("PenColor"),
           avatarGroupManager.getCurrentAvatarID());
-      if (workspace.containsKey(formattedKey)) {
-        return parseColors(workspace.get(formattedKey));
+      if (operationWorkspace.containsKey(formattedKey)) {
+        return parseColors(operationWorkspace.getChange(formattedKey));
       } else {
         return parseColors(
             avatarGroupManager.getAvatarString(KEY_CODES.getString("PenColor")));
@@ -249,11 +252,11 @@ public class ModelTracker implements Model {
    */
   @Override
   public boolean getAvatarIsPenDown() {
-    if (activeOpRunning()) {
+    if (operationWorkspace.activeOpRunning()) {
       String formattedKey = operationFormatter.encodeString(KEY_CODES.getString("IsPenDown"),
           avatarGroupManager.getCurrentAvatarID());
-      if (workspace.containsKey(formattedKey)) {
-        return Boolean.parseBoolean(workspace.get(formattedKey));
+      if (operationWorkspace.containsKey(formattedKey)) {
+        return Boolean.parseBoolean(operationWorkspace.getChange(formattedKey));
       } else {
         return avatarGroupManager.getAvatarBoolean(KEY_CODES.getString("IsPenDown"));
       }
@@ -269,11 +272,11 @@ public class ModelTracker implements Model {
    */
   @Override
   public boolean getAvatarVisible() {
-    if (activeOpRunning()) {
+    if (operationWorkspace.activeOpRunning()) {
       String formattedKey = operationFormatter.encodeString(KEY_CODES.getString("Visible"),
           avatarGroupManager.getCurrentAvatarID());
-      if (workspace.containsKey(formattedKey)) {
-        return Boolean.parseBoolean(workspace.get(formattedKey));
+      if (operationWorkspace.containsKey(formattedKey)) {
+        return Boolean.parseBoolean(operationWorkspace.getChange(formattedKey));
       } else {
         return avatarGroupManager.getAvatarBoolean(KEY_CODES.getString("Visible"));
       }
@@ -284,21 +287,37 @@ public class ModelTracker implements Model {
 
 
   /**
-   * Gets the value of the user variable with the specified key
+   * Gets the value of the user variable with the specified key. Throws an exception for nonexistent
+   * variable names.
    *
    * @param key variable name
    * @return variable value
    */
   @Override
-  public double getUserVariable(String key) {
-    if (activeOpRunning()) {
-      if (workspace.containsKey(key)) {
-        return Double.parseDouble(workspace.getOrDefault(key, "0"));
+  public double getUserVariable(String key) throws RuntimeException {
+    if (operationWorkspace.activeOpRunning()) {
+      if (operationWorkspace.containsKey(key)) {
+        return Double.parseDouble(operationWorkspace.getChange(key));
       } else {
-        return userVariables.getOrDefault(key, 0.0);
+        return fetchUserVariableFromSource(key);
       }
     } else {
-      return userVariables.getOrDefault(key, 0.0);
+      return fetchUserVariableFromSource(key);
+    }
+  }
+
+  /**
+   * Attempts to retrieve a user variable from the original source map. Throws an error if the
+   * variable does not exist.
+   *
+   * @param key variable name
+   * @return value of the variable
+   */
+  private Double fetchUserVariableFromSource(String key) throws RuntimeException {
+    if (userVariables.containsKey(key)) {
+      return userVariables.get(key);
+    } else {
+      throw new RuntimeException(EXCEPTIONS.getString("NonexistentUserVariable"));
     }
   }
 
@@ -331,9 +350,11 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarPosition(double x, double y) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("X"), getCurrentAvatarID()),
+    operationWorkspace.setChange(
+        operationFormatter.encodeString(KEY_CODES.getString("X"), getCurrentAvatarID()),
         x + "");
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Y"), getCurrentAvatarID()),
+    operationWorkspace.setChange(
+        operationFormatter.encodeString(KEY_CODES.getString("Y"), getCurrentAvatarID()),
         y + "");
     viewPayload.addCommand(
         new ChangeLog(KEY_CODES.getString("Position"), avatarGroupManager.getCurrentAvatarID(), x,
@@ -348,7 +369,7 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarRotation(double rotation) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Rotation"),
+    operationWorkspace.setChange(operationFormatter.encodeString(KEY_CODES.getString("Rotation"),
         avatarGroupManager.getCurrentAvatarID()), rotation + "");
     viewPayload.addCommand(
         new ChangeLog(KEY_CODES.getString("Rotation"), avatarGroupManager.getCurrentAvatarID(),
@@ -369,7 +390,7 @@ public class ModelTracker implements Model {
     int castedGreen = (int) green;
     int castedBlue = (int) blue;
     String convertedColor = castedRed + " " + castedGreen + " " + castedBlue;
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("PenColor"),
+    operationWorkspace.setChange(operationFormatter.encodeString(KEY_CODES.getString("PenColor"),
         avatarGroupManager.getCurrentAvatarID()), convertedColor);
     viewPayload.addCommand(
         new ChangeLog(KEY_CODES.getString("PenColor"), avatarGroupManager.getCurrentAvatarID(),
@@ -384,7 +405,7 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarPenDown(boolean isPenDown) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("IsPenDown"),
+    operationWorkspace.setChange(operationFormatter.encodeString(KEY_CODES.getString("IsPenDown"),
         avatarGroupManager.getCurrentAvatarID()), isPenDown + "");
     viewPayload.addCommand(
         new ChangeLog(KEY_CODES.getString("IsPenDown"), avatarGroupManager.getCurrentAvatarID(),
@@ -399,7 +420,7 @@ public class ModelTracker implements Model {
   @Override
   public void setAvatarVisible(boolean visible) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(operationFormatter.encodeString(KEY_CODES.getString("Visible"),
+    operationWorkspace.setChange(operationFormatter.encodeString(KEY_CODES.getString("Visible"),
         avatarGroupManager.getCurrentAvatarID()), visible + "");
     viewPayload.addCommand(
         new ChangeLog(KEY_CODES.getString("Visible"), avatarGroupManager.getCurrentAvatarID(),
@@ -415,7 +436,7 @@ public class ModelTracker implements Model {
   @Override
   public void setUserVariable(String key, double value) throws RuntimeException {
     checkCurrentOperationConfigured();
-    workspace.put(key, value + "");
+    operationWorkspace.setChange(key, value + "");
   }
 
   /**
@@ -453,6 +474,7 @@ public class ModelTracker implements Model {
   public void setActiveAvatars(List<Integer> externalIDs) {
     checkCurrentOperationConfigured();
     List<Avatar> newAvatarList = avatarGroupManager.setActiveAvatars(externalIDs);
+    operationWorkspace.recordAvatarAdditions(newAvatarList);
     for (Avatar newAvatar : newAvatarList) {
       viewPayload.addCommand(
           new ChangeLog(KEY_CODES.getString("CreateAvatar"), newAvatar.getExternalID(),

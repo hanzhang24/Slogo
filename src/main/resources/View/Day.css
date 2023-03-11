@@ -1,3 +1,4 @@
+
 #Canvas{
   -fx-border-color: BLACK;
   -fx-border-radius:7;
@@ -17,9 +18,4 @@
 #Text-Box{
   -fx-pref-height: 100;
   -fx-pref-width: 500;
-}
-#Animation-Panel{
-  -fx-pref-height: 50;
-  -fx-pref-width: 300;
-  -fx-spacing: 20;
 }

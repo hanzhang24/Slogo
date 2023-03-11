@@ -7,41 +7,36 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import slogo.Controller.Controller;
 import slogo.View.Animator;
+import slogo.View.PopUp;
 
 public class CommandBoxView extends ContainerView {
   private Controller controller;
+  private TextArea textBox;
+  private Animator animations;
+
   public CommandBoxView(Animator animations){
+    this.animations = animations;
     Pane container = new HBox();
     this.setContainer(container);
     container.setId("Command-HBox");
-    TextArea textBox = new TextArea();
+    textBox = new TextArea();
     textBox.setId("Text-Box");
     container.getChildren().add(textBox);
-    createButtons(textBox, animations);
-  }
-  private void createButtons(TextArea textBox, Animator animations) {
-    VBox buttons = new VBox();
-    buttons.setId("Command-VBox");
-    Button run = new Button("Run");
-    run.setId("Run");
-    run.setOnAction(e -> sendText(textBox, animations));
-    Button clear = new Button("Clear");
-    clear.setId("Clear");
-    clear.setOnAction(e -> textBox.clear());
-    buttons.getChildren().add(run);
-    buttons.getChildren().add(clear);
-    this.getContainer().getChildren().add(buttons);
   }
 
-  private void sendText(TextArea textBox, Animator animations){
+  public void sendText(){
     String input = textBox.getText();
-    //send to the control/parser
     try {
       controller.runInput(input);
       animations.resetAnimations();
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      // e.printStackTrace();
+      new PopUp(e.getMessage());
     }
+  }
+
+  public void clear() {
+    textBox.clear();
   }
   public void setController(Controller controller){
     this.controller = controller;

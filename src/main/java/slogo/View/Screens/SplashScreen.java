@@ -27,20 +27,16 @@ public class SplashScreen extends Screen {
 
     private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
     private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-    private static final String REFLECTION_RESOURCES = "ReflectionActions";
-    private static final String PANEL_RESOURCES = "PanelActions";
     private static final String STYLESHEET = "SplashScreen.css";
-
-    private ResourceBundle LabelResources;
-    private ResourceBundle ReflectionResources;
-    private ResourceBundle PanelResources;
+//
+//    private ResourceBundle LabelResources;
+//    private ResourceBundle ReflectionResources;
+//    private ResourceBundle PanelResources;
 
     private String chosenLanguage;
     private Color chosenColor;
     private ColorPicker colorPicker;
     private ComboBox languagePicker;
-
-    private Screen nextScreen;
 
     ObservableList<String> languageOptions;
     private ScreenController screenController;
@@ -50,13 +46,10 @@ public class SplashScreen extends Screen {
 
 
     public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions, ScreenController screenController) {
-        super(stage, language);
+        super(language, stage);
         this.languageOptions = languageOptions;
         this.screenController = screenController;
 
-        LabelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
-        ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + REFLECTION_RESOURCES);
-        PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
     }
 
     public Scene makeScene(int width, int height) {
@@ -64,8 +57,8 @@ public class SplashScreen extends Screen {
         root.getStyleClass().add("grid-pane");
         root.setId("Pane");
 
-        Label title = makeLabel("Group", LabelResources);
-        Node inputPanel = makeInputPanel(getPanelButtons("NavigationPanel", PanelResources), this, LabelResources, ReflectionResources);
+        Label title = makeLabel("Group", getLabelResources());
+        Node inputPanel = makeInputPanel(getPanelButtons("NavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
 
         colorPicker = new ColorPicker();
         colorPicker.setId("Color-Selector");

@@ -1,11 +1,10 @@
-package slogo.Model;
+package slogo.Model.UpdateManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Alec Liu The History class is meant to track the history of user commands. Note: probably
- * should just live in the View section as a separate model
+ * @author Alec Liu The History class is meant to track the history of user commands.
  */
 public class History {
 
@@ -32,7 +31,7 @@ public class History {
    *
    * @return user command history
    */
-  List<String> getAllHistory() {
+  public List<String> getAllHistory() {
     return commandLog;
   }
 }

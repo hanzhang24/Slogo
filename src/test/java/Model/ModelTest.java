@@ -23,8 +23,12 @@ import org.junit.jupiter.api.Test;
  */
 public class ModelTest {
 
-  private static final String EXCEPTIONS_PATH = "Model.Exceptions";
-  private static final ResourceBundle EXCEPTIONS = ResourceBundle.getBundle(EXCEPTIONS_PATH);
+  private static final String AVATAR_EXCEPTIONS_PATH = "Model.AvatarExceptions";
+  private static final ResourceBundle AVATAR_EXCEPTIONS = ResourceBundle.getBundle(
+      AVATAR_EXCEPTIONS_PATH);
+  private static final String MODEL_EXCEPTIONS_PATH = "Model.ModelExceptions";
+  private static final ResourceBundle MODEL_EXCEPTIONS = ResourceBundle.getBundle(
+      MODEL_EXCEPTIONS_PATH);
   private final Random randomGenerator = new Random();
   private ModelTracker modelTracker;
 
@@ -74,7 +78,8 @@ public class ModelTest {
     void testInitializeBadDefaultParameters() {
       Exception exception = assertThrows(NumberFormatException.class,
           () -> modelTracker = new ModelTracker("DefaultParametersBadType"));
-      String expected = String.format(EXCEPTIONS.getString("ConfigurationParsingError"), "AvatarX");
+      String expected = String.format(AVATAR_EXCEPTIONS.getString("ConfigurationParsingError"),
+          "AvatarX");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
     }
@@ -84,7 +89,7 @@ public class ModelTest {
       Exception exception = assertThrows(RuntimeException.class,
           () -> modelTracker.setAvatarPosition(randomGenerator.nextDouble(),
               randomGenerator.nextDouble()));
-      String expected = EXCEPTIONS.getString("StartOpNotCalledError");
+      String expected = MODEL_EXCEPTIONS.getString("StartOpNotCalledError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
     }
@@ -95,7 +100,7 @@ public class ModelTest {
       modelTracker.getAvatarY();
 
       Exception exception = assertThrows(RuntimeException.class, () -> modelTracker.startOp());
-      String expected = EXCEPTIONS.getString("EndOpNotCalledError");
+      String expected = MODEL_EXCEPTIONS.getString("EndOpNotCalledError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
     }
@@ -214,11 +219,21 @@ public class ModelTest {
     }
 
     @Test
+    void testGetNonexistentVariable() {
+      modelTracker.startOp();
+      Exception exception = assertThrows(RuntimeException.class,
+          () -> modelTracker.getUserVariable("a"));
+      String expected = MODEL_EXCEPTIONS.getString("NonexistentUserVariable");
+      String actual = exception.getMessage();
+      assertEquals(expected, actual);
+    }
+
+    @Test
     void testSetNonexistentAvatarID() {
       modelTracker.startOp();
       Exception exception = assertThrows(RuntimeException.class,
           () -> modelTracker.setCurrentAvatarID(2));
-      String expected = EXCEPTIONS.getString("NonexistentAvatarError");
+      String expected = AVATAR_EXCEPTIONS.getString("NonexistentAvatarError");
       String actual = exception.getMessage();
       assertEquals(expected, actual);
     }
@@ -277,9 +292,19 @@ public class ModelTest {
     }
 
     @Test
+    void testInitialActiveAvatars() {
+      modelTracker.startOp();
+      List<Integer> initialActive = modelTracker.getActiveAvatars();
+      modelTracker.endOp("", new ArrayList<>());
+
+      assertEquals(initialActive.size(), 1);
+      assertEquals(initialActive.get(0), 1);
+    }
+
+    @Test
     void testCreateAvatars() {
       modelTracker.startOp();
-      List<Integer> activeIDs = new ArrayList<>(List.of(1, 5 ,7));
+      List<Integer> activeIDs = new ArrayList<>(List.of(1, 5, 7));
       modelTracker.setActiveAvatars(activeIDs);
       ViewPayload viewPayload = modelTracker.endOp("", new ArrayList<>());
 
@@ -312,6 +337,15 @@ public class ModelTest {
       modelTracker.setCurrentAvatarID(3);
       assertEquals(penDown, modelTracker.getAvatarIsPenDown());
       modelTracker.endOp("", new ArrayList<>());
+    }
+
+    @Test
+    void testRecoverInitialAvatars() {
+      modelTracker.startOp();
+      modelTracker.setActiveAvatars(List.of(1, 2, 3, 10, 16));
+      modelTracker.bail();
+
+      assertEquals(1, modelTracker.getTotalNumberOfAvatars());
     }
   }
 }

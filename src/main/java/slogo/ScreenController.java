@@ -6,24 +6,11 @@ import javafx.stage.Stage;
 import slogo.Controller.Controller;
 import slogo.Controller.ViewController;
 import slogo.View.Screens.GameScreen;
-import slogo.View.Screens.Screen;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
 
 public class ScreenController {
-
-  private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
-  private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-  private static final String SCREEN_RESOURCES = "Screens";
-
   private GameScreen gameScreen;
   private Controller modelController;
   private ViewController viewController;
-
-  private ObservableList<Screen> screens;
-  private ResourceBundle screenResources;
 
   private Stage stage;
 
@@ -34,7 +21,6 @@ public class ScreenController {
    */
   public ScreenController(Stage stage) {
     this.stage = stage;
-    screenResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SCREEN_RESOURCES);
   }
 
   /**
@@ -48,6 +34,7 @@ public class ScreenController {
     modelController.setViewController(viewController);
     gameScreen.getCommandBoxView().setController(modelController);
   }
+
   public GameScreen getGameScreen() {
     return gameScreen;
   }

@@ -21,7 +21,6 @@ public class Main extends Application {
                     "Spanish"
             );
 
-
     @Override
     public void start (Stage stage) {
         ScreenController screenController = new ScreenController(stage);
