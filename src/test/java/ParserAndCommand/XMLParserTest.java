@@ -1,4 +1,4 @@
-package Parser;
+package ParserAndCommand;
 
 import org.junit.jupiter.api.Test;
 import slogo.Parser.XMLParser;

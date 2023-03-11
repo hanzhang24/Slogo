@@ -1,4 +1,4 @@
-package Parser;
+package ParserAndCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,11 +8,6 @@ import slogo.Model.ModelTracker;
 import slogo.Parser.CommandManager;
 import slogo.Parser.Parser;
 
-import org.junit.jupiter.api.BeforeEach;
-
-import org.junit.jupiter.api.Test;
-import slogo.Parser.*;
-import slogo.Model.*;
 import slogo.Node.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -115,8 +110,5 @@ public class ControlTest {
         assertEquals(model.getAvatarY(), -50);
         assertEquals(model.getAvatarRotation(), -180);
     }
-
-
-
 
 }
