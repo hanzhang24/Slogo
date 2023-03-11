@@ -32,6 +32,8 @@ operations, define variables and commands, and customize UI colors and simulatio
     * Refer to src/main/resources to see required resource files to run
 * Interesting data files:
     * flower.txt
+    * Spiral.txt
+    * SquareSpiral.txt
 * Key/Mouse inputs:
     * Keyboard
         * Type commands into the input box
@@ -123,6 +125,7 @@ operations, define variables and commands, and customize UI colors and simulatio
     * Speech-to-text functionality
     * Setting background of canvas
     * Arbitrary number of parameter inputs
+    * Switching between different layouts using makeScene
 * Noteworthy Features:
     * Model
         * Implements backup functionality that recovers previous state when an error occurs
@@ -131,10 +134,11 @@ operations, define variables and commands, and customize UI colors and simulatio
     * View
         * Avatar movement wraps around boundary edges to the opposite side
         * Images can be animated
+        * Use of reflection to attach actions to button for all buttons by looping through root node
 
 ### Assignment Impressions
 
 It was a fun but challenging project that was a much larger scope than expected, compared to Cell Society.
-The design challeneges associated with the project were more complex compared to the previous project, but
+The design challenges associated with the project were more complex compared to the previous project, but
 give the new design patterns and tools such as reflection we were able to complete this project. 
 
