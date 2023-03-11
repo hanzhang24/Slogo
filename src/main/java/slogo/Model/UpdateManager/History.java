@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Alec Liu The History class is meant to track the history of user commands.
+ * @author Alec Liu
+ * The History class is meant to track the history of user commands.
  */
 public class History {
 
