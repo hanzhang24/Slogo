@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -88,7 +90,7 @@ public class GameScreen extends Screen implements ModelView{
 
     setScene(new Scene(all, width, height));
     getScene().getStylesheets().add(
-        Objects.requireNonNull(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET)).toExternalForm());
+        Objects.requireNonNull(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet)).toExternalForm());
 
     return getScene();
   }
@@ -127,7 +129,6 @@ public class GameScreen extends Screen implements ModelView{
     container.setId("History-Container");
     String[] indexes = LayoutResources.getString("HistoryView").split(",");
     setIndexes(indexes, container);
-
   }
 
   /**
