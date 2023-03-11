@@ -51,7 +51,7 @@ public class Parser {
         } else if (commandManager.isCreateFunctionCommand(curToken)) {
             return parseCreateCommand();
         } else {
-            throw new NoSuchMethodException("No such command" + tokenizer.getCurToken());
+            throw new NoSuchMethodException("No such command \"" + tokenizer.getCurToken() + "\"");
         }
     };
     private Node parseSimpleDefinedCommand() throws Exception {
