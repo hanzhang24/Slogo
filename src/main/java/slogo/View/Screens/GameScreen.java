@@ -41,6 +41,8 @@ import javafx.scene.paint.Color;
 import slogo.View.PopUp;
 
 /**
+ * GameScreen is responsible for bringing together all the visual components of the simulation. It sets up the nodes,
+ * as well as handles all the events when a button or object is clicked.
  * @author aryankothari, hanzhang
  */
 
@@ -74,6 +76,12 @@ public class GameScreen extends Screen implements ModelView {
     avatars = new ArrayList<>();
   }
 
+  /**
+   * sets up the game screen and pushes it to the scene
+   * @param width
+   * @param height
+   * @return
+   */
   public Scene makeScene(int width, int height) {
     setPane(new GridPane());
 
@@ -106,6 +114,9 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(canvas.getContainer());
   }
 
+  /**
+   * creates avatar
+   */
   private void createTurtle() {
     Turtle newTurtle = new Turtle();
 //    newTurtle.getImage().toBack();
@@ -114,10 +125,18 @@ public class GameScreen extends Screen implements ModelView {
     animations = new Animator(avatars, canvas);
   }
 
+  /**
+   * creates box that allows user to enter commands
+   */
+
   private void createCommandBox() {
     commandBoxView = new CommandBoxView(animations);
     getRoot().getChildren().add(commandBoxView.getCommandContainer());
   }
+
+  /**
+   * initiaties all the buttons that are seen in the game sceen
+   */
 
   private void createButtons() {
     HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
@@ -128,6 +147,9 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(container);
   }
 
+  /**
+   * creates color picker for user to change color of pen
+   */
   private void createColorPicker() {
     ColorPicker colorPicker = new ColorPicker();
     colorPicker.setId("ColorPicker");
@@ -138,6 +160,10 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(colorPicker);
   }
 
+  /**
+   * allows user to shift from day to night mode
+   */
+
   private void createColorSchemePicker() {
     List<String> options = getPanelButtons("ColorSchemesPanel", getPanelResources());
     String id = "Color-Scheme-Box";
@@ -147,12 +173,20 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(ColorSchemePicker);
   }
 
+  /**
+   * updates the stylesheet applied to the page, used when switching from day to night mode
+   * @param value
+   */
   private void updateScheme(Object value) {
     getScene().getStylesheets().clear();
     setStylesheet(value.toString() + ".css");
     getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
     getStage().setScene(getScene());
   }
+
+  /**
+   * presents history of past commands
+   */
   private void createHistoryView() {
     historyView = new HistoryView();
     VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()),
