@@ -47,18 +47,52 @@ public class GameScreen extends Screen implements ModelView{
     setPane(new GridPane());
 
     createCanvas();
-    MakeTurtle();
+    makeTurtle();
     createCommandBox();
     createButtons();
     createHistoryView();
     makeColorPicker();
     makeColorSchemePicker();
 
-    setScene(new Scene(getAllObjects(), width, height));
+    setScene(new Scene(getAllNodes(), width, height));
     getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
 
     return getScene();
   }
+
+  private void createCanvas() {
+    canvas = new DrawBoardView();
+    canvas.setColor(this.color);
+    String[] indexes = getLayoutResources().getString("Canvas").split(",");
+    setIndexes(indexes, canvas.getContainer());
+  }
+
+  private void makeTurtle() {
+    avatar = new Turtle();
+    avatar.getImage().toBack();
+    getAllNodes().getChildren().add(avatar.getImage());
+    animations = new Animator(avatar, canvas);
+  }
+
+  private void createCommandBox() {
+    commandBoxView = new CommandBoxView(animations);
+    String[] indexes = getLayoutResources().getString("CommandBox").split(",");
+    setIndexes(indexes, commandBoxView.getCommandContainer());
+  }
+
+  private void createButtons() {
+    HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
+    container.setId("Animation-Panel");
+
+    SliderView animationInputs  = new SliderView(animations);
+    container.getChildren().add(animationInputs.getSliderContainer());
+    String[] indexes = getLayoutResources().getString("ButtonPanel").split(",");
+    setIndexes(indexes, container);
+  }
+
+
+
+
 
   private void makeColorPicker() {
     ColorPicker colorPicker = new ColorPicker();
@@ -67,7 +101,7 @@ public class GameScreen extends Screen implements ModelView{
       color = colorPicker.getValue();
       canvas.setColor(color);
     });
-    getAllObjects().getChildren().add(colorPicker);
+    getAllNodes().getChildren().add(colorPicker);
   }
 
   private void makeColorSchemePicker() {
@@ -75,7 +109,7 @@ public class GameScreen extends Screen implements ModelView{
     String id = "Color-Scheme-Box";
     ComboBox ColorSchemePicker = makeDropDown(options, id);
     ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
-    getAllObjects().getChildren().add(ColorSchemePicker);
+    getAllNodes().getChildren().add(ColorSchemePicker);
   }
 
   private void updateScheme(Object value) {
@@ -91,45 +125,14 @@ public class GameScreen extends Screen implements ModelView{
     container.setId("History-Container");
     String[] indexes = getLayoutResources().getString("HistoryView").split(",");
     setIndexes(indexes, container);
-
-  }
-
-  private void createButtons() {
-    HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
-    container.setId("Animation-Panel");
-
-    SliderView animationInputs  = new SliderView(animations);
-    container.getChildren().add(animationInputs.getSliderContainer());
-    String[] indexes = getLayoutResources().getString("ButtonPanel").split(",");
-    setIndexes(indexes, container);
-  }
-
-  private void createCommandBox() {
-    commandBoxView = new CommandBoxView(animations);
-    String[] indexes = getLayoutResources().getString("CommandBox").split(",");
-    setIndexes(indexes, commandBoxView.getCommandContainer());
-  }
-
-  private void createCanvas() {
-    canvas = new DrawBoardView();
-    canvas.setColor(this.color);
-    String[] indexes = getLayoutResources().getString("Canvas").split(",");
-    setIndexes(indexes, canvas.getContainer());
-  }
-
-  private void MakeTurtle() {
-    avatar = new Turtle();
-    avatar.getImage().toBack();
-    getAllObjects().getChildren().add(avatar.getImage());
-    animations = new Animator(avatar, canvas);
   }
 
   public void changeAvatar() {
-    getAllObjects().getChildren().remove(avatar.getImage());
+    getAllNodes().getChildren().remove(avatar.getImage());
     File selectedFile = fileChooser.showOpenDialog(getStage());
     Image image = new Image(selectedFile.toURI().toString());
     ImageView imageView = new ImageView(image);
-    getAllObjects().getChildren().add(avatar.setImage(imageView));
+    getAllNodes().getChildren().add(avatar.setImage(imageView));
   }
 
   public void updateAvatarIsPenDown(boolean penStatus) {

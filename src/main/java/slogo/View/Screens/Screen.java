@@ -36,13 +36,13 @@ public abstract class Screen {
   private Pane root;
   private Scene scene;
   private Stage stage;
-  private Group allObjects;
+  private Group allNodes;
 
 
 
   public Screen(String language, Stage stage) {
     this.stage = stage;
-    allObjects = new Group();
+    allNodes = new Group();
     LabelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
     ReflectionResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + REFLECTION_RESOURCES);
     PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
@@ -52,12 +52,12 @@ public abstract class Screen {
     root = pane;
     root.getStyleClass().add("grid-pane");
     root.setId("Pane");
-    allObjects.getChildren().add(root);
+    allNodes.getChildren().add(root);
   }
-  protected void setPositions(Group group) {
+  protected void setPositions(Pane pane) {
     String[] indexes;
-    for (Node n : group.getChildren()) {
-      indexes = getLayoutResources().getString("Title").split(",");
+    for (Node n : pane.getChildren()) {
+      indexes = getLayoutResources().getString(n.getId()).split(",");
       getRoot().getChildren().add(n);
       GridPane.setConstraints(n, Integer.parseInt(indexes[0]),Integer.parseInt(
               indexes[1]));
@@ -163,11 +163,11 @@ public abstract class Screen {
   public void setStage(Stage stage) {
     this.stage = stage;
   }
-  public Group getAllObjects() {
-    return allObjects;
+  public Group getAllNodes() {
+    return allNodes;
   }
-  public void setAllObjects(Group allObjects) {
-    this.allObjects = allObjects;
+  public void setAllNodes(Group allNodes) {
+    this.allNodes = allNodes;
   }
   public String getDEFAULT_RESOURCE_FOLDER() {
     return DEFAULT_RESOURCE_FOLDER;

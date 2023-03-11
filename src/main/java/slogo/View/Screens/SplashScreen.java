@@ -37,32 +37,30 @@ public class SplashScreen extends Screen {
         setPane(new GridPane());
 
         Label title = makeLabel("Title", getLabelResources());
-        getAllObjects().getChildren().add(title);
+        getAllNodes().getChildren().add(title);
         indexes = getLayoutResources().getString("Title").split(",");
         setIndexes(indexes, title);
 
         Node startButton = makeInputPanel(getPanelButtons("NavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
-        getAllObjects().getChildren().add(startButton);
-        indexes = getLayoutResources().getString("goCommand").split(",");
+        getAllNodes().getChildren().add(startButton);
+        startButton.setId("startButton");
+        indexes = getLayoutResources().getString("startButton").split(",");
         setIndexes(indexes, startButton);
 
 
         colorPicker = new ColorPicker();
         colorPicker.setId("ColorPicker");
-        getAllObjects().getChildren().add(colorPicker);
+        getAllNodes().getChildren().add(colorPicker);
         indexes = getLayoutResources().getString("colorPicker").split(",");
         setIndexes(indexes, colorPicker);
 
         languagePicker = new ComboBox(languageOptions);
         languagePicker.setId("Language-Box");
-        getAllObjects().getChildren().add(languagePicker);
+        getAllNodes().getChildren().add(languagePicker);
         indexes = getLayoutResources().getString("languagePicker").split(",");
         setIndexes(indexes, languagePicker);
 
-
-//        setPositions(getAllObjects());
-
-        setScene(new Scene(getAllObjects(), width, height));
+        setScene(new Scene(getAllNodes(), width, height));
         getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
         return getScene();
     }
