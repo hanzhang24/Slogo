@@ -21,7 +21,8 @@ operations, define variables and commands, and customize UI colors and simulatio
 * Resources used for learning (including AI assistance)
     * TODO
 * Resources used directly (including AI assistance)
-    * TODO
+    * Image for Square Resource (https://stackoverflow.com/questions/38430856/devide-square-into-four-clickable-triangles)
+    * Image for Turtle (https://www.pngitem.com/middle/JbTxoi_turtle-black-and-white-turtle-svg-hd-png/)
 
 ### Running the Program
 
@@ -30,7 +31,7 @@ operations, define variables and commands, and customize UI colors and simulatio
 * Data files needed:
     * Refer to src/main/resources to see required resource files to run
 * Interesting data files:
-    * Spirals.txt
+    * flower.txt
 * Key/Mouse inputs:
     * Keyboard
         * Type commands into the input box
@@ -86,6 +87,8 @@ operations, define variables and commands, and customize UI colors and simulatio
               to the middle
                 * Instead, the avatar may travel multiple times across the screen, backtracking its
                   movement away from the true (0,0) center
+            * Boundary Checking for avatar
+            * Multiple Windows
 * Known Bugs:
     * Upon returning to home, avatars will traverse the screen multiple times if they are at large
       magnitude x or y coordinates.
@@ -131,4 +134,7 @@ operations, define variables and commands, and customize UI colors and simulatio
 
 ### Assignment Impressions
 
+It was a fun but challenging project that was a much larger scope than expected, compared to Cell Society.
+The design challeneges associated with the project were more complex compared to the previous project, but
+give the new design patterns and tools such as reflection we were able to complete this project. 
 
