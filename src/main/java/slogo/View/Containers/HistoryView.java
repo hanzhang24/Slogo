@@ -64,6 +64,7 @@ public class HistoryView extends ContainerView {
   private TextArea makeScreen() {
     historyDisplay = new TextArea();
     historyDisplay.setId("History-Display");
+    historyDisplay.setEditable(false);
     return historyDisplay;
   }
 
@@ -103,6 +104,13 @@ public class HistoryView extends ContainerView {
     historyDisplay.setText(storedHistory);
   }
   public void updateLibraryHistory(String userInput) {
-    storedLibrary = storedLibrary + userInput;
+    if(storedLibrary == null){
+      storedLibrary = userInput;
+      storedLibrary = storedHistory.concat(HistoryResources.getString("Seperator"));
+    }else{
+      storedLibrary = storedHistory.concat(userInput);
+      storedLibrary = storedHistory.concat(HistoryResources.getString("Seperator"));
+    }
+    historyDisplay.setText(storedLibrary);
   }
 }
