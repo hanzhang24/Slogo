@@ -32,7 +32,7 @@ class GameScreenTest extends DukeApplicationTest {
   @Override
   public void start(Stage stage) throws ClassNotFoundException {
 
-    thisScreen = new GameScreen("English", Color.BLACK);
+    thisScreen = new GameScreen(stage, "English", Color.BLACK);
     stage.setScene(thisScreen.makeScene(750, 750));
     Controller modelController = new Controller();
     ViewController viewController = new ViewController(thisScreen);
@@ -135,20 +135,18 @@ class GameScreenTest extends DukeApplicationTest {
     }
     @Test
     void testInvalidAnimationStringInput(){
-      writeInputTo(animationInput, "20");
-      press(KeyCode.ENTER);
       writeInputTo(animationInput, "Hi");
       press(KeyCode.ENTER);
-      Button ok = lookup("#OK-Button").query();
-      clickOn(ok);
+      String message = getDialogMessage();
+      assertEquals("Invalid Input, must be a number", message);
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
     @Test
     void testInvalidNegativeInput(){
-      writeInputTo(animationInput, "20");
-      press(KeyCode.ENTER);
       writeInputTo(animationInput, "-10");
       press(KeyCode.ENTER);
+      String message = getDialogMessage();
+      assertEquals("Input must be from 1-100", message);
       assertEquals(60, thisScreen.getAnimationSpeed());
     }
   }

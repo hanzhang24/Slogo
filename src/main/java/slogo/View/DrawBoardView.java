@@ -31,7 +31,7 @@ public class DrawBoardView {
   }
 
   public void draw(double v, double v1, double xCor, double yCor) {
-    System.out.printf("%f%f%f%f", v,v1,xCor, yCor);
+//    System.out.printf("StartX:%f\nStartY:%f\nEndX:%f\nEndY:%f\n---------\n", v,v1,xCor, yCor);
     gc.strokeLine(v, v1, xCor, yCor);
   }
   public void setColor(Color newColor){

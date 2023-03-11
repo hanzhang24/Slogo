@@ -135,7 +135,9 @@ public class ModelTracker implements Model {
    * @param avatarRemovalList list of avatars to remove
    */
   private void undoCreations(List<Avatar> avatarRemovalList) {
-    avatarGroupManager.removeAvatars(avatarRemovalList);
+    if(avatarRemovalList != null){
+      avatarGroupManager.removeAvatars(avatarRemovalList);
+    }
   }
 
   /**
