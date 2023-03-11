@@ -274,7 +274,7 @@ public class GameScreen extends Screen implements ModelView {
   /**
    * Handler function to display help dialog box
    */
-  public void displayHelpScreen() {
+  public void displayHelp() {
     String pathName = "Parser.Commands.English";
     ResourceBundle resourceBundle = ResourceBundle.getBundle(pathName);
     Enumeration<String> allCommands = resourceBundle.getKeys();
