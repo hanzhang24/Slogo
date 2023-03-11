@@ -18,6 +18,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
+/**
+ * Screen is an abstract class that holds the common instance variables and methods that all screens have in common.
+ * @authors hanzhang, aryankothari
+ */
 public abstract class Screen {
 
   private final String DEFAULT_RESOURCE_PACKAGE = "View.";
@@ -48,12 +52,23 @@ public abstract class Screen {
     PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
   }
 
+  /**
+   * sets up the grid pane
+   * @param pane
+   */
   protected void setPane(Pane pane) {
     root = pane;
     root.getStyleClass().add("grid-pane");
     root.setId("Pane");
     allNodes.getChildren().add(root);
   }
+
+  /**
+   * Assigns each node the position on the grid it needs to be. This is done by accessing a properties file that stores
+   * the coordinates for each node, found by using its iD. This allows the program to be dynamic.
+   * @author aryankothari, hanzhang
+   * @param pane
+   */
   protected void setPositions(Pane pane) {
     String[] indexes;
     for (Node n : pane.getChildren()) {
@@ -62,14 +77,37 @@ public abstract class Screen {
               indexes[1]));
     }
   }
+
+  /**
+   * creates label and assigns iD
+   * @param property
+   * @param LabelResources
+   * @return
+   */
   protected Label makeLabel (String property, ResourceBundle LabelResources) {
     Label label = new Label(LabelResources.getString(property));
     label.setId(property);
     return label;
   }
+
+  /**
+   * allows for program to look up the display of the button based on what language the user has assigned it
+   * @param property
+   * @param PanelResources
+   * @return
+   */
   protected List<String> getPanelButtons (String property, ResourceBundle PanelResources) {
     return Arrays.asList(PanelResources.getString(property).split(","));
   }
+
+  /**
+   * this function groups all the buttons together under one Hbox.
+   * @param actions
+   * @param screen
+   * @param LabelResources
+   * @param ReflectionResources
+   * @return
+   */
   protected HBox makeInputPanel (List<String> actions, Screen screen, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
     HBox result = new HBox();
     // create buttons, with their associated actions
@@ -78,6 +116,13 @@ public abstract class Screen {
     }
     return result;
   }
+
+  /**
+   * create drop down with specified iD
+   * @param items
+   * @param id
+   * @return
+   */
   protected ComboBox makeDropDown(List<String> items, String id) {
     ComboBox box = new ComboBox();
     box.setId(id);
@@ -90,6 +135,15 @@ public abstract class Screen {
     }
     return box;
   }
+
+  /**
+   * helper function that creates method, eventually becomes a node in the InputPanel
+   * @param screen
+   * @param property
+   * @param LabelResources
+   * @param ReflectionResources
+   * @return
+   */
   private Button makeButton (Screen screen, String property, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
     // represent all supported image suffixes
     Button result = new Button();

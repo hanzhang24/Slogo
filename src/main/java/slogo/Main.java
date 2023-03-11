@@ -10,7 +10,9 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 
 
-
+/**
+ * main is used to launch game
+ */
 public class Main extends Application {
     private final String TITLE = "SLogo Team 7";
     private final Dimension DEFAULT_SIZE = new Dimension(1000, 1000);
