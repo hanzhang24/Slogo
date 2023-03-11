@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.PathTransition;
+import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -46,7 +47,6 @@ public class GameScreen extends Screen implements ModelView {
   private CommandBoxView commandBoxView;
   private HistoryView historyView;
   private DrawBoardView canvas;
-  private final Group all;
   private final FileChooser fileChooser;
 
   public GameScreen(Stage stage, String language, Color color) {
@@ -56,7 +56,6 @@ public class GameScreen extends Screen implements ModelView {
     setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
     fileChooser = new FileChooser();
     this.color = color;
-    all = new Group();
     avatars = new ArrayList<>();
   }
 
@@ -86,10 +85,11 @@ public class GameScreen extends Screen implements ModelView {
   }
 
   private void createTurtle() {
-    avatar = new Turtle();
-    avatar.getImage().toBack();
-    getAllNodes().getChildren().add(avatar.getImage());
-    animations = new Animator(avatar, canvas);
+    Turtle newTurtle = new Turtle();
+//    newTurtle.getImage().toBack();
+    avatars.add(newTurtle);
+    getAllNodes().getChildren().add(newTurtle.getImage());
+    animations = new Animator(avatars, canvas);
   }
 
   private void createCommandBox() {
@@ -125,17 +125,12 @@ public class GameScreen extends Screen implements ModelView {
     getRoot().getChildren().add(ColorSchemePicker);
   }
 
-  /**
-   * Create both the Turtle and Animation needed to manage the Turtle
-   */
-  private void MakeTurtle() {
-    Turtle newTurtle = new Turtle();
-    newTurtle.getImage().toBack();
-    avatars.add(newTurtle);
-    all.getChildren().add(newTurtle.getImage());
-    animations = new Animator(avatars, canvas);
+  private void updateScheme(Object value) {
+    getScene().getStylesheets().clear();
+    setStylesheet(value.toString() + ".css");
+    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
+    getStage().setScene(getScene());
   }
-
   private void createHistoryView() {
     historyView = new HistoryView();
     VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()),
@@ -149,13 +144,13 @@ public class GameScreen extends Screen implements ModelView {
    */
   public void changeAvatar() {
     for(PenView avatar: avatars){
-      all.getChildren().remove(avatar.getImage());
+      getAllNodes().getChildren().remove(avatar.getImage());
     }
     File selectedFile = fileChooser.showOpenDialog(getStage());
     Image image = new Image(selectedFile.toURI().toString());
     ImageView imageView = new ImageView(image);
     for(PenView avatar: avatars){
-      all.getChildren().add(avatar.setImage(imageView));
+      getAllNodes().getChildren().add(avatar.setImage(imageView));
     }
   }
 
@@ -249,7 +244,7 @@ public class GameScreen extends Screen implements ModelView {
       double[] colorDefault) {
     PenView avatar = new Turtle(externalID, numericDefault, booleanDefault, colorDefault);
     avatars.add(avatar);
-    all.getChildren().add(avatar.getImage());
+    getAllNodes().getChildren().add(avatar.getImage());
     animations.updateAvatars(avatar);
   }
 

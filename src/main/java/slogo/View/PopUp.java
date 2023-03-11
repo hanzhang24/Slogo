@@ -6,6 +6,10 @@ import javafx.scene.control.ButtonType;
 
 public class PopUp {
 
+  /**
+   *
+   * @param message
+   */
   public PopUp(String message) {
     Alert alert = new Alert(AlertType.ERROR, message, ButtonType.OK);
     alert.showAndWait();
