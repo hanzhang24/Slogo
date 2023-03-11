@@ -38,6 +38,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import slogo.View.PopUp;
 
+/**
+ * @author aryankothari, hanzhang
+ */
+
 public class GameScreen extends Screen implements ModelView {
 
   private Color color;
