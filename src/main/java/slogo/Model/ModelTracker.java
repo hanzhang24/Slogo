@@ -428,18 +428,19 @@ public class ModelTracker implements Model {
   }
 
   /**
-   * Sets all avatars to the default position and rotation values
+   * Sets all avatars to the default position and rotation values. RE
    */
   @Override
   public void resetOrientation() throws RuntimeException {
     checkCurrentOperationConfigured();
     double numericDefault = avatarGroupManager.getNumericDefault();
-    for (Integer externalID : avatarGroupManager.getAllExternalIDs()) {
+    List<Integer> IDs = avatarGroupManager.getAllExternalIDs();
+    for (Integer externalID : IDs) {
       setCurrentAvatarID(externalID);
       setAvatarPosition(numericDefault, numericDefault);
       setAvatarRotation(numericDefault); // Remove magic numbers
     }
-    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("ClearScreen")));
+    viewPayload.addCommand(new ChangeLog(KEY_CODES.getString("ClearScreen"), IDs.size(), IDs.size()));
   }
 
   /**
