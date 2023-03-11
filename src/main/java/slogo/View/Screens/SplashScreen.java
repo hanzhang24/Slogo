@@ -28,10 +28,6 @@ public class SplashScreen extends Screen {
     private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
     private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
     private static final String STYLESHEET = "SplashScreen.css";
-//
-//    private ResourceBundle LabelResources;
-//    private ResourceBundle ReflectionResources;
-//    private ResourceBundle PanelResources;
 
     private String chosenLanguage;
     private Color chosenColor;
@@ -41,15 +37,10 @@ public class SplashScreen extends Screen {
     ObservableList<String> languageOptions;
     private ScreenController screenController;
 
-    private Scene scene;
-
-
-
-    public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions, ScreenController screenController) {
+    public SplashScreen(Stage stage, String language, ObservableList<String> languageOptions) {
         super(language, stage);
         this.languageOptions = languageOptions;
-        this.screenController = screenController;
-
+        this.screenController = new ScreenController(stage);
     }
 
     public Scene makeScene(int width, int height) {
@@ -66,14 +57,15 @@ public class SplashScreen extends Screen {
         languagePicker = new ComboBox(languageOptions);
         languagePicker.setId("Language-Box");
 
+        //GET RID OF MAGIC NUMBERS
         root.add(inputPanel, 0, 30);
         root.add(title, 0, 25);
         root.add(colorPicker, 0, 27);
         root.add(languagePicker, 0, 26);
 
-        scene = new Scene(root, width, height);
-        scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
-        return scene;
+        setScene(new Scene(root, width, height));
+        getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+        return getScene();
     }
 
     public void nextPage() throws ClassNotFoundException {

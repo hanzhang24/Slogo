@@ -27,12 +27,11 @@ import javafx.scene.paint.Color;
 
 public class GameScreen extends Screen implements ModelView{
 
-  private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
-  private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-  private static final String GAME_SCREEN_LAYOUT = "GameScreenLayout";
+  private final String DEFAULT_RESOURCE_PACKAGE = "View.";
+  private final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
+  private final String GAME_SCREEN_LAYOUT = "GameScreenLayout";
 
   private String stylesheet = "Day.css";
-
   private ResourceBundle LayoutResources;
 
   private Color color;
@@ -54,11 +53,6 @@ public class GameScreen extends Screen implements ModelView{
     all = new Group();
   }
 
-  public double getAnimationSpeed() {
-    return animations.getAnimationSpeed();
-  }
-
-  @Override
   public Scene makeScene(int width, int height) {
     setUpGridPane();
     createCanvas();
@@ -182,6 +176,10 @@ public class GameScreen extends Screen implements ModelView{
     animations.makeRotation(newRot);
     animations.runAnimation();
     avatar.updateRot(saved);
+  }
+
+  public double getAnimationSpeed() {
+    return animations.getAnimationSpeed();
   }
 
   @Override

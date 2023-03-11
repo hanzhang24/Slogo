@@ -17,10 +17,10 @@ import javafx.stage.Stage;
 
 public abstract class Screen {
 
-  private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
-  private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-  private static final String REFLECTION_RESOURCES = "ReflectionActions";
-  private static final String PANEL_RESOURCES = "PanelActions";
+  private final String DEFAULT_RESOURCE_PACKAGE = "View.";
+  private final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
+  private final String REFLECTION_RESOURCES = "ReflectionActions";
+  private final String PANEL_RESOURCES = "PanelActions";
 
   private ResourceBundle LabelResources;
   private ResourceBundle ReflectionResources;
@@ -31,10 +31,7 @@ public abstract class Screen {
   private Stage stage;
 
 
-  /**
-   * Abstract class for Screen that sets up ResourceBundles
-   * @param language is the default branch
-   */
+
   public Screen(String language, Stage stage) {
     this.stage = stage;
     LabelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
@@ -42,33 +39,10 @@ public abstract class Screen {
     PanelResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + PANEL_RESOURCES);
   }
 
-  /**
-   * Method for creating screen to setUp scenes, allows for flexibility when reassigning css stylesheets
-   * @param width width of the Scene in pixels
-   * @param height height of the Scenes in pixels
-   * @return the Scene that represents the Screen
-   */
-  public abstract Scene makeScene(int width, int height);
-
-  /**
-   * Allows
-   * @param property
-   * @param LabelResources
-   * @return
-   */
   protected Label makeLabel (String property, ResourceBundle LabelResources) {
     Label label = new Label(LabelResources.getString(property));
     return label;
   }
-
-
-  /**
-   *
-   * @param property
-   * @param PanelResources
-   * @return
-   */
-  // get button actions for each panel from resource file
   protected List<String> getPanelButtons (String property, ResourceBundle PanelResources) {
     return Arrays.asList(PanelResources.getString(property).split(","));
   }
@@ -80,12 +54,12 @@ public abstract class Screen {
     }
     return result;
   }
-  // makes a button using either an image or a label
   private Button makeButton (Screen screen, String property, ResourceBundle LabelResources, ResourceBundle ReflectionResources) {
     // represent all supported image suffixes
     Button result = new Button();
     String label = LabelResources.getString(property);
     result.setText(label);
+
     // turn given string into method call
     result.setOnAction(handler -> {
       try {
@@ -113,6 +87,9 @@ public abstract class Screen {
   }
 
 
+  /**
+   * getters and setters for all instance variables in class
+   */
   protected ResourceBundle getLabelResources() {
     return LabelResources;
   }
@@ -155,6 +132,5 @@ public abstract class Screen {
   public void setStage(Stage stage) {
     this.stage = stage;
   }
-
 
 }
