@@ -5,7 +5,8 @@ import java.util.Map;
 import slogo.Payload.ViewPayloadManager.ViewPayload;
 
 /**
- * @author Alec Liu The Model interface is meant to represent the external API of the Model. Any
+ * @author
+ * Alec Liu The Model interface is meant to represent the external API of the Model. Any
  * model must support these functions for the Controller.
  */
 public interface Model {

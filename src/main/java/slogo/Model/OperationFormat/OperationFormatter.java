@@ -1,7 +1,8 @@
 package slogo.Model.OperationFormat;
 
 /**
- * @author Alec Liu The OperationFormatter class is a helper class to the Model, generating encoded
+ * @author Alec Liu
+ * The OperationFormatter class is a helper class to the Model, generating encoded
  * keys for avatar parameters to prevent collisions with user variables of the same name. This class
  * also contains methods to decode information.
  */

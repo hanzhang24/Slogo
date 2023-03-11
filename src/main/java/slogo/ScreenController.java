@@ -28,17 +28,11 @@ public class ScreenController {
    */
   public void launchGame(Color color, String language) throws ClassNotFoundException {
     gameScreen = new GameScreen(stage, language, color);
-    stage.setScene(gameScreen.makeScene(1000, 750));
+    stage.setScene(gameScreen.makeScene((int)stage.getWidth(), (int)stage.getHeight()));
     this.modelController = new Controller();
     this.viewController = new ViewController(gameScreen);
     modelController.setViewController(viewController);
     gameScreen.getCommandBoxView().setController(modelController);
   }
 
-  public GameScreen getGameScreen() {
-    return gameScreen;
-  }
-  public void setGameScreen(GameScreen screen){
-    gameScreen = screen;
-  }
 }
