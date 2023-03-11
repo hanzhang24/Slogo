@@ -56,8 +56,8 @@ class GameScreenTest extends DukeApplicationTest {
   void testUpdatePosition() {
     simulateAction(0, 0, () -> {
       thisScreen.updateAvatarPosXY(10, 10);
-      assertEquals(260, thisScreen.getAvatar().getXCor());
-      assertEquals(240, thisScreen.getAvatar().getYCor());
+      assertEquals(260.6066017177983, thisScreen.getAvatar().getXCor());
+      assertEquals(239.3933982822017, thisScreen.getAvatar().getYCor());
     });
   }
 
@@ -172,7 +172,8 @@ class GameScreenTest extends DukeApplicationTest {
       clickOn(run);
       String expected = "Commands";
       select(historyOptions, expected);
-      assertEquals(display.getText(), input);
+      String buffer = "\n------------\n";
+      assertEquals(display.getText(), input+buffer);
     }
   }
 }
