@@ -19,7 +19,8 @@ operations, define variables and commands, and customize UI colors and simulatio
 ### Attributions
 
 * Resources used for learning (including AI assistance)
-    * TODO
+    * ChatGPT
+    * Design patterns in Java (https://refactoring.guru/design-patterns/java)
 * Resources used directly (including AI assistance)
     * Image for Square Resource (https://stackoverflow.com/questions/38430856/devide-square-into-four-clickable-triangles)
     * Image for Turtle (https://www.pngitem.com/middle/JbTxoi_turtle-black-and-white-turtle-svg-hd-png/)
@@ -137,4 +138,3 @@ operations, define variables and commands, and customize UI colors and simulatio
 It was a fun but challenging project that was a much larger scope than expected, compared to Cell Society.
 The design challeneges associated with the project were more complex compared to the previous project, but
 give the new design patterns and tools such as reflection we were able to complete this project. 
-
