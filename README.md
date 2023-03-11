@@ -6,7 +6,7 @@
 
 This project implements a simplified version of Logo, an educational coding app for new programmers.
 Through a terminal-like command box, users can interact with an avatar, conduct mathematical
-operations, define variables and commands, and customize UI colors and simulation speed.
+operations, define variables and commands, and customize UI colors and simulation speed.git pu
 
 ### Timeline
 
