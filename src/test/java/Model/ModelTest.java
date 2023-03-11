@@ -221,11 +221,11 @@ public class ModelTest {
     @Test
     void testGetNonexistentVariable() {
       modelTracker.startOp();
-      Exception exception = assertThrows(RuntimeException.class,
-          () -> modelTracker.getUserVariable("a"));
-      String expected = MODEL_EXCEPTIONS.getString("NonexistentUserVariable");
-      String actual = exception.getMessage();
-      assertEquals(expected, actual);
+      double a = modelTracker.getUserVariable("a");
+      modelTracker.endOp("", new ArrayList<>());
+
+      assertEquals(0.0, a);
+
     }
 
     @Test
