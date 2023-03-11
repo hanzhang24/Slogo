@@ -7,7 +7,8 @@ import java.util.Map;
 import slogo.Model.AvatarManager.Avatar;
 
 /**
- * @author Alec Liu The OperationWorkspace class is responsible for holding a temporary copy of
+ * @author Alec Liu
+ * The OperationWorkspace class is responsible for holding a temporary copy of
  * changed values during an operation. During an active operation, any "writes" to values in the
  * Model are redirected here. At the conclusion of an operation, these updates are sent back to the
  * true sources in the Model. Importantly, by writing to this workspace instead of directly to the

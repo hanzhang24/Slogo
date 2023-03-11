@@ -17,6 +17,7 @@ public class Root extends Node {
         NodeValue result = new NodeValue();
         for (Node child: getChildren()) {
             List<Integer> activeAvatars = model.getActiveAvatars();
+            System.out.println("Number of active avatars: " + activeAvatars.size());
             if (child.getPlural()) {
                 result = child.execute();
                 returnValues.add(result.getNumeric());

@@ -6,11 +6,11 @@ import java.awt.Dimension;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 import slogo.ScreenController;
 import slogo.View.Screens.SplashScreen;
@@ -26,22 +26,20 @@ class SplashScreenTest extends DukeApplicationTest {
           "Spanish"
       );
 
-  private SplashScreen thisScreen;
   private ComboBox languages;
-  private Node button;
   private ColorPicker color;
-
+  private Button button;
 
   @Override
   public void start (Stage stage) {
-    thisScreen = new SplashScreen(DEFAULT_LANGUAGE, LANGUAGE_OPTIONS, new ScreenController(stage));
-    stage.setScene(thisScreen.makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
+    SplashScreen splashScreen = new SplashScreen(stage, DEFAULT_LANGUAGE, LANGUAGE_OPTIONS);
+    stage.setScene(splashScreen.makeScene(DEFAULT_SIZE.width, DEFAULT_SIZE.height));
     stage.setTitle(TITLE);
     stage.show();
 
-    languages = lookup("#Language-Box").query();
-    button = lookup("#Go-Button").query();
-    color = lookup("#Color-Selector").query();
+    languages = lookup("#languagePicker").query();
+    button = lookup("#GoCommand").query();
+    color = lookup("#colorPicker").query();
   }
 
   @Test
@@ -61,20 +59,10 @@ class SplashScreenTest extends DukeApplicationTest {
     // THEN, check label text has been updated to match input
     assertEquals(expected, color.getValue());
   }
-
-//  @Test
-//  void testValuesPassedToGameScreen() {
-//    String expectedLanguage = "English";
-//    select(languages, expectedLanguage);
-//    Color expectedColor = Color.RED;
-//    setValue(color, expectedColor);
-//    clickOn(button);
-////    assertEquals(expectedLanguage, GameScreen.);
-//  }
-//  @Test
-//  void testThrowsRuntimeError(){
-//    Exception noLanguage = assertThrows(NullPointerException.class, () -> clickOn(button));
-//    String ErrorMessage = "You have not selected an Language";
-//    assertEquals(noLanguage.getMessage(), ErrorMessage);
-//  }
+  @Test
+  void testButtonError(){
+    clickOn(button);
+    String message = getDialogMessage();
+    assertEquals("You have not selected a Language", message);
+  }
 }

@@ -16,12 +16,11 @@ public class CommandBoxView extends ContainerView {
 
   public CommandBoxView(Animator animations){
     this.animations = animations;
-    Pane container = new HBox();
-    this.setContainer(container);
-    container.setId("Command-HBox");
+    this.setContainer(new HBox());
+    getContainer().setId("Command-HBox");
     textBox = new TextArea();
     textBox.setId("Text-Box");
-    container.getChildren().add(textBox);
+    getContainer().getChildren().add(textBox);
   }
 
   public void sendText(){
@@ -30,7 +29,7 @@ public class CommandBoxView extends ContainerView {
       controller.runInput(input);
       animations.resetAnimations();
     } catch (Exception e) {
-      // e.printStackTrace();
+      e.printStackTrace();
       new PopUp(e.getMessage());
     }
   }

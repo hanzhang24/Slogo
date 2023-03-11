@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewCommand>
+  <name>If</name>
+  <syntax>if expr [sequence of commands]</syntax>
+  <numparameters>2+</numparameters>
+  <params>expr = an expression that evaluates to a number, sequence of commands = a list of commands to run
+  </params>
+  <returns>The return value of the last command or 0 if none are run</returns>
+  <description>Evaluates the given expression. If the expression is nonzero, the program executes a sequence of commands.</description>
+  <type>Control Command</type>
+</viewCommand>

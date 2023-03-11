@@ -1,215 +1,221 @@
 package slogo.View.Screens;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.animation.PathTransition;
+import javafx.scene.Group;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import slogo.Main;
+import slogo.Parser.XMLParser;
 import slogo.View.Animator;
 import slogo.View.Containers.HistoryView;
+import slogo.View.Containers.ReturnValueView;
 import slogo.View.Containers.SliderView;
 import slogo.View.PenView;
 import slogo.View.Avatars.Turtle;
 import slogo.View.Containers.CommandBoxView;
 import slogo.View.DrawBoardView;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import slogo.View.PopUp;
 
-public class GameScreen extends Screen implements ModelView{
+/**
+ * GameScreen is responsible for bringing together all the visual components of the simulation. It sets up the nodes,
+ * as well as handles all the events when a button or object is clicked.
+ * @author aryankothari, hanzhang
+ */
 
-  private static final String DEFAULT_RESOURCE_PACKAGE = "View.";
-  private static final String DEFAULT_RESOURCE_FOLDER = "/"+DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-  private static final String GAME_SCREEN_LAYOUT = "GameScreenLayout";
+public class GameScreen extends Screen implements ModelView {
 
-  private String stylesheet = "Day.css";
+  private String Parser_FILE = "Parser.Commands.English";
+  private String Help_FILE = "Help";
 
-  private ResourceBundle LayoutResources;
+  private ResourceBundle parserResources;
+  private ResourceBundle helpResources;
 
   private Color color;
+  private List<PenView> avatars;
   private PenView avatar;
   private Animator animations;
   private CommandBoxView commandBoxView;
   private HistoryView historyView;
   private DrawBoardView canvas;
-  private final Group all;
-
   private final FileChooser fileChooser;
+  private ReturnValueView returnBox;
 
-  /**
-   * Constructor for GameScreen, which is the class that represents the screen that contains everything
-   * required to display to the user for SLogo. This class is essentially a GripPane with
-   * objects that aren't inside the GridPane such as PenView are stacked on top.
-   * @param stage the stage that the screen will be displayed on
-   * @param language The language that the GameScreen is displayed in.
-   * @param color the initial color of the trail that will be displayed in the GameScreen
-   */
   public GameScreen(Stage stage, String language, Color color) {
     super(language, stage);
-    LayoutResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + GAME_SCREEN_LAYOUT);
+    parserResources = ResourceBundle.getBundle(Parser_FILE);
+    helpResources = ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + Help_FILE);
+    setScreenLayout("GameScreenLayout");
+    setStylesheet("Day.css");
+    setLayoutResources(ResourceBundle.getBundle(getDEFAULT_RESOURCE_PACKAGE() + getScreenLayout()));
     fileChooser = new FileChooser();
-    setRoot(new GridPane());
     this.color = color;
-    all = new Group();
+    avatars = new ArrayList<>();
   }
 
   /**
-   * Return the animation speed of the current animation
-   * @return a double that represents the current animation speed
+   * sets up the game screen and pushes it to the scene
+   * @param width
+   * @param height
+   * @return
    */
-  public double getAnimationSpeed() {
-    return animations.getAnimationSpeed();
-  }
-
-  /**
-   * Overrides the default makeScene in Screen abstract
-   * @param width width of the Scene in pixels
-   * @param height height of the Scenes in pixels
-   * @return gives the Scene which contains all the view Objects that need to be displayed
-   */
-  @Override
   public Scene makeScene(int width, int height) {
-    setUpGridPane();
+    setPane(new GridPane());
+
     createCanvas();
-    MakeTurtle();
+    createTurtle();
     createCommandBox();
     createButtons();
     createHistoryView();
-    makeColorPicker();
-    makeColorSchemePicker();
+    createColorPicker();
+    createColorSchemePicker();
 
-    setScene(new Scene(all, width, height));
-    getScene().getStylesheets().add(
-        Objects.requireNonNull(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET)).toExternalForm());
+    createReturnBox();
+
+    setPositions(getRoot());
+    setScene(new Scene(getAllNodes(), width, height));
+    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
 
     return getScene();
   }
 
-  /**
-   * Sets up the ColorPicker to be added to the view
-   */
-  private void makeColorPicker() {
-    ColorPicker colorPicker = new ColorPicker();
-    colorPicker.setId("Color-Selector");
-    colorPicker.setOnAction(handler -> {
-      color = colorPicker.getValue();
-      canvas.setColor(color);
-    });
-    all.getChildren().add(colorPicker);
+  private void createReturnBox() {
+    returnBox = new ReturnValueView();
+    getRoot().getChildren().add(returnBox.getReturnContainer());
   }
 
-  private void makeColorSchemePicker() {
-    List<String> options = getPanelButtons("ColorSchemesPanel", getPanelResources());
-    String id = "Color-Scheme-Box";
-    ComboBox ColorSchemePicker = makeDropDown(options, id);
-    ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
-    all.getChildren().add(ColorSchemePicker);
-  }
+  private void createCanvas() {
+    canvas = new DrawBoardView();
+    canvas.setColor(this.color);
 
-  private void updateScheme(Object value) {
-    getScene().getStylesheets().clear();
-    stylesheet = value.toString() + ".css";
-    getScene().getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + stylesheet).toExternalForm());
-    getStage().setScene(getScene());
-  }
-
-  private void createHistoryView() {
-    historyView = new HistoryView();
-    VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()), getLabelResources());
-    container.setId("History-Container");
-    String[] indexes = LayoutResources.getString("HistoryView").split(",");
-    setIndexes(indexes, container);
-
+    getRoot().getChildren().add(canvas.getContainer());
   }
 
   /**
-   * Dictates where in the GripPane the Panes should be
-   * @param indexes the indices given by the Properties sheet
-   * @param pane The Pane that contains whatever View Class that needs to be added to GameScreen
+   * creates avatar
    */
-  private void setIndexes(String[] indexes, Pane pane) {
-    getRoot().getChildren().add(pane);
-    GridPane.setConstraints(pane, Integer.parseInt(indexes[0]),Integer.parseInt(
-        indexes[1]));
+  private void createTurtle() {
+    Turtle newTurtle = new Turtle();
+//    newTurtle.getImage().toBack();
+    avatars.add(newTurtle);
+    getAllNodes().getChildren().add(newTurtle.getImage());
+    animations = new Animator(avatars, canvas);
   }
 
   /**
-   * Creates the Buttons that display Animation control options and the Animation Speeds
+   * creates box that allows user to enter commands
    */
+
+  private void createCommandBox() {
+    commandBoxView = new CommandBoxView(animations);
+    getRoot().getChildren().add(commandBoxView.getCommandContainer());
+  }
+
+  /**
+   * initiaties all the buttons that are seen in the game sceen
+   */
+
   private void createButtons() {
     HBox container = makeInputPanel(getPanelButtons("GameScreenNavigationPanel", getPanelResources()), this, getLabelResources(), getReflectionResources());
     container.setId("Animation-Panel");
 
     SliderView animationInputs  = new SliderView(animations);
     container.getChildren().add(animationInputs.getSliderContainer());
-    String[] indexes = LayoutResources.getString("ButtonPanel").split(",");
-    setIndexes(indexes, container);
+    getRoot().getChildren().add(container);
   }
 
   /**
-   * Create the CommandBox to display in the GridPane
+   * creates color picker for user to change color of pen
    */
-  private void createCommandBox() {
-    commandBoxView = new CommandBoxView(animations);
-    String[] indexes = LayoutResources.getString("CommandBox").split(",");
-    setIndexes(indexes, commandBoxView.getCommandContainer());
+  private void createColorPicker() {
+    ColorPicker colorPicker = new ColorPicker();
+    colorPicker.setId("ColorPicker");
+    colorPicker.setOnAction(handler -> {
+      color = colorPicker.getValue();
+      canvas.setColor(color);
+    });
+    getRoot().getChildren().add(colorPicker);
   }
 
   /**
-   * Create the Canvas to display in the GridPane
+   * allows user to shift from day to night mode
    */
-  private void createCanvas() {
-    canvas = new DrawBoardView();
-    canvas.setColor(this.color);
-    String[] indexes = LayoutResources.getString("Canvas").split(",");
-    setIndexes(indexes, canvas.getContainer());
+
+  private void createColorSchemePicker() {
+    List<String> options = getPanelButtons("ColorSchemesPanel", getPanelResources());
+    String id = "Color-Scheme-Box";
+    ComboBox ColorSchemePicker = makeDropDown(options, id);
+    ColorSchemePicker.setId("ColorSchemePicker");
+    ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
+    getRoot().getChildren().add(ColorSchemePicker);
   }
 
   /**
-   * Create both the Turtle and Animation needed to manage the Turtle
+   * updates the stylesheet applied to the page, used when switching from day to night mode
+   * @param value
    */
-  private void MakeTurtle() {
-    avatar = new Turtle();
-    avatar.getImage().toBack();
-    all.getChildren().add(avatar.getImage());
-    animations = new Animator(avatar, canvas);
+  private void updateScheme(Object value) {
+    getScene().getStylesheets().clear();
+    setStylesheet(value.toString() + ".css");
+    getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
+    getStage().setScene(getScene());
   }
 
   /**
-   * Creates the GridPane that contains everything
+   * presents history of past commands
    */
-  private void setUpGridPane() {
-    setRoot(new GridPane());
-    getRoot().getStyleClass().add("grid-pane");
-    getRoot().setId("Pane");
-    all.getChildren().add(getRoot());
+  private void createHistoryView() {
+    historyView = new HistoryView();
+    VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()),
+        getLabelResources());
+    container.setId("History-Container");
+    getRoot().getChildren().add(container);
   }
 
   /**
    * Allows us to Change the image of the Avatar
    */
   public void changeAvatar() {
-    all.getChildren().remove(avatar.getImage());
+    for(PenView avatar: avatars){
+      getAllNodes().getChildren().remove(avatar.getImage());
+    }
     File selectedFile = fileChooser.showOpenDialog(getStage());
     Image image = new Image(selectedFile.toURI().toString());
     ImageView imageView = new ImageView(image);
-    all.getChildren().add(avatar.setImage(imageView));
+    for(PenView avatar: avatars){
+      getAllNodes().getChildren().add(avatar.setImage(imageView));
+    }
   }
 
   /**
    * Set the AvatarPenDown to whatever state is required
    * @param penStatus if the pen is down
    */
-  public void updateAvatarIsPenDown(boolean penStatus) {
-    avatar.updatePen(penStatus);
+  public void updateAvatarIsPenDown(int ExternalID, boolean penStatus) {
+    getAvatar(ExternalID).updatePen(penStatus);
   }
 
   /**
@@ -219,9 +225,9 @@ public class GameScreen extends Screen implements ModelView{
    * @param blue  blue color value
    */
   @Override
-  public void updateAvatarPenColor(int red, int green, int blue) {
+  public void updateAvatarPenColor(int ExternalID, int red, int green, int blue) {
     Color newColor = Color.rgb(red, green, blue);
-    avatar.updateColor(newColor);
+    getAvatar(ExternalID).updateColor(newColor);
   }
 
   /**
@@ -229,30 +235,30 @@ public class GameScreen extends Screen implements ModelView{
    * @param newX New x coordinate
    * @param newY New y coordinate
    */
-  public void updateAvatarPosXY(double newX, double newY) {
-    animations.makeTranslation(newX, newY);
+  public void updateAvatarPosXY(int ExternalID, double newX, double newY) {
+    animations.makeTranslation(ExternalID, newX, newY);
   }
 
   /**
    * Creates an Animation to rotate the Avatar
    * @param newRot new rotation that needs to be relative
    */
-  public void updateAvatarRot(double newRot) {
-    double oldRot = avatar.getRot();
+  public void updateAvatarRot(int ExternalID, double newRot) {
+    double oldRot = getAvatar(ExternalID).getRot();
     double saved = newRot;
     newRot = -1*newRot + 90;
     newRot = (newRot-oldRot);
-    animations.makeRotation(newRot);
-    avatar.updateRot(saved);
+    animations.makeRotation(ExternalID, newRot);
+    getAvatar(ExternalID).updateRot(saved);
   }
 
-  /**
-   * Update if the Avatar is visible or not
-   * @param state if the avatar is visible
-   */
+  public double getAnimationSpeed() {
+    return animations.getAnimationSpeed();
+  }
+
   @Override
-  public void updateAvatarVisible(boolean state) {
-    avatar.changeVisible();
+  public void updateAvatarVisible(int ExternalID, boolean state) {
+    getAvatar(ExternalID).changeVisible();
   }
 
   /**
@@ -278,6 +284,7 @@ public class GameScreen extends Screen implements ModelView{
    */
   @Override
   public void displayReturnValues(List<String> returnValues) {
+    returnBox.setReturnValue(returnValues);
   }
 
   /**
@@ -287,6 +294,15 @@ public class GameScreen extends Screen implements ModelView{
   @Override
   public void addToUserLibrary(String functionDescription) {
     historyView.updateLibraryHistory(functionDescription);
+  }
+
+  @Override
+  public void createNewAvatar(int externalID, double numericDefault, boolean booleanDefault,
+      double[] colorDefault) {
+    PenView avatar = new Turtle(externalID, numericDefault, booleanDefault, colorDefault);
+    avatars.add(avatar);
+    getAllNodes().getChildren().add(avatar.getImage());
+    animations.updateAvatars(avatar);
   }
 
   /**
@@ -301,10 +317,14 @@ public class GameScreen extends Screen implements ModelView{
    * Getter method to access the GameScreen's Avatar
    * @return the GameScreen's current Avatar
    */
-  public PenView getAvatar(){
-    return avatar;
+  public PenView getAvatar(int ExternalID){
+    for(PenView avatar: avatars){
+      if(avatar.getID() == ExternalID){
+        return avatar;
+      }
+    }
+    return null;
   }
-
   /**
    * Clear the screen, and run the Animation from the beginning
    */
@@ -355,7 +375,90 @@ public class GameScreen extends Screen implements ModelView{
    * Updates the PenColor on the Frontend
    * @param penColor new PenColor that will be displayed
    */
-  public void updatePenColor(Color penColor) {
-    this.avatar.updateColor(penColor);
+  public void updatePenColor(int ExternalID, Color penColor) {
+    getAvatar(ExternalID).updateColor(penColor);
+  }
+
+  // TODO: refactor the following section to be in the right class, have no hard-coded values, add the actual help button
+
+  /**
+   * Handler function to display help dialog box
+   */
+  public void displayHelp() {
+    Enumeration<String> allCommands = parserResources.getKeys();
+    List<String> allCommandKeys = formatKeysAsString(allCommands);
+    ChoiceDialog choiceDialog = new ChoiceDialog(helpResources.getString("Prompt"), allCommandKeys);
+    choiceDialog.setTitle(helpResources.getString("Title"));
+    choiceDialog.setHeaderText(helpResources.getString("Header"));
+
+    Optional<String> result = choiceDialog.showAndWait();
+    if (result.isPresent()) {
+      fetchAndDisplayDocumentation((String) choiceDialog.getSelectedItem());
+    }
+  }
+
+  /**
+   * Formats the valid command names as a list of Strings to display in the ChoiceDialog
+   *
+   * @param allCommands keys of every supported command
+   * @return list of formatted Strings including every valid command
+   */
+  private static List<String> formatKeysAsString(Enumeration<String> allCommands) {
+    List<String> allCommandKeys = new ArrayList<>();
+    while (allCommands.hasMoreElements()) {
+      String command = allCommands.nextElement();
+      if (command.contains(".")) {
+        String[] parsed = command.split("\\.");
+        command = parsed[parsed.length - 1];
+      }
+      allCommandKeys.add(command);
+    }
+    Collections.sort(allCommandKeys);
+    return allCommandKeys;
+  }
+
+  /**
+   * Fetches the correct XML file for a command and displays its contents in a dialog box
+   *
+   * @param commandName name of the requested command
+   */
+  private void fetchAndDisplayDocumentation(String commandName) {
+    if (commandName.equals(helpResources.getString("Prompt"))) {
+      return;
+    }
+    String USER_DIRECTORY = System.getProperty("user.dir");
+    try {
+      XMLParser xmlParser = new XMLParser(
+          USER_DIRECTORY + "/src/main/resources/Parser/Commands/" + commandName + ".xml");
+      Alert alert = formatDocumentationDialog(xmlParser);
+      alert.showAndWait();
+    } catch (Exception e) {
+      new PopUp(helpResources.getString("Error"));
+    }
+
+  }
+
+  /**
+   * Using the given XML parser, build an Alert to display all information
+   *
+   * @param xmlParser configured XML parser for the specific command
+   * @return configured alert
+   */
+  private Alert formatDocumentationDialog(XMLParser xmlParser) {
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle(helpResources.getString("Header"));
+    alert.setHeaderText(helpResources.getString("Learn"));
+    String body = String.format(
+        "Name:    %s\nSyntax:    %s\nNumber of Parameters:    %s\nParams:    %s\nReturns:    %s\nDescription:    %s\nClassification:    %s",
+        xmlParser.getName(), xmlParser.getSyntax(), xmlParser.getNumParameters(),
+        xmlParser.getParams(), xmlParser.getReturns(), xmlParser.getDescription(),
+        xmlParser.getType());
+    alert.setContentText(body);
+    return alert;
+  }
+
+  public void openNewWindow(){
+    Main main = new Main();
+    main.start(new Stage());
   }
 }

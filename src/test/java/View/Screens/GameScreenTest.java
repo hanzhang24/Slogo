@@ -55,20 +55,20 @@ class GameScreenTest extends DukeApplicationTest {
   @Test
   void testUpdatePosition() {
     simulateAction(0, 0, () -> {
-      thisScreen.updateAvatarPosXY(10, 10);
-      assertEquals(260, thisScreen.getAvatar().getXCor());
-      assertEquals(240, thisScreen.getAvatar().getYCor());
+      thisScreen.updateAvatarPosXY(1,10, 10);
+      assertEquals(260.6066017177983, thisScreen.getAvatar(1).getXCor());
+      assertEquals(239.3933982822017, thisScreen.getAvatar(1).getYCor());
     });
   }
 
   @Test
   void testUpdatePenStatus() {
     boolean test = false;
-    thisScreen.updateAvatarIsPenDown(test);
-    assertEquals(test, thisScreen.getAvatar().getPenActive());
+    thisScreen.updateAvatarIsPenDown(1, test);
+     assertEquals(test, thisScreen.getAvatar(1).getPenActive());
     Color PenTest = Color.RED;
-    thisScreen.updatePenColor(PenTest);
-    assertEquals(PenTest, thisScreen.getAvatar().getColor());
+    thisScreen.updatePenColor(1, PenTest);
+    assertEquals(PenTest, thisScreen.getAvatar(1).getColor());
   }
   @Nested
   @DisplayName("Run Payload Tests")
@@ -77,29 +77,48 @@ class GameScreenTest extends DukeApplicationTest {
     void testInputFd50() {
       writeInputTo(area, "fd 50");
       clickOn(run);
-      assertEquals(300, thisScreen.getAvatar().getXCor());
-      assertEquals(250, thisScreen.getAvatar().getYCor());
+      assertEquals(300, thisScreen.getAvatar(1).getXCor());
+      assertEquals(250, thisScreen.getAvatar(1).getYCor());
     }
     @Test
     void testInputHome() {
       writeInputTo(area, "home");
       clickOn(run);
-      assertEquals(250, thisScreen.getAvatar().getXCor());
-      assertEquals(250, thisScreen.getAvatar().getYCor());
+      assertEquals(250, thisScreen.getAvatar(1).getXCor());
+      assertEquals(250, thisScreen.getAvatar(1).getYCor());
     }
     @Test
     void testInputMultiple50(){
       writeInputTo(area, "fd 50 \nfd 50");
       clickOn(run);
-      assertEquals(350, thisScreen.getAvatar().getXCor());
-      assertEquals(250, thisScreen.getAvatar().getYCor());
+      assertEquals(350, thisScreen.getAvatar(1).getXCor());
+      assertEquals(250, thisScreen.getAvatar(1).getYCor());
     }
     @Test
     void testInputForwardThenHome(){
       writeInputTo(area, "fd 50 \nhome");
       clickOn(run);
-      assertEquals(250, thisScreen.getAvatar().getXCor());
-      assertEquals(250, thisScreen.getAvatar().getYCor());
+      assertEquals(250, thisScreen.getAvatar(1).getXCor());
+      assertEquals(250, thisScreen.getAvatar(1).getYCor());
+    }
+    @Test
+    void testInputBoundaryFd251(){
+      writeInputTo(area, "fd 251");
+      clickOn(run);
+      assertEquals(1, thisScreen.getAvatar(1).getXCor());
+      assertEquals(250, thisScreen.getAvatar(1).getYCor());
+    }
+    @Test
+    void testRT(){
+      writeInputTo(area, "rt 90");
+      clickOn(run);
+      assertEquals(180, thisScreen.getAvatar(1).getRot());
+    }
+    @Test
+    void testLT(){
+      writeInputTo(area, "LT 90");
+      clickOn(run);
+      assertEquals(0, thisScreen.getAvatar(1).getRot());
     }
   }
 
@@ -172,7 +191,8 @@ class GameScreenTest extends DukeApplicationTest {
       clickOn(run);
       String expected = "Commands";
       select(historyOptions, expected);
-      assertEquals(display.getText(), input);
+      String buffer = "\n------------\n";
+      assertEquals(display.getText(), input+buffer);
     }
   }
 }

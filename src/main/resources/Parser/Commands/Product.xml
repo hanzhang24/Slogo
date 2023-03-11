@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewCommand>
+  <name>Product|*</name>
+  <syntax>* expr1 expr2</syntax>
+  <numparameters>2</numparameters>
+  <params>expr1 = first number; expr2 = second number</params>
+  <returns>Product of the two numbers</returns>
+  <description>Multiplies the two numbers and returns the product</description>
+  <type>Math Command</type>
+</viewCommand>

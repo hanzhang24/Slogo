@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * @author Alec Liu The Avatar class is meant to manage the associated default set of parameters
+ * @author Alec Liu
+ * The Avatar class is meant to manage the associated default set of parameters
  * describing an Avatar. These are core values, and the abstraction supports rules that prevent the
  * default parameters from changing in unexpected ways.
  */

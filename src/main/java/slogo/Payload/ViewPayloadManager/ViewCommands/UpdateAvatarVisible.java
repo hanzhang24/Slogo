@@ -10,8 +10,8 @@ public class UpdateAvatarVisible extends ViewCommand {
 
   @Override
   public void executeSpecificCommand() {
-    gameScreen.updateAvatarVisible(Boolean.parseBoolean(parameters.get(0)));
-    // gameScreen.updateAvatarVisible(Boolean.parseBoolean(externalID, parameters.get(0)));
+    //gameScreen.updateAvatarVisible(Boolean.parseBoolean(parameters.get(0)));
+    gameScreen.updateAvatarVisible(externalID, Boolean.parseBoolean(parameters.get(0)));
   }
 
   @Override
