@@ -62,13 +62,6 @@ public abstract class Screen {
               indexes[1]));
     }
   }
-
-  protected void setIndexes(String[] indexes, Node node) {
-    getRoot().getChildren().add(node);
-    GridPane.setConstraints(node, Integer.parseInt(indexes[0]),Integer.parseInt(
-            indexes[1]));
-  }
-
   protected Label makeLabel (String property, ResourceBundle LabelResources) {
     Label label = new Label(LabelResources.getString(property));
     label.setId(property);

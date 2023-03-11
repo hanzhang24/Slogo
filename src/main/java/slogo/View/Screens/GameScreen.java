@@ -47,13 +47,14 @@ public class GameScreen extends Screen implements ModelView{
     setPane(new GridPane());
 
     createCanvas();
-    makeTurtle();
+    createTurtle();
     createCommandBox();
     createButtons();
     createHistoryView();
-    makeColorPicker();
-    makeColorSchemePicker();
+    createColorPicker();
+    createColorSchemePicker();
 
+    setPositions(getRoot());
     setScene(new Scene(getAllNodes(), width, height));
     getScene().getStylesheets().add(getClass().getResource(getDEFAULT_RESOURCE_FOLDER() + getStylesheet()).toExternalForm());
 
@@ -64,12 +65,10 @@ public class GameScreen extends Screen implements ModelView{
     canvas = new DrawBoardView();
     canvas.setColor(this.color);
 
-//    getRoot().getChildren().add(canvas.getContainer());
-    String[] indexes = getLayoutResources().getString("Canvas").split(",");
-    setIndexes(indexes, canvas.getContainer());
+    getRoot().getChildren().add(canvas.getContainer());
   }
 
-  private void makeTurtle() {
+  private void createTurtle() {
     avatar = new Turtle();
     avatar.getImage().toBack();
     getAllNodes().getChildren().add(avatar.getImage());
@@ -78,9 +77,7 @@ public class GameScreen extends Screen implements ModelView{
 
   private void createCommandBox() {
     commandBoxView = new CommandBoxView(animations);
-//    getRoot().getChildren().add(commandBoxView.getCommandContainer());
-    String[] indexes = getLayoutResources().getString("CommandBox").split(",");
-    setIndexes(indexes, commandBoxView.getCommandContainer());
+    getRoot().getChildren().add(commandBoxView.getCommandContainer());
   }
 
   private void createButtons() {
@@ -89,28 +86,26 @@ public class GameScreen extends Screen implements ModelView{
 
     SliderView animationInputs  = new SliderView(animations);
     container.getChildren().add(animationInputs.getSliderContainer());
-//    getRoot().getChildren().add(container);
-    String[] indexes = getLayoutResources().getString("ButtonPanel").split(",");
-    setIndexes(indexes, container);
+    getRoot().getChildren().add(container);
   }
 
-  private void makeColorPicker() {
+  private void createColorPicker() {
     ColorPicker colorPicker = new ColorPicker();
     colorPicker.setId("ColorPicker");
     colorPicker.setOnAction(handler -> {
       color = colorPicker.getValue();
       canvas.setColor(color);
     });
-    getAllNodes().getChildren().add(colorPicker);
+    getRoot().getChildren().add(colorPicker);
   }
 
-  private void makeColorSchemePicker() {
+  private void createColorSchemePicker() {
     List<String> options = getPanelButtons("ColorSchemesPanel", getPanelResources());
     String id = "Color-Scheme-Box";
     ComboBox ColorSchemePicker = makeDropDown(options, id);
-//    ColorSchemePicker.setId("ColorSchemePicker");
+    ColorSchemePicker.setId("ColorSchemePicker");
     ColorSchemePicker.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateScheme(ColorSchemePicker.getValue())));
-    getAllNodes().getChildren().add(ColorSchemePicker);
+    getRoot().getChildren().add(ColorSchemePicker);
   }
 
   private void updateScheme(Object value) {
@@ -124,8 +119,7 @@ public class GameScreen extends Screen implements ModelView{
     historyView = new HistoryView();
     VBox container = historyView.make(getPanelButtons("DropDownPanel", getPanelResources()), getLabelResources());
     container.setId("History-Container");
-    String[] indexes = getLayoutResources().getString("HistoryView").split(",");
-    setIndexes(indexes, container);
+    getRoot().getChildren().add(container);
   }
 
   public void changeAvatar() {
