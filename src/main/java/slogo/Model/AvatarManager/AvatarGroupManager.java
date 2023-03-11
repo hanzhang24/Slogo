@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * @author Alec Liu The AvatarGroupManager class is a helper class to the Model which stores the
+ * @author Alec Liu
+ * The AvatarGroupManager class is a helper class to the Model which stores the
  * collection of Avatars. This class tracks "active turtles", the current turtle being modified, and
  * internally translates external IDs to internal indicies.
  */

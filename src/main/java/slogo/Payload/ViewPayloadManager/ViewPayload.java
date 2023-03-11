@@ -9,7 +9,8 @@ import java.util.List;
 import slogo.Payload.ViewPayloadManager.ViewCommands.ViewCommandFactory;
 
 /**
- * @author Alec Liu The ViewPayload class is a simplified, linear sequence of update instructions
+ * @author Alec Liu
+ * The ViewPayload class is a simplified, linear sequence of update instructions
  * generated in the Model and ran in the ViewController.
  */
 public class ViewPayload implements Payload, Iterable<ViewCommand> {

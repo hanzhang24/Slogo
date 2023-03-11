@@ -3,7 +3,8 @@ package slogo.Model.OperationFormat;
 import java.util.Random;
 
 /**
- * @author Alec Liu The OperationSignatureGeneratorClass is a random number generator that produces
+ * @author Alec Liu
+ * The OperationSignatureGeneratorClass is a random number generator that produces
  * unique, hard-to-guess signatures for each operation. These signatures help prevent collisions
  * between user variables and protected avatar parameters.
  */

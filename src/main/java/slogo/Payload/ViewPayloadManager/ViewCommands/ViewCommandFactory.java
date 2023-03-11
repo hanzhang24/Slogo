@@ -6,7 +6,8 @@ import java.util.ResourceBundle;
 import slogo.Payload.ViewPayloadManager.ChangeLog;
 
 /**
- * @author Alec Liu The ViewCommandFactory is a helper class for the ViewPayload, which uses this
+ * @author Alec Liu
+ * The ViewCommandFactory is a helper class for the ViewPayload, which uses this
  * class to translate temproary ChangeLogs into real commands for the View.
  */
 public class ViewCommandFactory {

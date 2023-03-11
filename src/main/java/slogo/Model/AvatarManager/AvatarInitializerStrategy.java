@@ -4,7 +4,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * @author Alec Liu The AvatarInitilizerStrategy is a helper class for Avatar to load in parameters
+ * @author Alec Liu
+ * The AvatarInitilizerStrategy is a helper class for Avatar to load in parameters
  * from config files. It helps to sort each parameter into the correct map for the Avatar, and it
  * catches misformatted files.
  */
