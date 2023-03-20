@@ -1,6 +1,5 @@
-package Parser;
+package ParserAndCommand;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,14 @@ public class AvatarTest {
     private Parser parser = null;
     private Model model = null;
     private CommandManager commandManager = null;
+
+    private void print(String str) {
+        System.out.println(str);
+    }
+
+    private void print(double val) {
+        System.out.println(val);
+    }
     @BeforeEach
     void init() throws Exception {
         commandManager = new CommandManager();
@@ -66,11 +73,62 @@ public class AvatarTest {
 
     @Test
     void testPen() throws Exception {
-        Node root = parser.parseInput("goto 69 420");
+        Node root = parser.parseInput("pu");
         root.initContext(model);
         root.execute();
-        assertEquals(model.getAvatarX(), 69);
-        assertEquals(model.getAvatarY(), 420);
-        assertEquals(model.getAvatarRotation(), 0);
+        assertEquals(model.getAvatarIsPenDown(), false);
+
+        root = parser.parseInput("pd");
+        root.initContext(model);
+        root.execute();
+        assertEquals(model.getAvatarIsPenDown(), true);
+    }
+
+    @Test
+    void testRotate() throws Exception {
+        Node root = parser.parseInput("rt 50");
+        root.initContext(model);
+        root.execute();
+        assertEquals(model.getAvatarRotation(), -50);
+
+        root = parser.parseInput("lt 60");
+        root.initContext(model);
+        root.execute();
+        assertEquals(model.getAvatarRotation(), 10);
+    }
+
+    @Test
+    void testHeading() throws Exception {
+        Node root = parser.parseInput("setheading 42069");
+        root.initContext(model);
+        root.execute();
+        assertEquals(42069%360, model.getAvatarRotation());
+    }
+
+    @Test
+    void testTowards() throws Exception {
+        Node root = parser.parseInput("towards 0 69");
+        root.initContext(model);
+        root.execute();
+        assertEquals(90, model.getAvatarRotation());
+
+        root = parser.parseInput("towards 69 0");
+        root.initContext(model);
+        root.execute();
+        assertEquals(0, model.getAvatarRotation());
+
+        root = parser.parseInput("towards 420 420");
+        root.initContext(model);
+        root.execute();
+        assertEquals(45, model.getAvatarRotation());
+
+        root = parser.parseInput("towards 3 4");
+        root.initContext(model);
+        root.execute();
+
+        print(Math.toDegrees(Math.atan(4.0/3)));
+        print(model.getAvatarRotation());
+
+        assertEquals(Math.toDegrees(Math.atan(4.0/3)), model.getAvatarRotation());
     }
 }
