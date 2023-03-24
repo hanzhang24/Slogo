@@ -16,6 +16,47 @@
 * Aryan
 * Han
 * Jack
+    * Designer/Implementer/Refactorer/Tester of:
+        * Command structures
+            * Node
+            * Associated Node abstractions
+                * Command
+                * Constant
+                * Group 
+                * Root 
+                * Variable
+            * All associated Command classes
+                * avatar 
+                    * All commands relevant to avatar movement, rotation, pen behavior
+                * control
+                    * All commands related to control-loops, setting variables, and custom commands
+                * display
+                    * All commands related to visual effects, sizes and colors
+                * logical
+                    * All commands related to logical compututation in math
+                * math 
+                    * All commands related to mathematical functions (e.g. sine, arctan)
+                * multiple 
+                    * All commands related to multiple avatars 
+                * queries
+                    * All commands which are queries
+            * Custom commands (UserFunctionTemplate, UserFunctionCommand)
+        * Parsing string to commands
+            * Parser
+                * Includes parsing pre-defined commands, as well as parsing the creation of custom commands
+            * Tokenizer
+                * Handles whitespaces, comments, newlines
+            * TypeChecker
+                * Handles all types of tokens
+            * TokenType
+                * Represents possible token types
+        * Util classes for geometry, floating point operations
+            * Vector
+                * Used for handling vector operations, and related geometrical operations/properties
+            * Geometry
+                * Used for handling rotations that need decomposition into whole rotations of 360 degrees and residuals
+            * Precision
+                * Used for handling non-exact logical comparisons that are tolerant to floating point errors
 * Yegor
 
 ## Design Goals
@@ -31,6 +72,13 @@
               functionality
     * Controller
         * New commands/syntax
+    * TypeChecker
+        * New types of tokens with unique behavior
+    * Parser
+        * Parsing new types of tokens with unique behavior
+        * Catching undefined behavior and throwing relevant error messages as to why that was unexpected
+    * Tokenizer 
+        * Handling arbitrary input
 
 ## High-Level Design
 
@@ -38,25 +86,29 @@
 
 * The general flow of the program is as follows:
     1. The View collects a user command through the command input box.
-    2. The View sends the input to the Parser, which uses the input to build a complex structure of
-       conditionals and commands.
-    3. The Parser sends this structure to the Controller, which iterates through the given commands,
-       taking branches as needed.
-    4. As the Controller executes commands, it may need to pull data from the Model or put data into
-       the Model. Each new piece of information inserted into the Model is documented.
-    5. A summary of changes is produced by the Model and packaged in a ViewPayload. The ViewPayload
-       contains a set of commands that update the View with new information.
-    6. The ViewPayload is sent to the ViewController, which generically executes the view commands
+    2. The View sends the input to the Parser
+    3. The Parser recursively parses the input as a series of expressions, each of which is represented
+       by a Node. The recursion follows a depth first order, treating Commands, groups of Commands, 
+       Constants, and Variables and arguments to Commands all as expressions within a tree structure.
+    4. The Controller receives the parsed tree by the root Node, and links the tree to the Model
+    5. The command tree is executed, pulling/setting data in Model as necessary. On the Model side all of these
+       changes are staged to make possibility for reversion
+    6. If this execution was unsuccessful, Model is reverted to its original state. Otherwise a summary of changes
+       is produced by the Model and packaged in a ViewPayload. The ViewPayload contains a set of commands that update
+       the View with this new information
+    7. The ViewPayload is sent to the ViewController, which generically executes the view commands
        to reflect the new program state.
-    7. As each view command applies updates, the View may internally apply transformations to adjust
+    8. As each view command applies updates, the View may internally apply transformations to adjust
        coordinates, create animations, etc.
 * Major classes for each step:
     * Step 1:
-        *
-    * Step 2:
-        *
+        * `Parser` class - serves to turn raw input into java understandable instructions via 
+          abstract syntax tree
+    * Step 2: 
+        * `Node` abstract class - enforces existence and correct return value of AST execution
     * Step 3:
-        *
+        * `Controller` class - serves as a coordinator for multiple parts, including Parser, Model,    
+          ViewController
     * Step 4:
         * `Model` interface - enforces functionality within different Model implementations to
           ensure that the Controller to properly communicate information.
@@ -90,6 +142,8 @@
         * Reusing a common command implementation causes either a) the Model commands to be too
           simplistic or b) the view commands to waste much of the built-in complexity needed for
           Model commands.
+
+
 
 ## Changes from the Plan
 
