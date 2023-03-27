@@ -15,6 +15,13 @@
     * Integrated various parts of MVC design
 * Aryan
 * Han
+    * Designer/Debugger/Refactorer/Tester of:
+        * View
+          * GameScreen
+          * Animation
+          * Containers
+          * Avatars
+          * PopUp
 * Jack
     * Designer/Implementer/Refactorer/Tester of:
         * Command structures
@@ -70,6 +77,12 @@
         * New ViewCommands to modify the View
             * Can quickly add new View commands that combine other commands or introduce new
               functionality
+        * Can quickly add new buttons and input fields using Container Classes as templeates. 
+        * Handle new type of exceptions to display visually
+        * Change the actions of each button and which buttons are displayed using reflection
+        * New output displays to display any given state about current simulation, ex: commands, history, unique commands
+        * Different layouts to choose from, just load a new array into the properties file GameScreenLayout.Properites
+        * More languages and color themes
     * Controller
         * New commands/syntax
     * TypeChecker
@@ -158,7 +171,8 @@
         * Total number of avatars
     * Recombination of existing commands
         * SetAvatarPosition (simultaneously set x and y)
-
+* Changing the UI design from the wireframe 
+* Expanded 'View' API - added upon change of multiple turtles and moving animation to it's own class
 ## How to Add New Features
 * Adding a new language command
   * Add the command in the known commands files for each supported language
@@ -174,11 +188,14 @@
  
 * Adding new front end component
   * Initialization and display can be added as `__View` class
+  * Add the front end component to either one of the Screen classes to decide where it will be displayed 
+  * Input in the properties files the respective indicies in which the element lays within the GridPane
   * If the component requires specific information from the Model, add a hidden command to fetch the
     required information through the existing `Parser`-`Controller`-`Model`-`ViewPayload` track
       * Format a special command to fetch the data from the view and disable history logging
   * If the component requires a special data format, add a new `ViewCommand` to format the needed
     structure
+  * Add styling in the respective css sheets for the newly created class to apply styling to the element
 
 
 * Loading a configuration
